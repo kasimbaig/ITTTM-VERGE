@@ -1,0 +1,174 @@
+<div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Document Details </h2>
+        <div class="h-1 w-20 bg-blue-600 rounded"></div>
+    <!-- Row Data Display Section -->
+    <div class="rounded-lg p-4 mb-4 mt-4" style="background: linear-gradient(135deg, #1e40af 0%, #1e40af 100%); border: 1px solid #1e40af;">
+        <h3 class="text-md font-semibold text-white mb-3">Selected Equipment Details</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div >
+                <label class="block  font-medium text-gray-200 mb-1">Equipment Code :</label> &nbsp;
+                <span class="text-white font-medium">{{ rowData?.code || 'N/A' }}</span>
+            </div>
+            <div class="">
+                <label class="block  font-medium text-gray-200 mb-1">Equipment Name :</label> &nbsp;
+                <span class="text-white font-medium">{{ rowData?.name || 'N/A' }}</span>
+            </div>
+            <div >
+                <label class="block  font-medium text-gray-200 mb-1">Equipment Model :</label> &nbsp;
+                <span class="text-white font-medium">{{ rowData?.model || 'N/A' }}</span>
+            </div>
+            <div >
+                <label class="block  font-medium text-gray-200 mb-1">Equipment Status : </label> &nbsp;
+                <span class="text-white font-medium">{{ rowData?.equipment_status || 'N/A' }}</span>
+            </div>
+            <div >
+                <label class="block  font-medium text-gray-200 mb-1">Supplier :</label> &nbsp;
+                <span class="text-white font-medium">{{ rowData?.supplier_name || 'N/A' }}</span>
+            </div>
+            <div >
+                <label class="block  font-medium text-gray-200 mb-1">Manufacturer :</label> &nbsp;
+                <span class="text-white font-medium">{{ rowData?.manufacturer_name || 'N/A' }}</span>
+            </div>
+        </div>
+    </div>
+    </div>
+
+  
+
+    <!-- Reusable Table -->
+    <div  >
+        <app-resuable-table
+            [gridColumns]="tableColumns"
+            [filteredData]="tableData"
+            [isPaginator]="true"
+            [isShearchDisable]="'T'"
+            [isCheckBox]="false"
+            [isAction]="true"
+            [isAdd]="true"
+            [isView]="true"
+            [isEditable]="true"
+            [isDeletable]="true"
+            (viewEvent)="onView($event)"
+            (addEvent)="onAdd($event)"
+            (editEvent)="onEdit($event)"
+            (deleteEvent)="onDelete($event)"
+            >
+        </app-resuable-table>
+    </div>
+    
+   
+   
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="isDeleteConfirmationVisible"
+  [message]="'Are you sure you want to delete the Document Details record: ' + (selectedDocument?.document_type || '') + '?'"
+  (onConfirm)="confirmDelete()"
+  (onCancel)="cancelDelete()"
+></app-delete-confirmation-modal>
+
+<!-- Edit Document Details Modal -->
+<p-dialog 
+    [header]="isEdit ? 'Edit Document Details' : 'Add Document Details'"
+    [(visible)]="showEditDialog" 
+    [modal]="true" 
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="p-fluid"
+    [style]="{width: '500px'}">
+    
+    <form [formGroup]="documentForm" >
+        <div class="grid grid-cols-1 gap-4 p-4 mt-4">
+            <!-- Document Type -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Document Type<span class="text-red-500">*</span>:</label>
+                <p-dropdown 
+                    formControlName="document_type"
+                    [options]="documentTypeOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select Document Type"
+                    filter="true"
+                    filterBy="label"
+                    styleClass="w-full col-span-4">
+                </p-dropdown>
+            </div>
+
+            <!-- Reference No -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Reference No:</label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    formControlName="reference_no"
+                    placeholder="Enter Reference Number"
+                    class="w-full col-span-4 border-2 border-gray-500 rounded-sm bg-white" />
+            </div>
+
+            <!-- Category -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Category:</label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    formControlName="category"
+                    placeholder="Enter Category"
+                    class="w-full col-span-4 border-2 border-gray-500 rounded-sm bg-white" />
+            </div>
+
+            <!-- Location -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Location:</label>
+                <p-dropdown 
+                    formControlName="location"
+                    [options]="locationOptions"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Select Location"
+                    filter="true"
+                    filterBy="name"
+                    styleClass="w-full col-span-4">
+                </p-dropdown>
+            </div>
+
+            <!-- Description -->
+            <div class="grid grid-cols-6 gap-4 items-start">
+                <label class="text-sm font-medium text-gray-700 col-span-2 pt-2">Description:</label>
+                <textarea 
+                    pInputTextarea 
+                    formControlName="description"
+                    rows="4"
+                    placeholder="Enter Description"
+                    class="w-full p-2 col-span-4 border-2 border-gray-500 rounded-sm bg-white">
+                </textarea>
+            </div>
+        </div>
+
+        <!-- Dialog Footer -->
+    </form>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-end gap-2 mt-3">
+            <button 
+                type="button" 
+                pButton 
+                label="Cancel" 
+                icon="pi pi-times" 
+                class="bg-red-500 text-white"
+                (click)="onCancelEdit()">
+            </button>
+            <button 
+                type="submit" 
+                pButton 
+                label="Save" 
+                icon="pi pi-check" 
+                class="p-button-success"
+                (click)="onSaveDocument()"
+                [disabled]="documentForm.invalid">
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

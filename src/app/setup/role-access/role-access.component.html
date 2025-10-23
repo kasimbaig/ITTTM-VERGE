@@ -1,0 +1,288 @@
+<div class="role-access-container">
+  <!-- Header -->
+  <div class="role-access-header">
+    <div class="header-left">
+      <button 
+        pButton 
+        icon="pi pi-arrow-left" 
+        label="Back to Setup" 
+        class="btn-secondary" 
+        (click)="goBack()">
+      </button>
+      <h2 class="role-access-title">Role Access</h2>
+      <div class="role-dropdown-container">
+        <p-dropdown 
+          [options]="roleOptions" 
+          [(ngModel)]="selectedRoleId" 
+          placeholder="Select a Role"
+          optionLabel="name"
+          optionValue="id"
+          (onChange)="onRoleSelectionChange($event)"
+          class="role-dropdown">
+        </p-dropdown>
+        <p-dropdown 
+          [options]="processOptions" 
+          [(ngModel)]="selectedProcessId" 
+          placeholder="Select a Process"
+          optionLabel="name"
+          optionValue="id"
+          (onChange)="onProcessSelectionChange($event)"
+          class="process-dropdown">
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="header-right">
+      <button 
+        pButton 
+        icon="pi pi-th-large" 
+        label="" 
+        class="btn-switch-mode-simple"
+        (click)="openSwitchModeDialog()">
+      </button>
+     
+      <button 
+        pButton 
+        icon="pi pi-plus" 
+        label="Add Menu" 
+        class="btn-primary"
+        (click)="addMenu()">
+      </button>
+      <button 
+        pButton 
+        icon="pi pi-save" 
+        label="Save Changes" 
+        class="btn-success"
+        (click)="saveChanges()">
+      </button>
+    </div>
+  </div>
+
+  <!-- Instructional Text -->
+  <div class="instructional-text" *ngIf="!selectedRoleId">
+    <div class="instructional-content">
+      <i class="pi pi-lock"></i>
+      <h3>Select a Role to View Privileges</h3>
+      <p>Please select a role from the dropdown above to configure and view its access permissions.</p>
+    </div>
+  </div>
+
+  <!-- Permissions Table (shown when role is selected) -->
+  <div class="permissions-table-container" *ngIf="selectedRoleId">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoadingMenuMappings">
+      <div class="loading-content">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Loading role permissions...</span>
+      </div>
+    </div>
+
+    <!-- Table Content -->
+    <div class="table-panel" *ngIf="!isLoadingMenuMappings">
+      <!-- Debug Information (remove in production) -->
+
+      <!-- Permissions Table -->
+      <div class="permissions-table" *ngIf="modules.length > 0">
+        <table class="permissions-table-content">
+          <thead>
+            <tr>
+              <th class="module-column">Module</th>
+              <th *ngFor="let privilege of availablePrivileges" class="privilege-column">{{ privilege.name }}</th>
+              <th class="enabled-column">Enabled</th>
+              <th class="actions-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let module of flattenedModules">
+              <tr [ngClass]="{'sub-module': module.level > 0}" [style.padding-left.px]="module.level * 20">
+                <td class="module-name">
+                  <span *ngIf="module.hasSubModules" 
+                        class="expand-icon" 
+                        (click)="toggleModuleExpansion(module.id)"
+                        [ngClass]="{'expanded': module.isExpanded}">
+                    <i class="pi" [ngClass]="module.isExpanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+                  </span>
+                  <i *ngIf="module.icon" [ngClass]="module.icon" class="module-icon"></i>
+                  {{ module.name }}
+                </td>
+                <td *ngFor="let privilege of availablePrivileges" class="privilege-cell">
+                  <p-checkbox 
+                    [binary]="true" 
+                    [ngModel]="getPrivilegeValue(module, privilege.name)"
+                    (onChange)="onPermissionChange(module, privilege.name, $event.checked)">
+                  </p-checkbox>
+                </td>
+                <td class="enabled-cell">
+                  <p-inputSwitch 
+                    [ngModel]="module.enabled"
+                    (onChange)="onToggleChange(module)">
+                  </p-inputSwitch>
+                </td>
+                <td class="actions-cell">
+                  <div class="action-buttons">
+                    <button class="btn-action btn-add-sub" 
+                            pButton 
+                            type="button" 
+                            icon="pi pi-plus" 
+                            (click)="addSubModule(module)"
+                            pTooltip="Add Sub Module">
+                    </button>
+                    <button class="btn-action btn-edit" 
+                            pButton 
+                            type="button" 
+                            icon="pi pi-pencil" 
+                            (click)="editModule(module)"
+                            pTooltip="Edit Module">
+                    </button>
+                    <button class="btn-action btn-delete" 
+                            pButton 
+                            type="button" 
+                            icon="pi pi-trash" 
+                            (click)="deleteModule(module)"
+                            pTooltip="Delete Module">
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No data message -->
+      <div class="no-data-message" *ngIf="modules.length === 0">
+        <div class="no-data-content">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>No modules found for the selected role and process combination.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Role Form -->
+  <app-add-form
+    *ngIf="showAddForm"
+    [open]="showAddForm"
+    [formConfig]="roleFormConfig"
+    [formData]="newRole"
+    [fromTitle]="'Add New Role Access'"
+    [submitLabel]="'Add Role'"
+    (onOpenChange)="closeAddForm()"
+    (onSubmit)="handleAddSubmit($event)">
+  </app-add-form>
+
+  <!-- Edit Role Form -->
+  <app-add-form
+    *ngIf="showEditForm"
+    [open]="showEditForm"
+    [formConfig]="roleFormConfig"
+    [formData]="selectedRole"
+    [fromTitle]="'Edit Role Access'"
+    [submitLabel]="'Update Role'"
+    [isEditMode]="true"
+    (onOpenChange)="closeEditForm()"
+    (onSubmit)="handleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- View Role Form -->
+  <app-add-form
+    *ngIf="showViewForm"
+    [open]="showViewForm"
+    [formConfig]="roleFormConfig"
+    [formData]="selectedRole"
+    [fromTitle]="'View Role Access Details'"
+    [submitLabel]="'Close'"
+    [isEditMode]="false"
+    (onOpenChange)="closeViewForm()"
+    (onSubmit)="handleViewSubmit($event)">
+  </app-add-form>
+
+  <!-- Add Menu Form Modal -->
+  <app-add-form
+    [open]="showAddMenuForm"
+    [formConfig]="menuFormConfig"
+    [formData]="newMenu"
+    [fromTitle]="'Add New Menu'"
+    [submitLabel]="'Add Menu'"
+    (onOpenChange)="showAddMenuForm = $event"
+    (onSubmit)="handleAddMenuSubmit($event)">
+  </app-add-form>
+
+  <!-- Add Sub Menu Form Modal -->
+  <app-add-form
+    [open]="showAddSubMenuForm"
+    [formConfig]="subMenuFormConfig"
+    [formData]="newSubMenu"
+    [fromTitle]="'Add New Sub Menu'"
+    [submitLabel]="'Add Sub Menu'"
+    (onOpenChange)="closeAddSubMenuForm()"
+    (onSubmit)="handleAddSubMenuSubmit($event)">
+  </app-add-form>
+
+  <!-- Edit Module Form Modal -->
+  <app-add-form
+    [open]="showEditModuleForm"
+    [formConfig]="moduleEditFormConfig"
+    [formData]="moduleEditData"
+    [fromTitle]="'Edit Module'"
+    [submitLabel]="'Update Module'"
+    [isEditMode]="true"
+    (onOpenChange)="closeEditModuleForm()"
+    (onSubmit)="handleModuleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- Delete Module Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="showDeleteModuleModal"
+    [visible]="showDeleteModuleModal"
+    [itemName]="selectedModule?.name || ''"
+    (onConfirm)="confirmModuleDelete()"
+    (onCancel)="closeDeleteModuleModal()">
+  </app-delete-confirmation-modal>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="showDeleteModal"
+    [visible]="showDeleteModal"
+    [itemName]="selectedRole?.roleName || ''"
+    (onConfirm)="confirmDelete()"
+    (onCancel)="closeDeleteModal()">
+  </app-delete-confirmation-modal>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)">
+          <div class="tile-icon">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

@@ -1,0 +1,58 @@
+/* seg-form.component.css */
+.seg-form-ui-container {
+  /* Keep existing styles from the original SEG form */
+}
+
+/* Dialog specific styles */
+.dialog-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dialog-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Form button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.btn.outlined {
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.btn.outlined:hover {
+  background: #f9fafb;
+  color: #374151;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}

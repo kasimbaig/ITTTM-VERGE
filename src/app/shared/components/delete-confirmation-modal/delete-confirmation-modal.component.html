@@ -1,0 +1,72 @@
+ <!-- <p-dialog
+      header="Confirm Deletion"
+      [(visible)]="visible"
+      [modal]="true"
+      [style]="{ width: '400px' }"
+      [draggable]="false"
+      [resizable]="false"
+    >
+      <div class="dialog-content">
+        <div class="dialog-icon">
+          <i class="pi pi-exclamation-triangle text-warning"></i>
+        </div>
+        <p class="dialog-message">{{ message }}</p>
+      </div>
+      <div class="dialog-footer">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (click)="onCancel.emit()"
+          styleClass="p-button-text p-button-secondary"
+        ></p-button>
+        <p-button
+          label="Delete"
+          icon="pi pi-trash"
+          (click)="onConfirm.emit()"
+          styleClass="p-button-danger"
+        ></p-button>
+      </div>
+    </p-dialog> -->
+
+
+    <div *ngIf="visible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+      <div class="bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-100">
+          <div class="flex items-center gap-4 p-6 bg-rose-700 border-b border-red-800 rounded-t-lg">
+              <div class="relative">
+                  <i class="fa-solid fa-triangle-exclamation text-yellow-100 fa-2xl animate-pulse"></i>
+                  <div class="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping"></div>
+              </div>
+              <div>
+                  <span class="font-bold text-white text-lg">Confirm Action</span>
+                  <div class="text-sm text-yellow-100 mt-1">Please review before proceeding</div>
+              </div>
+          </div>
+          <div class="flex-1 p-6 bg-amber-100">
+              <p class="text-gray-700 mb-4 text-center">
+                  {{message}}
+              </p>
+    
+             
+          </div>
+          
+          <div class="flex justify-end gap-4 p-6 bg-amber-100 border-t border-gray-200 rounded-b-lg">
+              <span 
+                  type="button" 
+                  (click)="onCancel.emit()"
+                  class="group relative px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200 font-medium">
+                  <i class="pi pi-times mr-2"></i>
+                  Cancel
+                  <div class="absolute inset-0 bg-gray-100 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-200"></div>
+              </span>
+              <span 
+                  type="button" 
+                  (click)="onConfirm.emit()"
+                  class="group relative px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white border-2 border-red-600 rounded-lg hover:from-red-700 hover:to-orange-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 font-medium cursor-pointer">
+                  <i class="pi pi-check mr-2"></i>
+                  Confirm
+                  <div class="absolute inset-0 bg-white rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-200"></div>
+                  <div class="absolute -top-1 -right-1 w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+              </span>
+          </div>
+      </div>
+    </div>

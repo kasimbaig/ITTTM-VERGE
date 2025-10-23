@@ -1,0 +1,106 @@
+<div  class="max-w-screen-xl mx-auto">
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-industry"></i>
+      <div>
+        <h2>Manufacturer Master</h2>
+        <p>View & manage all manufacturers and suppliers</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <button class="btn primary btn-sm" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i> Add Manufacturer
+      </button>
+
+      <button class="btn outlined btn-sm">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button>
+
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+<div>
+
+  <app-paginated-table 
+    [columns]="cols" 
+    [apiUrl]="apiUrl"
+    [totalCount]="totalCount"
+    [data]="manufacturers"
+    [showEndActions]="true" 
+    [showViewAction]="true"
+    (viewEvent)="viewManufacturerDetails($event)" 
+    (editEvent)="editManufacturerDetails($event)" 
+    (deleteEvent)="deleteManufacturerDetails($event)"
+    (dataLoaded)="onDataLoaded($event)"
+     >
+  </app-paginated-table>
+</div>
+
+  
+
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteDialog"
+  [message]="'Are you sure you want to delete ' + (selectedManufacturer?.name || 'this manufacturer') + '?'"
+  (onConfirm)="confirmDeletion()"
+  (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<!-- View Manufacturer Details Dialog -->
+ <app-view-details
+  *ngIf="viewdisplayModal"
+  [open]="viewdisplayModal"
+  [viewDetails]="selectedManufacturer"
+  [headers]="formConfig"
+  (onOpenChange)="viewdisplayModal = $event"
+  [title]="'View Manufacturer Details'"
+></app-view-details>
+<!-- <p-dialog [(visible)]="isViewFormOpen" [modal]="true" [closable]="true" [header]="viewTitle"
+  [style]="{ width: '50vw' }">
+  <div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12 p-md-6" *ngFor="let field of formConfig">
+      <label [for]="field.key">{{ field.label }}</label>
+      <div class="p-inputtext p-component p-element" [ngSwitch]="field.type">
+        <span *ngSwitchCase="'text'">{{ selectedManufacturer?.[field.key] || 'N/A' }}</span>
+        <span *ngSwitchCase="'email'">{{ selectedManufacturer?.[field.key] || 'N/A' }}</span>
+        <ng-container *ngSwitchCase="'tel'">
+          <span>{{ selectedManufacturer?.[field.key] || 'N/A' }}</span>
+        </ng-container>
+        <span *ngSwitchCase="'textarea'">{{ selectedManufacturer?.[field.key] || 'N/A' }}</span>
+        <span *ngSwitchCase="'select'">
+          {{ getSelectOptionLabel(field, selectedManufacturer?.[field.key]) }}
+        </span>
+        <span *ngSwitchCase="'checkbox'">{{ selectedManufacturer?.[field.key] ? 'Yes' : 'No' }}</span>
+        <span *ngSwitchDefault>N/A</span>
+      </div>
+    </div> -->
+    <!-- Displaying nested properties like country name explicitly if not handled by formConfig -->
+    <!-- <div class="p-field p-col-12 p-md-6">
+      <label>Country Name</label>
+      <div class="p-inputtext p-component p-element">
+        <span>{{ selectedManufacturer?.country_name || 'N/A' }}</span>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button type="button" pButton icon="pi pi-times" label="Close" class="p-button-text" (click)="closeDialog()"></button>
+  </ng-template>
+</p-dialog> -->
+
+<app-toast></app-toast>
+<!-- Add Manufacturer Form -->
+<app-add-form [open]="isFormOpen" [formConfig]="formConfig" [formData]="newManufacturer" [fromTitle]="title" (onOpenChange)="isFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+
+<!-- Edit Manufacturer Form -->
+<app-add-form [open]="isEditFormOpen" [formConfig]="formConfig" [formData]="selectedManufacturer" [fromTitle]="editTitle" [isEditMode]="true" (onOpenChange)="isEditFormOpen = $event" (onSubmit)="handleEditSubmit($event)"></app-add-form>

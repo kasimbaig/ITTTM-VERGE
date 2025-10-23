@@ -1,0 +1,108 @@
+
+<div class="dashboard overflow-x-hidden">
+
+
+  <!-- Main Content -->
+  <main class="container main-content">
+    <div class="dropdowns-container1 w-full max-w-full">
+      <div class="dropdowns-sec" *ngFor="let card of shipCard">
+        <label class="dropdown-label">{{ card.label }}</label>
+        <p-dropdown
+          [options]="card.options"
+          [(ngModel)]="card.selectedOption"
+          placeholder="Select {{ card.label }}"
+          (onChange)="applyFilter(card.label, $event.value)"
+        >
+        </p-dropdown>
+      </div>
+      <button class="btn reset-btn" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <!-- Dashboard Title -->
+    <div class="mb-8">
+ 
+
+      <p class="text-gray-500 mt-1">
+        Comprehensive overview of the fleet maintenance operations
+      </p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full max-w-full">
+      <app-stat-card
+        *ngFor="let stat of stats; let i = index"
+        [title]="stat.title"
+        [value]="stat.value"
+        [description]="stat.change"
+        [icon]="getStatIcon(i)"
+        [color]="getCardColor(i)"
+      >
+      </app-stat-card>
+    </div>
+
+    <!-- Charts & Tables Section -->
+    <!-- Charts & Tables Section (first row) -->
+ <!-- Charts Row -->
+ <div class="charts-container w-full max-w-full">
+  <p-card class="chart-card">
+    <app-dash3-chart (segmentClick)="onSegmentClicked($event)" [data]="chartData2"></app-dash3-chart>
+  </p-card>
+  <p-card class="chart-card">
+    <app-dash4-chart [data]="chartData4"   [title]="'Department Tasks'"></app-dash4-chart>
+  </p-card>
+</div>
+
+
+   
+
+
+    <div class="dropdowns-container w-full max-w-full">
+      <div class="dropdowns-sec" *ngFor="let card of cards">
+        <label class="dropdown-label">{{ card.label }}</label>
+        <p-dropdown
+          [options]="card.options"
+          [(ngModel)]="card.selectedOption"
+          placeholder="Select {{ card.label }}"
+          (onChange)="applyFilter(card.label, $event.value)"
+        >
+        </p-dropdown>
+      </div>
+      <button class="btn reset-btn" (click)="resetFilters()">
+        <i class="pi pi-filter-slash"></i> Reset
+      </button>
+    </div>
+
+    <div class="mb-8 w-full max-w-full">
+      <app-paginated-table
+        [data]="maintopDetails"
+        [columns]="cols"
+        [showEndActions]="true"
+      ></app-paginated-table>
+    </div>
+
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t py-4 w-full max-w-full">
+    <div class="container text-center text-sm text-gray-500">
+      Naval CMMS ohoo Maintops Module Dashboard &copy; {{ currentYear }}
+    </div>
+  </footer>
+</div>
+<p-dialog
+  header="{{ selectedStatus }} Tasks"
+  [(visible)]="displayPopup"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  [closable]="true"
+>
+  <ul *ngIf="statusDetails.length; else noData">
+    <li *ngFor="let item of statusDetails">
+      {{ item.name }}
+    </li>
+  </ul>
+  <ng-template #noData>
+    <p>No records found for {{ selectedStatus }}</p>
+  </ng-template>
+</p-dialog>

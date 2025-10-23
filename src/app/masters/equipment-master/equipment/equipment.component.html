@@ -1,0 +1,299 @@
+<div >
+  <!-- Header Section -->
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-cog"></i>
+      <div>
+        <h2>Equipment Management</h2>
+        <p>View & manage equipment inventory across the naval fleet</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <button class="btn primary btn-sm" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i> Add Equipment
+      </button>
+
+      <button class="btn outlined btn-sm">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button>
+
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+<div class="max-w-screen-xl mx-auto">
+    <app-paginated-table 
+      [columns]="cols" 
+      [apiUrl]="apiUrl"
+      [totalCount]="totalCount"
+      [data]="departments"
+      [showEndActions]="true" 
+      (viewEvent)="view($event)"
+      (editEvent)="edit($event)" 
+      (deleteEvent)="deleteRow($event)"
+       >
+    </app-paginated-table>
+</div>
+
+    
+  </div>
+ 
+  
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteDialog"
+  [message]="'Are you sure you want to delete the equipment ' + (selectedDetails?.name || 'Equipment') + '?'"
+  (onConfirm)="confirmDeletion()"
+  (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<!-- View Details Component -->
+<app-view-details
+  *ngIf="viewdisplayModal"
+  [open]="viewdisplayModal"
+  [viewDetails]="selectedDetails"
+  [headers]="equipmentViewConfig"
+  (onOpenChange)="viewdisplayModal = $event"
+  [title]="'View Equipment Details'"
+></app-view-details>
+
+<!-- 
+<app-add-form *ngIf="isFormOpen" [open]="isFormOpen" [formConfig]="formConfigForNewDetails" [formData]="newDetails"  
+  [fromTitle]="title" (onOpenChange)="isFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+
+    <app-add-form *ngIf="isEditFormOpen" [open]="isEditFormOpen" [formConfig]="formConfigForNewDetails"    
+[formData]="selectedDetails" [fromTitle]="editTitle" [isEditMode]="true" (onOpenChange)="isEditFormOpen = $event"  
+  (onSubmit)="handleEditSubmit($event)"></app-add-form> -->
+
+
+
+<p-dialog [header]="isEdit + ' Equipment Details'" [(visible)]="isFormOpen" [modal]="true" [responsive]="true" [style]="{width: '80vw'}" [baseZIndex]="10000" [draggable]="false" [maximizable]="true" [resizable]="true">
+
+  <div class="p-6 bg-slate-100 shadow-md border border-slate-50 mx-auto">
+      <form [formGroup]="equipmentForm" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+              <!-- Section -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Section <span class="text-red-500">*</span> :</label>
+                  <p-dropdown 
+                      formControlName="section"
+                      [options]="filteredSection"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="Select section"
+                      [filter]="true"
+                      filterBy="name"
+                      (onChange)="onSectionChange($event)"
+                      class="col-span-4 border-2 border-gray-500 rounded-sm bg-white">
+                  </p-dropdown>
+              </div>
+              <!-- Group -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Group <span class="text-red-500">*</span> :</label>
+                  <p-dropdown 
+                      formControlName="group"
+                      [options]="filteredGroups"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="Select group"
+                      (onChange)="onGroupChange($event)"
+                      [filter]="true"
+                      filterBy="name"
+                      class="col-span-4 border-2 border-gray-500 rounded-sm bg-white">
+                  </p-dropdown>
+              </div>
+              <!-- Code -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Genreric Code :</label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="generic_code"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter code">
+              </div>
+              <!-- Country -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Type: </label>
+                <p-dropdown 
+                    formControlName="type"
+                    [options]="filteredTypes"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="--Select type--"
+                    [filter]="true"
+                    filterBy="name"
+                    class="col-span-4 border-2 border-gray-500 rounded-sm">
+                </p-dropdown>
+            </div>
+           
+                             <!-- Equipment Code -->
+               <div class="grid grid-cols-6 gap-4 items-center">
+                   <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Equipment Code <span class="text-red-500">*</span> :</label>
+                   <div class="col-span-4 flex items-center gap-2">
+                       <input 
+                           pInputText
+                           type="text" 
+                           formControlName="code"
+                           class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Auto-generated code"
+                           readonly>
+                       <div *ngIf="isLoading" class="flex items-center">
+                           <i class="pi pi-spin pi-spinner text-blue-500"></i>
+                           <span class="ml-2 text-sm text-gray-500">Generating...</span>
+                       </div>
+                   </div>
+               </div>
+                
+              <!-- Image -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Equipment Name <span class="text-red-500">*</span> :</label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="name"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter equipment name">
+              </div>
+              <!-- Model -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Equipment Model : </label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="model"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter model">
+              </div>
+              <!-- Manufacture Name -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Maintop Number : </label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="maintop_number"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter maintop number">
+              </div>
+              <!-- Manufacture Address -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Acquaint Issued : </label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="acquaint_issued"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter acquaint issued">
+              </div>
+              
+              <!-- Authority -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Authority : </label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="authority"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter authority">
+              </div>
+              <!-- Type -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                  <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">ILMS Equipment Code : </label>
+                  <input 
+                      pInputText
+                      type="text" 
+                      formControlName="ilms_equipment_code"
+                      class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                      placeholder="Enter ILMS equipment code">
+              </div>
+              <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Country: </label>
+                <select 
+                  formControlName="country"
+                  class="col-span-4 border-2 border-gray-500 rounded-sm bg-white py-2"
+                  placeholder="--Select country--"
+                  style="color: gray-400;">
+                  <option value="" selected>--Select country--</option>
+                  <option *ngFor="let country of filteredCountries" [value]="country.value">{{ country.label }}</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Manufacturer: </label>
+                <select 
+                  formControlName="manufacturer"
+                  class="col-span-3 border-2 border-gray-500 rounded-sm bg-white py-2"
+                  placeholder="--Select manufacturer--"
+                  style="color: gray-400;">
+                  <option value="" selected>--Select manufacturer--</option>
+                  <option *ngFor="let manufacturer of filteredManufacturers" [value]="manufacturer.id">{{ manufacturer.name }}</option>
+                </select>
+                <span (click)="addManufacturer()" class="col-span-1 bg-green-100 border-2 py-1 ps-1 border-green-500 rounded-sm text-green-600 cursor-pointer text-xs hover:bg-green-500 hover:text-white" ><i class="fa fa-plus fa-xs"> </i> Manufacturer</span>
+
+              </div>
+              <div class="grid grid-cols-6 gap-4 items-center dropdown-cell">
+                <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Supplier: </label>
+
+                <select 
+                  formControlName="supplier"
+                  class="col-span-3 border-2 border-gray-500 rounded-sm bg-white py-2 dropdown-container"
+                  placeholder="--Select supplier--"
+                  style="color: gray-400;">
+                  <option value="" selected>--Select supplier--</option>
+                  <option *ngFor="let supplier of filteredSuppliers" [value]="supplier.id">{{ supplier.name }}</option>
+                </select>
+                <span (click)="addSupplier()" class="col-span-1 bg-green-100 border-2 py-2 ps-1 border-green-500 rounded-sm text-green-600 cursor-pointer text-sm hover:bg-green-500 hover:text-white" ><i class="fa fa-plus fa-sm"> </i> Supplier</span>
+
+              </div>
+             
+              <!-- Obsolete -->
+              <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 font-semibold col-span-2">Obsolete</label>
+                <div class="col-span-4 flex items-center">
+                    <input 
+                        type="checkbox" 
+                        formControlName="obsolete"
+                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        id="obsolete-checkbox">
+                    <label for="obsolete-checkbox" class="ml-2 text-sm text-gray-700">Obsolete</label>
+                </div>
+            </div>
+         
+          </div>
+      </form>
+      
+      <div class="flex justify-end gap-2 mt-6 pt-4 border-t border-gray-200">
+          <button (click)="closeForm()"
+              type="button" 
+              class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-200">
+              Cancel
+          </button>
+          <button 
+              type="button" 
+              class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-600 -700 transition-colors duration-200"
+              (click)="submit()">
+              Save
+          </button>
+      </div>
+  </div>
+
+</p-dialog>
+
+<app-add-form [open]="isManufacturerFormOpen" [formConfig]="manufacturerFormConfig" [formData]="newManufacturer" [fromTitle]="'Add New Manufacturer'" (onOpenChange)="isManufacturerFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+<app-add-form *ngIf="isSupplierFormOpen" [open]="isSupplierFormOpen" [formConfig]="formConfigForNewDetails" [formData]="newSupplier" [fromTitle]="'Add New Supplier'" (onOpenChange)="isSupplierFormOpen = $event" (onSubmit)="handleSupplierSubmit($event)"></app-add-form>
+
+
+
+
+
+
+

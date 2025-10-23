@@ -1,0 +1,85 @@
+<div class="max-w-screen-xl mx-auto">
+  <!-- Header Section -->
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-tags"></i>
+      <div>
+        <h2>Ship Category Management</h2>
+        <p>View & manage ship categories across the naval fleet</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <button class="btn primary btn-sm" (click)="openAddCategory()">
+        <i class="pi pi-plus"></i> Add Category
+      </button>
+
+      <button class="btn outlined btn-sm">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button>
+
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <app-paginated-table *ngIf="toggleTable"
+    [columns]="cols" 
+    [apiUrl]="apiUrl"
+    [totalCount]="totalCount"
+    [data]="departments" 
+    [showEndActions]="true"
+    (viewEvent)="viewDeptDetails($event)" 
+    (editEvent)="editDetails($event)"
+    (deleteEvent)="deleteDeptDetails($event)" 
+    [showViewAction]="false"
+    (dataLoaded)="onDataLoaded($event)"
+     >
+  </app-paginated-table>
+
+  
+</div>
+<app-toast></app-toast>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteDialog"
+  [message]="'Are you sure you want to delete ' + (selectedDept?.name || 'this ship category') + '?'"
+  (onConfirm)="confirmDeletion()"
+  (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<!-- Add Category Form using reusable AddFormComponent -->
+<app-add-form 
+  *ngIf="isFormOpen && !isEditFormOpen" 
+  [open]="isFormOpen" 
+  [fromTitle]="title"
+  [submitLabel]="'Save'"
+  [isEditMode]="false"
+  [formData]="newDepartment" 
+  [formConfig]="shipCategoryFormConfig"
+  (onOpenChange)="isFormOpen = $event"
+  (onSubmit)="handleSubmit($event)">
+</app-add-form>
+
+<!-- Edit Category Form using reusable AddFormComponent -->
+<app-add-form 
+  *ngIf="isEditFormOpen" 
+  [open]="isEditFormOpen" 
+  [fromTitle]="editTitle"
+  [submitLabel]="'Update'"
+  [isEditMode]="true"
+  [formData]="selectedDept" 
+  [formConfig]="shipCategoryFormConfig"
+  (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)">
+</app-add-form>

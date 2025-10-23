@@ -1,0 +1,177 @@
+
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-6 text-center">
+    <h3 class="text-lg font-semibold text-blue-600">Fuel/AVCAT/Torsionmeter</h3>
+  </div>
+
+  <!-- Notice Section -->
+  <div class="mb-4 p-3 bg-red-100 border border-red-200 rounded">
+    <div class="text-red-600 text-sm">
+      <div class="flex items-start gap-2 mb-2">
+        <i class="pi pi-info-circle mt-1"></i>
+        <span class="font-medium">Field Guide:</span>
+      </div>
+      <div class="ml-6 space-y-1">
+        <div>
+            <div class="font-medium">Note:-</div>
+            <div class="ml-6 space-y-1">
+                <div>1. Fuel details must be fill in ton at Harbour if equipment run at harbour.</div>
+                <div>2. Fuel details must be fill in ton at Sea if equipment run at harbour or ship activity indicated days at sea.</div>
+                <div>3. Fuel details must be fill in ton at Anchorage if ship activity indicated days at anchorage.</div>
+                <div>4. AVCAT status fill in litter if applicable.</div>
+                <div>5. Fill Details of Rorsion meter if applicable</div>
+            </div>
+        </div>  
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end mb-3">
+    <div class="flex gap-2">
+      <button (click)="addFuel()"
+        class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+      </button>
+      <button (click)="editFuel()"
+        class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+      <button (click)="saveFuel()"
+        class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+  <!-- FUEL CONSUMPTION IN BUNKER/TANK Section -->
+  <div class="mb-6">
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+      <span>1. FUEL CONSUMPTION IN BUNKER/TANK</span>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400 ">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">B/F From Last Month(Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Received (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Cons. In Harbour (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Cons. At Anchorage (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Cons. At Sea (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Total Cons. (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Defuelled (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Bal Left Onboard (Tons)</th>
+          </tr>
+        </thead>
+        <tbody>
+                     <ng-container *ngFor="let item of fuelConsumptionData; let i = index">
+             <tr class="bg-white">
+               <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.b_f_from_last_month" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.recieved" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.consumed_in_harbour" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.consumed_at_anchorage" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.consumed_at_sea" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.total_consumed" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.defueled" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.balance_left_on_board" placeholder="0.00">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="fuelConsumptionData.length === 0">
+            <td colspan="8" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No fuel consumption data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- AVCAT CONSUMPTION Section -->
+  <div class="mb-6">
+    <div class="flex justify-end mb-3">
+      <div class="flex gap-2">
+        <button (click)="addAvcat()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+        </button>
+        <button (click)="editAvcat()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+        </button>
+        <button (click)="saveAvcat()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+        </button>
+      </div>
+    </div>
+    <div class="bg-blue-600 -950 text-white p-2  font-semibold">
+      2. AVCAT CONSUMPTION(LITRE)
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400 text-md">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">B/F From Last Month(Litres)</th>
+            <th class="border border-gray-400 p-2 text-center">Received (Litres)</th>
+            <th class="border border-gray-400 p-2 text-center">Given to A/C(Litres)</th>
+            <th class="border border-gray-400 p-2 text-center">Use For Trials/Drained (Litres)</th>
+            <th class="border border-gray-400 p-2 text-center">Total Cons. (Litres)</th>
+                <th class="border border-gray-400 p-2 text-center">Defuelled (Litres)</th>
+            <th class="border border-gray-400 p-2 text-center">Bal Left Onboard (Litres)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of avcatStatusData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.b_f_from_last_month" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.recieved" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.given_to_ac" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.used_for_trials_drained" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.total_consumed" placeholder="0.00">
+              </td>
+             
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.defueled" placeholder="0.00">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-400 p-2 text-center" [(ngModel)]="item.balance_left_on_board" placeholder="0.00">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="avcatStatusData.length === 0">
+            <td colspan="8" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No AVCAT consumption data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

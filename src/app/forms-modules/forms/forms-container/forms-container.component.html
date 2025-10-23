@@ -1,0 +1,42 @@
+<div class="forms-container">
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <div class="tab-list">
+      <button 
+        *ngFor="let tab of tabs" 
+        class="tab-button"
+        [class.active]="activeTab === tab.id"
+        (click)="setActiveTab(tab.id)">
+        {{ tab.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- SEG Form Tab -->
+    <div *ngIf="activeTab === 'seg-form'" class="tab-panel">
+      <app-seg-form></app-seg-form>
+    </div>
+
+    <!-- ETMA Form Tab -->
+    <div *ngIf="activeTab === 'etma-form'" class="tab-panel">
+      <app-etma-form></app-etma-form>
+    </div>
+
+    <!-- Intermediate Form Tab -->
+    <div *ngIf="activeTab === 'intermediate-form'" class="tab-panel">
+      <app-intermediate-form></app-intermediate-form>
+    </div>
+
+    <!-- Final Form Tab -->
+    <div *ngIf="activeTab === 'final-form'" class="tab-panel">
+      <app-final-form></app-final-form>
+    </div>
+
+    <!-- U/W Compartments Form Tab -->
+    <div *ngIf="activeTab === 'uw-compartments-form'" class="tab-panel">
+      <app-uw-compartments-form></app-uw-compartments-form>
+    </div>
+  </div>
+</div>

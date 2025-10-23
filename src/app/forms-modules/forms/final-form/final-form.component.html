@@ -1,0 +1,372 @@
+<div style="min-height: 100vh; background-color: #f9fafb; padding: 2rem 0;">
+  <div class="w-full px-4">
+    <!-- Header -->
+    <!-- <div style="background-color: #3b82f6; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; margin-bottom: 2rem;">
+      <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h1 style="font-size: 1.5rem; font-weight: bold; text-align: center; flex: 1; margin: 0;">
+            Final Underwater Hull Inspection
+          </h1>
+          <button
+            type="button"
+            (click)="toggleView()"
+            style="padding: 0.5rem 1rem; background-color: white; color: #3b82f6; font-weight: 500; border: 1px solid #3b82f6; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease;">
+            <i class="pi pi-table" style="margin-right: 0.5rem;"></i> {{ showTableView ? 'Show Form' : 'Show Table' }}
+          </button>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Table View -->
+    <div *ngIf="showTableView && !formOnlyMode">
+      <app-final-form-table
+        (editEvent)="onEditForm($event)"
+        (viewEvent)="onViewForm($event)"
+        (deleteEvent)="onDeleteForm($event)"
+        (tabChanged)="onTabChanged($event)">
+      </app-final-form-table>
+    </div>
+
+    <!-- Form View -->
+    <div *ngIf="!showTableView || formOnlyMode">
+      <form [formGroup]="finalForm" (ngSubmit)="onSubmit()" class="space-y-8">
+        
+        <!-- Inspection Details Section -->
+        <div class="bg-white shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+            <div class="flex justify-between items-center">
+              <h2 class="text-lg font-semibold text-white">Inspection Details</h2>
+              <!-- Back to Table button (for same component) -->
+              <button
+                *ngIf="!formOnlyMode"
+                type="button"
+                (click)="toggleView()"
+                style="padding: 1rem 1.5rem; background-color: transparent; color: white; font-weight: 500; border: 1px solid white; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 0 0 2px transparent;">
+                <i class="pi pi-arrow-left mr-2"></i> Back to Table
+              </button>
+              <!-- Back to List button (for Commentor Sheet) -->
+              <button
+                *ngIf="formOnlyMode && (mode === 'edit' || mode === 'view')"
+                type="button"
+                (click)="goBackToList()"
+                style="padding: 1rem 1.5rem; background-color: transparent; color: white; font-weight: 500; border: 1px solid white; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 0 0 2px transparent;">
+                <i class="pi pi-arrow-left mr-2"></i> Back to List
+              </button>
+            </div>
+            </div>
+        <!-- Route Configuration Section - Only show in edit mode -->
+        <div *ngIf="!isAddMode && finalForm.get('id')?.value" class="bg-white shadow-sm border border-gray-200">
+          <div class="p-6">
+            <app-route-config 
+              [useApi]="true"
+              [transactionId]="finalForm.get('id')?.value"
+              [submodule]="1"
+              [vesselId]="finalForm.get('ship_id')?.value"
+              [formTitle]="'Final Underwater Hull Inspection Route Config'"
+              [hideButtons]="isViewMode"
+              (routeConfigSaved)="onRouteConfigSaved($event)"
+              (nextStepClicked)="onNextStep($event)"
+              (timelineToggled)="onTimelineToggle($event)">
+            </app-route-config>
+          </div>
+        </div>
+          
+          <div class="p-6">
+            <!-- Inspection Details in Single Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  VESSEL <span class="text-red-500">*</span>
+                </label>
+                <select 
+                  formControlName="ship_id"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="finalForm.get('ship_id')?.invalid && finalForm.get('ship_id')?.touched"
+                  [disabled]="loading">
+                  <option value="">--Select Ship--</option>
+                  <option *ngFor="let ship of ships" [value]="ship.id">
+                    {{ ship.name }}
+                  </option>
+                </select>
+                <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  DATE OF INSPECTION <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="date"
+                  formControlName="dt_inspection"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="finalForm.get('dt_inspection')?.invalid && finalForm.get('dt_inspection')?.touched">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  AUTHORITY FOR INSPECTION <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="auth_inspection"
+                  placeholder="Enter authority"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="finalForm.get('auth_inspection')?.invalid && finalForm.get('auth_inspection')?.touched">
+              </div>
+            </div>
+            
+            <!-- Additional Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  SHIP NOT CLEARED FOR UNDOCKING
+                </label>
+                <div class="flex items-center space-x-4">
+                  <label class="flex items-center">
+                    <input 
+                      type="radio" 
+                      formControlName="ship_not_cleaerd_for_undocking" 
+                      [value]="false"
+                      class="mr-2">
+                    No
+                  </label>
+                  <label class="flex items-center">
+                    <input 
+                      type="radio" 
+                      formControlName="ship_not_cleaerd_for_undocking" 
+                      [value]="true"
+                      class="mr-2">
+                    Yes
+                  </label>
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  FINAL OBSERVATION
+                </label>
+                <textarea 
+                  formControlName="final_observation"
+                  rows="3"
+                  placeholder="Enter final inspection observations and findings..."
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </textarea>
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  RE-OFFER INSPECTION ON
+                </label>
+                <input 
+                  type="date"
+                  formControlName="reoffer_date"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+            </div>
+
+            <!-- HITU's Inspectors Section -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <app-dynamic-table
+                title="HITU's Inspectors"
+                [columns]="inspectorColumns"
+                [formArray]="inspectors"
+                [minRows]="0"
+                [maxRows]="20"
+                [showRowCounter]="true"
+                [showLabel]="false"
+                [createRowFunction]="createInspectorRow.bind(this)"
+                (rowCountChange)="updateInspectorRows($event)">
+              </app-dynamic-table>
+            </div>
+            
+          </div>
+        </div>
+
+     
+
+      <!-- DEFECTS/OBSERVATIONS Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold text-white">DEFECTS/OBSERVATIONS</h2>
+        </div>
+        
+        <div class="p-6">
+          <!-- Sub-section (a) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(a) Confirmation on observations / defects of intermediate U/W hull inspection - List attached</h3>
+            <app-dynamic-table
+              title=""
+              [columns]="defectsColumns"
+              [formArray]="defectsA"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDefectsRow.bind(this)"
+              (rowCountChange)="updateDefectsARows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- Sub-section (b) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(b) SS to confirm all internal U/W compartments defects have been liquidated</h3>
+            <app-dynamic-table
+              title=""
+              [columns]="defectsColumns"
+              [formArray]="defectsB"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDefectsRow.bind(this)"
+              (rowCountChange)="updateDefectsBRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- Sub-section (c) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(c) SS to confirm</h3>
+            <app-dynamic-table
+              title=""
+              [columns]="defectsColumns"
+              [formArray]="defectsC"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDefectsRow.bind(this)"
+              (rowCountChange)="updateDefectsCRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- Sub-section (i) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(i) Fitment of all U/W and overboard discharge valves</h3>
+            <app-dynamic-table
+              title=""
+              [columns]="defectsColumns"
+              [formArray]="defectsI"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDefectsRow.bind(this)"
+              (rowCountChange)="updateDefectsIRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- Sub-section (ii) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(ii) Ship is in the same trim condition as at the time of docking</h3>
+            <app-dynamic-table
+              title=""
+              [columns]="defectsColumns"
+              [formArray]="defectsII"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDefectsRow.bind(this)"
+              (rowCountChange)="updateDefectsIIRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- Sub-section (d) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(d) Refit authority to confirm no doublers existing on the U/W hull</h3>
+            <app-dynamic-table
+              title=""
+              [columns]="simpleColumns"
+              [formArray]="defectsD"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createSimpleRow.bind(this)"
+              (rowCountChange)="updateDefectsDRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- Sub-section (e) -->
+          <div class="mb-4">
+            <h3 class="text-lg font-semibold text-black mb-4">(e) Fresh defects / observations <span class="text-red-500">*</span></h3>
+            <app-dynamic-table
+              title=""
+              [columns]="simpleColumns"
+              [formArray]="defectsE"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createSimpleRow.bind(this)"
+              (rowCountChange)="updateDefectsERows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approves Checkbox Section -->
+     
+
+      <!-- Clearance and Signatures Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        
+        
+        <div class="p-6">
+                    <!-- Action Buttons - Hide in view mode -->
+          <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+            <div class="flex flex-wrap justify-center gap-4 p-6">
+              <button 
+                type="button"
+                style="padding: 1.5rem 2rem; background-color: #6b7280; color: white; font-weight: 500; border: none; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease;">
+                <i class="pi pi-download mr-2"></i>Fetch Drafts
+              </button>
+          <button 
+            type="button"
+            (click)="onSaveDraft()"
+            class="px-6 py-2 bg-yellow-500 text-white font-medium rounded border-none cursor-pointer transition-all duration-200 hover:bg-yellow-600">
+            <i class="pi pi-save mr-2"></i>SAVE DRAFT
+          </button>
+              <button 
+                type="button"
+                (click)="onClear()"
+                class="px-6 py-2 bg-red-500 text-white font-medium rounded border-none cursor-pointer transition-all duration-200 hover:bg-red-600">
+                <i class="pi pi-trash mr-2"></i>Clear
+              </button>
+              <button 
+                type="submit"
+                class="px-6 py-2 bg-green-500 text-white font-medium rounded border-none cursor-pointer transition-all duration-200 hover:bg-green-600">
+                <i class="pi pi-check mr-2"></i>Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- Route Configuration Popup using Reusable Component -->
+<app-route-config-popup
+  [isVisible]="showRouteConfigPopup"
+  [title]="'Route Configuration'"
+  [subtitle]="'Smart Configuration'"
+  [submodule]="1"
+  [shipId]="finalForm.get('inspectionType')?.value"
+  [transactionId]="finalForm.get('id')?.value"
+  [useApi]="true"
+  (close)="onCloseRouteConfigPopup()"
+  (configureRoute)="onConfigureRoute()"
+  (saveDirectly)="onSaveDirectly()"
+  (routeConfigSaved)="onRouteConfigSaved($event)"
+  (refreshTimeline)="onRefreshTimeline()">
+</app-route-config-popup>
+
+<!-- Route Configuration Modal (for Configure Route option) -->
+<div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+    <!-- Modal Header -->
+   
+  </div>
+</div>

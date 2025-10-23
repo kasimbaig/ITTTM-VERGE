@@ -1,0 +1,30 @@
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* overflow-x: hidden; */
+
+  @media (max-width: 767px) {
+    max-width: 380px;
+    width: 100%;
+  }
+  .layout-body {
+    display: flex;
+    flex: 1;
+    height: 100%;
+  }
+}
+.content {
+  flex-grow: 1;
+}
+@media (max-width: 767px) {
+  .content {
+    max-width: 380px;
+  }
+}
+.floating-chatbot-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000; /* Ensure it's on top of other content */
+}

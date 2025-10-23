@@ -1,0 +1,50 @@
+<p-dialog 
+  [(visible)]="open" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [style]="{width: '80vw'}"
+  (onHide)="closeDialog()"
+>
+  <ng-template pTemplate="header">
+    <div class="dialog-header-content">
+      <h2 class="dialog-title">{{ title }}</h2>
+    </div>
+  </ng-template>
+
+  <!-- Content Area -->
+  <div class="p-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div class="elegant-section">
+      <div class="elegant-info-grid">
+        <div class="elegant-info-item" *ngFor="let field of headers">
+          <div class="elegant-info-label">{{ field.label }}</div>
+          <div class="elegant-info-value">
+            <ng-container [ngSwitch]="field.type">
+              <span *ngSwitchCase="'select'" class="value-text">
+                {{ viewDetails[field.key]?.code || viewDetails[field.key] }}
+              </span>
+              <span *ngSwitchDefault class="value-text">
+                {{ viewDetails[field.key] || 'N/A' }}
+              </span>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3 pt-4">
+      <button 
+        type="button" 
+        class="px-6 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-600 -700 transition-colors duration-200"
+        (click)="closeDialog()">
+        Close
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

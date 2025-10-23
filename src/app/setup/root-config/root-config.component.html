@@ -1,0 +1,151 @@
+<div class="root-config-container">
+  <!-- Header -->
+  <div class="root-config-header">
+    <div class="header-content">
+      <div class="header-left">
+        <button class="btn-back" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i>
+          Back to Setup
+        </button>
+        <h2 class="root-config-title">Root Configurations</h2>
+      </div>
+      <div class="header-right">
+        <button class="btn-switch-mode" (click)="openSwitchModeDialog()">
+          <i class="pi pi-th-large"></i>
+        </button>
+        <button class="btn-add-primary" (click)="addNewConfig()">
+          <i class="pi pi-plus"></i>
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="root-config-content">
+    <div class="content-section">
+      <!-- <div class="table-header">
+        <div>
+          <h3>Root Configurations</h3>
+          <p>Manage root-level system configuration settings and parameters.</p>
+        </div>
+        <div>
+          <button class="btn-add" (click)="addNewConfig()">
+            <i class="pi pi-plus"></i>
+            Add Config
+          </button>
+        </div>
+      </div> -->
+
+      <app-resuable-table
+        [gridColumns]="gridColumns"
+        [filteredData]="rootConfigs"
+        [isCheckBox]="false"
+        [isAction]="true"
+        [isView]="true"
+        [isEditable]="true"
+        [isDeletable]="true"
+        [isAdd]="false"
+        [isPaginator]="true"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [lazy]="true"
+        (viewEvent)="viewConfig($event)"
+        (editEvent)="editConfig($event)"
+        (deleteEvent)="deleteConfig($event)"
+        (pageChangeEvent)="onPageChange($event)"
+        (rowsPerPageChangeEvent)="onRowsPerPageChange($event)">
+      </app-resuable-table>
+    </div>
+  </div>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)">
+          <div class="tile-icon">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+
+  <!-- Add Form -->
+  <app-add-form
+    *ngIf="showAddForm"
+    [open]="showAddForm"
+    [formConfig]="formConfig"
+    [formData]="selectedConfig"
+    [isSingleColumn]="true"
+    [fromTitle]="'Add New Config'"
+    [submitLabel]="'Add Config'"
+    (onOpenChange)="closeAddForm()"
+    (onSubmit)="handleAddSubmit($event)"
+    (onSelectChange)="onSelectChange($event)">
+  </app-add-form>
+
+  <!-- Edit Form -->
+  <app-add-form
+    *ngIf="showEditForm"
+    [open]="showEditForm"
+    [formConfig]="formConfig"
+    [formData]="selectedConfig"
+    [isSingleColumn]="true"
+    (onSelectChange)="onSelectChange($event)"
+    [fromTitle]="'Edit Config'"
+    [submitLabel]="'Update Config'"
+    [isEditMode]="true"
+    (onOpenChange)="closeEditForm()"
+    (onSubmit)="handleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- View Form -->
+  <app-add-form
+    *ngIf="showViewForm"
+    [open]="showViewForm"
+    [formConfig]="formConfig"
+    [formData]="selectedConfig"
+    [fromTitle]="'View Config Details'"
+    [submitLabel]="'Close'"
+    [isEditMode]="false"
+    (onOpenChange)="closeViewForm()"
+    (onSubmit)="handleViewSubmit($event)">
+  </app-add-form>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="showDeleteModal"
+    [visible]="showDeleteModal"
+    [itemName]="selectedConfig?.key || ''"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteModal()">
+  </app-delete-confirmation-modal>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+</div>

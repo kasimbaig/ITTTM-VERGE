@@ -1,0 +1,33 @@
+<app-shared-layout>
+  <div class="registration-content">
+    <div class="registration-container">
+      <div class="form-header">
+        <h1>New User Registration</h1>
+        <p>Click the button below to open the registration form</p>
+      </div>
+      
+      <div class="action-buttons">
+        <button mat-raised-button class="open-form-btn" (click)="openRegistrationForm()">
+          <mat-icon>person_add</mat-icon>
+          Open Registration Form
+        </button>
+        <button mat-stroked-button class="back-btn" (click)="onBackToLogin()">
+          <mat-icon>arrow_back</mat-icon>
+          Back To Home
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Form Component -->
+  <app-add-form
+    [open]="showRegistrationForm"
+    [formConfig]="formConfig"
+    [formData]="formData"
+    [fromTitle]="'New User Registration'"
+    [submitLabel]="'Register User'"
+    [isSingleColumn]="false"
+    (onOpenChange)="onFormOpenChange($event)"
+    (onSubmit)="onRegistrationSubmit($event)"
+  ></app-add-form>
+</app-shared-layout>

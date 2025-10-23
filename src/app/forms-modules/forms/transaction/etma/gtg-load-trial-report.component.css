@@ -1,0 +1,184 @@
+/* GTG Load Trial Report Form Styles */
+.gtg-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h2 {
+  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.form-section h3 {
+  color: #374151;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Custom styling for form inputs */
+.form-input {
+  border: 1px solid #9ca3af;
+  background-color: white;
+  color: black;
+}
+
+.form-input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #3b82f6;
+}
+
+/* Header styling */
+.form-header {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+}
+
+.form-header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Section headers */
+.section-header {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+}
+
+/* Equipment subsection styling */
+.equipment-subsection {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+}
+
+.equipment-subsection h3 {
+  color: #1f2937;
+  font-weight: 600;
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 0.5rem;
+}
+
+/* Required field indicators */
+.required-field {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  background-color: #6b7280;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-success {
+  background-color: #059669;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-success:hover {
+  background-color: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form validation styling */
+.field-error {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.field-error:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .gtg-form-container {
+    padding: 1rem;
+  }
+  
+  .form-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .form-header h2 {
+    font-size: 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-danger {
+    display: none;
+  }
+  
+  .gtg-form-container {
+    box-shadow: none;
+    border: none;
+  }
+  
+  .form-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* Disabled state styling for Ship dropdown only in view mode */
+select.ship-dropdown:disabled,
+select.ship-dropdown.disabled {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  pointer-events: none !important;
+}

@@ -1,0 +1,124 @@
+<div class="">
+  <!-- Header Section -->
+  <div class="command-header flex justify-between items-center mb-6">
+    <div class="command-title-block flex items-center gap-3">
+      <i class="pi pi-sitemap text-3xl"></i>
+      <div>
+        <h2 class="text-2xl font-semibold">Section Management</h2>
+        <p class="text-sm">View & manage ship sections across the naval fleet</p>
+      </div>
+    </div>
+
+    <div class="command-actions flex gap-3">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <button class="btn primary btn-sm" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i> Add Section
+      </button>
+
+      <button class="btn outlined btn-sm" (click)="isBulkUploadPopup = true">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button>
+
+      <div class="menu-group relative">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+ 
+  <!-- IMPORTANT: This is where your toast messages will appear -->
+  <app-toast></app-toast> 
+
+
+
+  <!-- Loading Spinner: Conditionally rendered based on isLoading -->
+  <div *ngIf="isLoading" class="flex justify-center items-center h-40">
+    <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+  </div>
+  <app-paginated-table
+    *ngIf="!isLoading"
+    [columns]="cols"
+    [apiUrl]="apiUrl"
+    [totalCount]="totalCount"
+     
+    [showEndActions]="true"
+    (viewEvent)="viewDetails($event)"
+    (editEvent)="editDetails($event)"
+    (deleteEvent)="deleteSectionDetails($event)"
+    (dataLoaded)="onDataLoaded($event)"
+     
+  ></app-paginated-table>
+
+
+
+  <!-- Bulk Upload Popup -->
+  <p-dialog
+    header="Bulk Upload Sections"
+    [(visible)]="isBulkUploadPopup"
+    [style]="{ width: '500px' }"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeDialog()"
+  >
+    <p-fileUpload
+      name="bulkFile"
+      url="api/upload-sections"
+      accept=".xlsx,.csv"
+      maxFileSize="1000000"
+      (onUpload)="handleBulkUpload($event)"
+      [auto]="true"
+      chooseLabel="Select File"
+      uploadLabel="Upload"
+    ></p-fileUpload>
+  </p-dialog>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+    [visible]="isDeleteConfirmationVisible"
+    [message]="'Are you sure you want to delete the section: ' + selectedDetails?.name + '?'"
+    (onConfirm)="confirmDeletion()"
+    (onCancel)="isDeleteConfirmationVisible = false"
+  ></app-delete-confirmation-modal>
+
+  <!-- View Details Component -->
+  <app-view-details
+    *ngIf="isViewDetailsOpen"
+    [open]="isViewDetailsOpen"
+    [viewDetails]="detailsForViewComponent"
+    [headers]="formConfigForNewDetails"
+    (onOpenChange)="isViewDetailsOpen = $event"
+    [title]="viewDetailsTitle"
+  ></app-view-details>
+
+</div>
+
+  <!-- Add Form -->
+  <app-add-form
+    *ngIf="isFormOpen"
+    [open]="isFormOpen"
+    [isSingleColumn]="true"
+    [formConfig]="formConfigForNewDetails"
+    [formData]="newDetails"
+    [fromTitle]="title"
+    (onOpenChange)="isFormOpen = $event"
+    (onSubmit)="handleSubmit($event)"
+  ></app-add-form>
+
+  <!-- Edit Form -->
+  <app-add-form
+    *ngIf="isEditFormOpen"
+    [open]="isEditFormOpen"
+    [isSingleColumn]="true"
+    [formConfig]="formConfigForNewDetails"
+    [formData]="selectedDetails"
+    [fromTitle]="editTitle"
+    [isEditMode]="true"
+    (onOpenChange)="isEditFormOpen = $event"
+    (onSubmit)="handleEditSubmit($event)"
+  ></app-add-form>

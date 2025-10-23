@@ -1,0 +1,99 @@
+// Custom component overrides for blue gradient theme
+// Using direct CSS overrides instead of Material Design theming
+
+.mat-mdc-raised-button.mat-primary {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15) !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    background: linear-gradient(135deg, #1e40af 0%, #60a5fa 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.25) !important;
+  }
+}
+
+.mat-mdc-button.mat-primary {
+  color: #1e3a8a !important;
+  font-weight: 600 !important;
+  
+  &:hover {
+    background: rgba(30, 58, 138, 0.1) !important;
+  }
+}
+
+.mat-mdc-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(30, 58, 138, 0.1) !important;
+  border: 1px solid #e2e8f0 !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    box-shadow: 0 8px 30px rgba(30, 58, 138, 0.15) !important;
+    transform: translateY(-2px) !important;
+  }
+}
+
+.mat-mdc-form-field {
+  .mat-mdc-form-field-focus-overlay {
+    background-color: rgba(30, 58, 138, 0.1) !important;
+  }
+  
+  &.mat-focused .mat-mdc-form-field-underline {
+    background-color: #3b82f6 !important;
+  }
+}
+
+.mat-mdc-table {
+  .mat-mdc-header-row {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+    
+    .mat-mdc-header-cell {
+      color: white !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+    }
+  }
+  
+  .mat-mdc-row:nth-child(even) {
+    background: linear-gradient(90deg, #f8fafc 0%, #e0f2fe 100%) !important;
+  }
+  
+  .mat-mdc-row:hover {
+    background: linear-gradient(90deg, #e0f2fe 0%, #7dd3fc 100%) !important;
+    transform: scale(1.01) !important;
+  }
+}
+
+.mat-mdc-dialog-container {
+  .mat-mdc-dialog-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+    color: white !important;
+    border-radius: 12px 12px 0 0 !important;
+  }
+  
+  .mat-mdc-dialog-content {
+    background: #ffffff !important;
+    border-radius: 0 0 12px 12px !important;
+  }
+}
+
+.mat-mdc-snack-bar-container {
+  &.success {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+    color: white !important;
+  }
+  
+  &.error {
+    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%) !important;
+    color: white !important;
+  }
+  
+  &.warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%) !important;
+    color: white !important;
+  }
+} 

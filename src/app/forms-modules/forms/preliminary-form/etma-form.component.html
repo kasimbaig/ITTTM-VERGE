@@ -1,0 +1,475 @@
+<div style="min-height: 100vh; background-color: #f9fafb; padding: 2rem 0;">
+  <div style="width: 100%; padding: 0 1rem;">
+    <!-- Table View -->
+    <div *ngIf="showTableView && !formOnlyMode">
+      <app-preliminary-form-table
+        title="Preliminary Form Records"
+        apiUrl="/hitu/preliminary-underwater-hull-inspection-reports/"
+        (editEvent)="onEditForm($event)"
+        (viewEvent)="onViewForm($event)"
+        (deleteEvent)="onDeleteForm($event)">
+      </app-preliminary-form-table>
+    </div>
+
+    <!-- Form View -->
+    <div *ngIf="!showTableView || formOnlyMode">
+      <form [formGroup]="etmaForm" (ngSubmit)="onSubmit()">
+        <!-- Inspection Details Section -->
+        <div style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+          <div style="padding: 0.5rem 1.5rem; border-bottom: 1px solid #e5e7eb; background-color: #04308f;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h2 style="font-size: 1.125rem; font-weight: 600; color: white;">Inspection Details</h2>
+              <!-- Back to Table button (for same component) -->
+              <button 
+                *ngIf="!formOnlyMode"
+                type="button"
+                (click)="toggleView()"
+                class="px-4 py-2 bg-transparent text-white font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 rounded border border-primary-blue">
+                <i class="pi pi-arrow-left mr-2"></i> Back to Table
+              </button>
+              <!-- Back to List button (for Commentor Sheet) -->
+              <button 
+                *ngIf="formOnlyMode && (mode === 'edit' || mode === 'view')"
+                type="button"
+                (click)="goBackToList()"
+                class="px-4 py-2 bg-transparent text-white font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 rounded border border-primary-blue">
+                <i class="pi pi-arrow-left mr-2"></i> Back to List
+              </button>
+            </div>
+          </div>
+          
+        <!-- Route Configuration Section - Only show in edit mode -->
+        <div *ngIf="!isAddMode && etmaForm.get('id')?.value" style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+          <div style="padding: 1.5rem;">
+            <app-route-config
+              [useApi]="true"
+              [transactionId]="etmaForm.get('id')?.value"
+              [submodule]="4"
+              [vesselId]="etmaForm.get('inspectionType')?.value"
+              [formTitle]="'Preliminary Form Route Config'"
+              [hideButtons]="isViewMode"
+              (routeConfigSaved)="onRouteConfigSaved($event)"
+              (nextStepClicked)="onNextStep($event)"
+              (timelineToggled)="onTimelineToggle($event)">
+            </app-route-config>
+          </div>
+        </div>
+          
+          <div style="padding: 1.5rem;">
+            <!-- Single Row Layout for Inspection Details -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  PRELIMINARY UNDERWATER HULL INSPECTION - INS <span style="color: #ef4444;">*</span>
+                </label>
+                <select 
+                  formControlName="inspectionType"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+                  <option value="">--Select Ship--</option>
+                  <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}</option>
+                </select>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Date of Inspection <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="date"
+                  formControlName="inspectionDate"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Authority for Inspection <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="inspectionAuthority"
+                  placeholder="Enter authority"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Docking Section -->
+        <div style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+          <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background-color: #04308f;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; color: white;">Docking</h2>
+          </div>
+          
+          <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Docking Version <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="dockingVersion"
+                  placeholder="Enter docking version"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Nature of Docking <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="natureOfDocking"
+                  placeholder="Enter nature of docking"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Dock Blocks Wedged <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="dockBlocksWedged"
+                  placeholder="Enter dock blocks wedged"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Dock Blocks Crushed <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="dockBlocksCrushed"
+                  placeholder="Enter dock blocks crushed"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  U/W Openings Clear <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="uwOpeningsClear"
+                  placeholder="Enter U/W openings clear"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Docking Duration <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="dockingDuration"
+                  placeholder="Enter docking duration"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Underwater Cleaning Section -->
+        <div style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+          <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background-color: #04308f;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; color: white;">Underwater Cleaning</h2>
+          </div>
+          
+          <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Marine Growth Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Marine Growth Observations</h3>
+              <app-dynamic-table
+                [formArray]="marineGrowthObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateMarineGrowthRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Propeller Cleaning Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Propeller Cleaning Observations</h3>
+              <app-dynamic-table
+                [formArray]="propellerCleaningObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updatePropellerCleaningRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Foreign Objects Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Foreign Objects Observations</h3>
+              <app-dynamic-table
+                [formArray]="foreignObjectsObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateForeignObjectsRows($event)">
+              </app-dynamic-table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painting Section -->
+        <div style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+          <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background-color: #04308f;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; color: white;">Painting</h2>
+          </div>
+          
+          <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Condition of A/F Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Condition of A/F Observations</h3>
+              <app-dynamic-table
+                [formArray]="conditionOfAFObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateConditionOfAFRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Outer Bottom Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Outer Bottom Observations</h3>
+              <app-dynamic-table
+                [formArray]="outerBottomObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateOuterBottomRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Stern Aft Cutup Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Stern Aft Cutup Observations</h3>
+              <app-dynamic-table
+                [formArray]="sternAftCutupObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateSternAftCutupRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Boot Top Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Boot Top Observations</h3>
+              <app-dynamic-table
+                [formArray]="bootTopObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateBootTopRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Rudders Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Rudders Observations</h3>
+              <app-dynamic-table
+                [formArray]="ruddersObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateRuddersRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Stabilizers Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Stabilizers Observations</h3>
+              <app-dynamic-table
+                [formArray]="stabilizersObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateStabilizersRows($event)">
+              </app-dynamic-table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Structure Section -->
+        <div style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+          <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background-color: #04308f;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; color: white;">Structure</h2>
+          </div>
+          
+          <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+                  Extent of Hull Survey <span style="color: #ef4444;">*</span>
+                </label>
+                <input 
+                  type="text"
+                  formControlName="extentOfHullSurvey"
+                  placeholder="Enter extent of hull survey"
+                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              </div>
+            </div>
+
+            <!-- Dents At Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Dents At Observations</h3>
+              <app-dynamic-table
+                [formArray]="dentsAtObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateDentsAtRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Suspect Cracks Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Suspect Cracks Observations</h3>
+              <app-dynamic-table
+                [formArray]="suspectCracksObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateSuspectCracksRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Deep Scratch Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Deep Scratch Observations</h3>
+              <app-dynamic-table
+                [formArray]="deepScratchObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateDeepScratchRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Holes Doublers Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Holes Doublers Observations</h3>
+              <app-dynamic-table
+                [formArray]="holesDoublersObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateHolesDoublersRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Other Structure Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Other Structure Observations</h3>
+              <app-dynamic-table
+                [formArray]="otherStructureObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateOtherStructureRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Structural Defects Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Structural Defects Observations</h3>
+              <app-dynamic-table
+                [formArray]="structuralDefectsObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateStructuralDefectsRows($event)">
+              </app-dynamic-table>
+            </div>
+
+            <!-- Stabilizers Survey Observations -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <h3 style="font-size: 1rem; font-weight: 500; color: #1f2937;">Stabilizers Survey Observations</h3>
+              <app-dynamic-table
+                [formArray]="stabilizersSurveyObservations"
+                [columns]="observationColumns"
+                [createRowFunction]="createObservationRow.bind(this)"
+                [minRows]="0"
+                (rowCountChange)="updateStabilizersSurveyRows($event)">
+              </app-dynamic-table>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Approves Checkbox Section -->
+    
+
+        <!-- Action Buttons - Hide in view mode -->
+        <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+          <div class="flex flex-wrap justify-center gap-4 py-6 px-6">
+            <button 
+              type="button"
+              class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+              <i class="pi pi-download mr-2"></i>Fetch Drafts
+            </button>
+            <button 
+              type="button"
+              (click)="onSaveDraft()"
+              class="px-6 py-2 bg-yellow-500 text-white font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+              <i class="pi pi-save mr-2"></i>SAVE DRAFT
+            </button>
+            <button 
+              type="button"
+              class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+              <i class="pi pi-trash mr-2"></i>Clear
+            </button>
+            <button 
+              type="button"
+              (click)="onSubmit()"
+              class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+              <i class="pi pi-check mr-2"></i>Save
+            </button>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Route Config Popup -->
+<app-route-config-popup
+  *ngIf="showRouteConfigPopup"
+  [isVisible]="showRouteConfigPopup"
+  [title]="'Preliminary Form Route Config'"
+  [subtitle]="'Smart Configuration'"
+  [submodule]="4"
+  [shipId]="etmaForm.get('inspectionType')?.value"
+  [transactionId]="etmaForm.get('id')?.value"
+  [useApi]="true"
+  (close)="onCloseRouteConfigPopup()"
+  (configureRoute)="onConfigureRoute()"
+  (saveDirectly)="onSaveDirectly()"
+  (routeConfigSaved)="onRouteConfigSaved($event)"
+  (refreshTimeline)="onRefreshTimeline()">
+</app-route-config-popup>
+
+<!-- Route Config Modal Placeholder -->
+<div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
+    <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
+    <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
+    <button 
+      (click)="showRouteConfigModal = false"
+      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+      Close
+    </button>
+  </div>
+</div>

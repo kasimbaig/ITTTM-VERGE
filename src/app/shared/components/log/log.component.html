@@ -1,0 +1,63 @@
+<div class="login-wrapper">
+  <header class="login-header">
+    <div class="logo-box">
+      <img src="/assets/indian-navy-emblem.png" alt="Indian Navy Emblem" class="navy-emblem" />
+      <h1 class="app-title">CMMS</h1>
+    </div>
+  </header>
+
+  <main class="login-main">
+    <div class="login-card animate-fade-in">
+      <div class=" flex flex-col items-center justify-center">
+        <img src="assets/indian-navy-emblem.png" alt="Emblem" class="emblem-center" />
+        <h2 class="card-title">Sign In</h2>
+        <p class="subtitle">Welcome back! <span class="sanskrit">शं नो वरुणः</span></p>
+      </div>
+
+      <form class="login-form" (ngSubmit)="onLogin()">
+        <div class="form-group">
+          <label for="email">Username</label>
+          <div class="input-icon">
+            <i class="icon mail"></i>
+            <input
+              type="email"
+              id="email"
+              [(ngModel)]="username"
+              name="email"
+              placeholder="Login ID"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-icon password-wrapper">
+            <i class="icon lock"></i>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
+            <i
+              class="pi"
+              [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+              (click)="togglePasswordVisibility()"
+              style="cursor: pointer; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: #6b7280;"
+            ></i>
+          </div>
+        </div>
+        
+
+        <button type="submit" class="btn-submit">Sign In</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="login-footer">
+    <p>© {{ 2025 }} Indian Navy - CMMS</p>
+  </footer>
+</div>

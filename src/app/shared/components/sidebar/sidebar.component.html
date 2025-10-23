@@ -1,0 +1,135 @@
+<aside [ngClass]="{
+    'modern-sidebar-expanded': expanded,
+    'modern-sidebar-collapsed': !expanded
+  }" class="sidebar modern-sidebar">
+
+  <div class="modern-sidebar-header">
+    <span class="modern-icon-text">
+      <i class="fa-solid fa-ship modern-icon"></i>
+      <span *ngIf="expanded" class="modern-cmms-text"> ITTTM </span>
+    </span>
+    <button class="modern-collapse-button" (click)="toggleSidebar()">
+      <span class="modern-collapse-icon" *ngIf="expanded">←</span>
+      <span class="modern-collapse-icon" *ngIf="!expanded">→</span>
+    </button>
+  </div>
+
+  <div class="modern-sidebar-container">
+    <ng-container *ngFor="let item of menuItems">
+      <button (click)="item.hasChildren ? '' : (item.path && navigateTo(item.path))"
+        class="modern-menu-button" [class.active]="item.path && isActive(item.path)">
+        <span class="modern-menu-icon" *ngIf="item.icon">
+          <i [ngClass]="item.icon"></i>
+        </span>
+        <span *ngIf="expanded" class="modern-menu-label" [title]="item.label">
+          {{ item.label }}
+        </span>
+
+        <span *ngIf="item.hasChildren && expanded && item.path" class="modern-submenu-toggle" (click)="toggleSubMenu(item.path)">
+          {{ openSubMenus[item.path] ? "▲" : "▼" }}
+        </span>
+      </button>
+
+      <ng-container *ngIf="item.path && openSubMenus[item.path] && expanded">
+        <div class="modern-submenu-container">
+          <ng-container *ngFor="let subItem of item.children">
+            <button (click)="
+                subItem.hasChildren
+                  ? ''
+                  : (subItem.path && navigateTo(subItem.path)) 
+              " class="modern-submenu-button" [class.active]="subItem.path && isActive(subItem.path)">
+              <span class="modern-menu-icon" *ngIf="subItem.icon">
+                <i [ngClass]="subItem.icon"></i>
+              </span>
+              <span class="modern-menu-label">{{ subItem.label }}</span>
+              <span *ngIf="subItem.hasChildren && subItem.path" class="modern-submenu-toggle" (click)="toggleSubMenu(subItem.path)">
+                {{ openSubMenus[subItem.path] ? "▲" : "▼" }}
+              </span>
+            </button>
+
+            <div *ngIf="subItem.hasChildren && subItem.path && openSubMenus[subItem.path]"
+              class="modern-nested-submenu-container">
+              <ng-container *ngFor="let nested of subItem.children">
+                <button (click)="nested.path && navigateTo(nested.path)"
+                  class="modern-submenu-button modern-nested-item" [class.active]="nested.path && isActive(nested.path)">
+                  <span class="modern-menu-icon" *ngIf="nested.icon">
+                    <i [ngClass]="nested.icon"></i>
+                  </span>
+                  <span class="modern-menu-label">{{ nested.label }}</span>
+                </button>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div class="modern-sidebar-footer absolute bottom-0 left-0 right-0">
+    <!-- Logout Button moved to top of footer -->
+    <button (click)="showLogoutDialog=true" class="modern-menu-button modern-logout-button mb-2">
+      <span class="modern-menu-icon">
+        <i class="fa-solid fa-sign-out-alt"></i>
+      </span>
+      <span *ngIf="expanded" class="modern-menu-label">
+        Logout
+      </span>
+    </button>
+    
+    <!-- User Information Section moved to bottom -->
+    <div  class="user-info-section border-t border-green-200 modern-menu-button">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-user text-white text-sm"></i>
+        </div>
+        <div *ngIf="expanded" class="mt-3">
+          <p class="text-sm font-medium text-white truncate">
+            {{ currentUser?.first_name || 'User' }} <br>
+            {{ currentUser?.user_roles?.[0]?.role || 'Admin' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="modern-sidebar-footer absolute bottom-0 left-0 right-0">
+      <button (click)="logOut()" class="modern-menu-button modern-logout-button">
+      <span class="modern-menu-icon">
+        <i class="fa-solid fa-sign-out-alt"></i>
+      </span>
+      <span *ngIf="expanded" class="modern-menu-label">
+        Logout
+      </span>
+    </button>
+  </div> -->
+</aside>
+
+
+<!-- Logout Confirmation Dialog -->
+<div *ngIf="showLogoutDialog" class="fixed inset-0   flex items-center justify-center z-50 bg-gray-100/70">
+  <div class="bg-green-50 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-100 ">
+    <!-- Header Section -->
+    <div class="mb-6 flex flex-col items-center">
+      <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <i class="fa-solid fa-sign-out-alt text-emerald-700 text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Confirm Logout</h3>
+    </div>
+    <p class="text-gray-600 leading-relaxed">Are you sure you want to sign out of your account? You'll need to log in again to access your dashboard.</p>
+    
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+      <span 
+        (click)="showLogoutDialog = false" 
+        class="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 cursor-pointer">
+        <i class="fa-solid fa-times mr-2"></i>
+        Cancel
+      </span>
+      <span 
+        (click)="logOut()" 
+        class="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 active:from-red-800 active:to-red-900 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-lg cursor-pointer">
+        <i class="fa-solid fa-sign-out-alt mr-2"></i>
+        Logout
+      </span>
+    </div>
+  </div>
+</div>

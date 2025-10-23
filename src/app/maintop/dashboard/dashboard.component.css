@@ -1,0 +1,144 @@
+.dashboard {
+  min-height: 100vh;
+  background-color: #f9fafb; /* Tailwind's gray-50 */
+}
+.dropdown-wrapper {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+  height: 100vh; /* full viewport height */
+  flex-direction: column; /* stack dropdowns and button vertically */
+  background-color: #f9fafb; /* match the dashboard bg if needed */
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* 16px */
+  padding-right: 1rem; /* 16px */
+}
+
+.main-content {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.md\:grid-cols-2 {
+  /* For medium screens and above */
+}
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.md\:grid-cols-4 {
+  /* For medium screens and above */
+}
+@media (min-width: 768px) {
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.lg\:grid-cols-3 {
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.lg\:grid-cols-4 {
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.border-t {
+  border-top: 1px solid #e5e7eb; /* Tailwind's gray-200 */
+}
+
+.border-b {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+.charts-row {
+  display: flex;
+  gap: 16px; /* or use margin manually */
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* for responsiveness */
+}
+
+.chart-item {
+  flex: 1;
+}
+
+.chart-space-left {
+  margin-left: 16px; /* space between chart1 and chart2 */
+}
+.chart-half {
+  flex: 1;
+  min-width: 300px; /* Optional: ensures charts don't get too narrow on smaller screens */
+}
+.dropdowns-container {
+  display: flex;
+  justify-content: center; /* Horizontally centers contents */
+  gap: 1rem;
+  flex-wrap: wrap; /* Optional: handles responsiveness */
+  margin-bottom: 1rem;
+}
+.dropdowns-container1 {
+  display: flex;
+  justify-content: center; /* Horizontally centers contents */
+  gap: 1rem;
+  flex-wrap: wrap; /* Optional: handles responsiveness */
+  margin-bottom: 1rem;
+  margin-left: 500px;
+}
+
+.dropdown-container label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(145, 139, 139);
+  margin-bottom: 6px;
+  padding-left: 2px;
+  text-transform: capitalize;
+}
+.dropdown-label {
+  display: block;
+  font-weight: 300;
+  margin-bottom: 6px;
+  margin-left: 10px;
+  color: #b0b0b0; /* Tailwind gray-700 */
+}

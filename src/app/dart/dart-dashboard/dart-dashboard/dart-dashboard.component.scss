@@ -1,0 +1,635 @@
+/* ========================================
+   DART DASHBOARD - CYBER SECURITY THEME
+   Dark Mode with Neon Green/Cyan Accents
+   ======================================== */
+
+/* --- Base Container & Typography --- */
+.command-container {
+  background: linear-gradient(180deg, #0a0e1a 0%, #0f1419 100%);
+  font-family: 'Courier New', 'Roboto Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.command-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(90deg, rgba(0, 255, 133, 0.03) 0px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(0deg, rgba(0, 255, 133, 0.03) 0px, transparent 1px, transparent 40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- Header Styles --- */
+.command-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: linear-gradient(135deg, #0f1a1f 0%, #1a2332 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(0, 255, 133, 0.15),
+    inset 0 1px 0 rgba(0, 255, 133, 0.2);
+  border: 2px solid rgba(0, 255, 133, 0.3);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.command-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 133, 0.1), transparent);
+  animation: scanline 3s infinite;
+}
+
+@keyframes scanline {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.command-title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.command-title-block i {
+  font-size: 1.5rem;
+  color: #00ff85;
+  text-shadow: 
+    0 0 10px #00ff85,
+    0 0 20px #00ff85,
+    0 0 30px rgba(0, 255, 133, 0.5);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    opacity: 1;
+    text-shadow: 
+      0 0 10px #00ff85,
+      0 0 20px #00ff85,
+      0 0 30px rgba(0, 255, 133, 0.5);
+  }
+  50% { 
+    opacity: 0.8;
+    text-shadow: 
+      0 0 5px #00ff85,
+      0 0 10px #00ff85,
+      0 0 15px rgba(0, 255, 133, 0.3);
+  }
+}
+
+.command-title-block h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #00ff85;
+  font-weight: 700;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 133, 0.6),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  letter-spacing: 1.5px;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+}
+
+.command-title-block p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #00d9ff;
+  text-shadow: 0 0 5px rgba(0, 217, 255, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.command-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* --- Filter Dropdown Styling - CYBER THEME --- */
+:host ::ng-deep .filter-dropdown .p-dropdown {
+  min-width: 200px;
+  background: rgba(15, 26, 31, 0.9);
+  border: 2px solid rgba(0, 255, 133, 0.3);
+  border-radius: 8px;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(0, 255, 133, 0.1),
+    inset 0 1px 0 rgba(0, 255, 133, 0.1);
+  transition: all 0.3s ease;
+  font-family: 'Courier New', monospace;
+  backdrop-filter: blur(10px);
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown:hover {
+  border-color: #00ff85;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(0, 255, 133, 0.3);
+  background: rgba(15, 26, 31, 1);
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-label {
+  color: #00ff85;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  text-shadow: 0 0 5px rgba(0, 255, 133, 0.3);
+  letter-spacing: 0.5px;
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-label.p-placeholder {
+  color: #00d9ff;
+  text-shadow: 0 0 5px rgba(0, 217, 255, 0.3);
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-trigger {
+  color: #00ff85;
+  padding: 0.75rem;
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-panel {
+  background: rgba(10, 14, 26, 0.98);
+  border: 2px solid rgba(0, 255, 133, 0.4);
+  border-radius: 8px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(0, 255, 133, 0.2);
+  z-index: 999999 !important;
+  backdrop-filter: blur(10px);
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-item {
+  color: #b0f0d0;
+  transition: all 0.3s ease;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+  border-bottom: 1px solid rgba(0, 255, 133, 0.1);
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-item:hover {
+  background: rgba(0, 255, 133, 0.15);
+  color: #00ff85;
+  text-shadow: 0 0 5px rgba(0, 255, 133, 0.5);
+  border-left: 3px solid #00ff85;
+}
+
+:host ::ng-deep .filter-dropdown .p-dropdown-item.p-highlight {
+  background: linear-gradient(135deg, rgba(0, 255, 133, 0.25) 0%, rgba(0, 217, 255, 0.25) 100%);
+  color: #00ff85;
+  text-shadow: 0 0 10px rgba(0, 255, 133, 0.6);
+  border-left: 3px solid #00ff85;
+  font-weight: 700;
+}
+
+/* --- KPI Cards Grid --- */
+.kpi-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Charts Section - CYBER THEME --- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 1.75rem;
+  margin-top: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.chart-container {
+  background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 25, 35, 0.95) 100%);
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(0, 255, 133, 0.1),
+    inset 0 1px 0 rgba(0, 255, 133, 0.15);
+  border: 2px solid rgba(0, 255, 133, 0.25);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  min-height: 400px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.chart-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #00ff85, transparent);
+  animation: chart-glow 2s ease-in-out infinite;
+}
+
+@keyframes chart-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.chart-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.9),
+    0 0 50px rgba(0, 255, 133, 0.3);
+  border-color: #00ff85;
+}
+
+/* Chart Header Layout - Cyber Theme */
+.chart-container h3 {
+  font-size: 1.4rem;
+  color: #00ff85;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  padding-right: 220px;
+  box-sizing: border-box;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 
+    0 0 10px rgba(0, 255, 133, 0.6),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  position: relative;
+  z-index: 2;
+}
+
+/* Chart Header with Button Layout - EXTREMELY FIXED */
+.chart-container .d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 100%;
+  gap: 2rem; /* Much larger gap */
+  min-height: 40px;
+}
+
+.chart-container .d-flex h3 {
+  margin: 0;
+  padding-right: 0;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 140px); /* Ensure text doesn't extend into button area */
+}
+
+/* Chart Canvas Styling */
+:host ::ng-deep .chart-container p-chart {
+  flex-grow: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  margin: 0 auto;
+}
+
+:host ::ng-deep .chart-container p-chart canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 400px;
+}
+
+/* Special handling for Doughnut/Pie charts */
+.chart-container p-chart[type="doughnut"],
+.chart-container p-chart[type="pie"] {
+  max-width: 350px;
+  max-height: 350px;
+  margin: auto;
+}
+
+/* Large Chart specific styles */
+.large-chart {
+  grid-column: 1 / -1;
+  min-height: 550px;
+}
+
+:host ::ng-deep .large-chart p-chart canvas {
+  max-height: 500px;
+}
+
+/* Reset Zoom Button - Cyber Theme */
+.reset-zoom-button {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(0, 255, 133, 0.1) !important;
+  border: 2px solid rgba(0, 255, 133, 0.4) !important;
+  color: #00ff85 !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease;
+  min-width: 130px;
+  white-space: nowrap;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(0, 255, 133, 0.2);
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 5px rgba(0, 255, 133, 0.5);
+}
+
+.reset-zoom-button:hover {
+  background: rgba(0, 255, 133, 0.25) !important;
+  border-color: #00ff85 !important;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(0, 255, 133, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+/* --- Drill-down Dialog - Cyber Theme --- */
+:host ::ng-deep .p-dialog {
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.9),
+    0 0 60px rgba(0, 255, 133, 0.3);
+  border: 2px solid rgba(0, 255, 133, 0.4);
+  background: rgba(10, 14, 26, 0.98);
+  backdrop-filter: blur(10px);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 25, 35, 0.95) 100%);
+  color: #00ff85;
+  padding: 1.25rem 2rem;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-bottom: 2px solid rgba(0, 255, 133, 0.3);
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px rgba(0, 255, 133, 0.6);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #00ff85;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 1.5rem 2rem;
+  background: rgba(10, 14, 26, 0.95);
+}
+
+:host ::ng-deep .p-table {
+  font-size: 0.95rem;
+  font-family: 'Courier New', monospace;
+  background: transparent;
+}
+
+:host ::ng-deep .p-table .p-sortable-column {
+  font-weight: 700;
+  color: #00ff85;
+  background: rgba(15, 25, 35, 0.8);
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid rgba(0, 255, 133, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(0, 255, 133, 0.4);
+}
+
+:host ::ng-deep .p-table .p-sortable-column:hover {
+  background: rgba(0, 255, 133, 0.15);
+  color: #00ff85;
+}
+
+:host ::ng-deep .p-table .p-datatable-tbody>tr>td {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 255, 133, 0.15);
+  color: #b0f0d0;
+}
+
+:host ::ng-deep .p-table .p-datatable-tbody>tr:nth-child(even) {
+  background: rgba(15, 25, 35, 0.5);
+}
+
+:host ::ng-deep .p-table .p-datatable-tbody>tr:hover {
+  background: rgba(0, 255, 133, 0.1);
+  border-left: 3px solid #00ff85;
+}
+
+:host ::ng-deep .p-table .p-paginator {
+  background: rgba(15, 25, 35, 0.8);
+  border-top: 2px solid rgba(0, 255, 133, 0.3);
+  padding: 0.75rem 1.25rem;
+  color: #00ff85;
+}
+
+:host ::ng-deep .p-button-secondary {
+  background: rgba(0, 255, 133, 0.1) !important;
+  border: 2px solid rgba(0, 255, 133, 0.4) !important;
+  color: #00ff85 !important;
+  text-shadow: 0 0 5px rgba(0, 255, 133, 0.5);
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+:host ::ng-deep .p-button-secondary:hover {
+  background: rgba(0, 255, 133, 0.25) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 133, 0.4) !important;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1400px) {
+  .command-container {
+    padding: 1rem;
+    gap: 1.25rem;
+  }
+  
+  .command-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .charts-grid {
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  }
+  
+  .chart-container h3 {
+    padding-right: 180px;
+  }
+  
+  .chart-container .d-flex h3 {
+    max-width: calc(100% - 160px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .command-container {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .command-header {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .charts-grid {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+  
+  .chart-container h3 {
+    padding-right: 160px;
+  }
+  
+  .chart-container .d-flex h3 {
+    max-width: calc(100% - 140px);
+  }
+}
+
+@media (max-width: 992px) {
+  .command-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .command-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  :host ::ng-deep .filter-dropdown .p-dropdown {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .kpi-cards-grid,
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .large-chart {
+    grid-column: auto;
+  }
+
+  .command-container {
+    padding: 1rem;
+  }
+
+  :host ::ng-deep .chart-container p-chart canvas {
+    max-height: 350px;
+  }
+  
+  .chart-container h3 {
+    padding-right: 140px;
+  }
+  
+  .chart-container .d-flex h3 {
+    max-width: calc(100% - 120px);
+  }
+}
+
+@media (max-width: 576px) {
+  .command-title-block h2 {
+    font-size: 1.5rem;
+  }
+
+  .command-title-block i {
+    font-size: 1.5rem;
+  }
+
+  .kpi-cards-grid {
+    gap: 1rem;
+  }
+
+  .charts-grid {
+    gap: 1rem;
+  }
+
+  .chart-container {
+    padding: 1rem;
+    min-height: 350px;
+  }
+
+  .chart-container h3 {
+    font-size: 1.2rem;
+    padding-right: 120px;
+  }
+  
+  .chart-container .d-flex h3 {
+    max-width: calc(100% - 100px);
+  }
+
+  .reset-zoom-button {
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    min-width: 110px;
+    height: 28px;
+  }
+
+  :host ::ng-deep .chart-container p-chart canvas {
+    max-height: 300px;
+  }
+
+  .large-chart {
+    min-height: 450px;
+  }
+
+  :host ::ng-deep .p-dialog {
+    width: 95vw !important;
+  }
+
+  :host ::ng-deep .p-dialog .p-dialog-header {
+    padding: 1rem 1.25rem;
+  }
+
+  :host ::ng-deep .p-dialog .p-dialog-content {
+    padding: 1rem 1.25rem;
+  }
+}

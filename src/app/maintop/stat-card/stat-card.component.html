@@ -1,0 +1,15 @@
+<div [ngClass]="['card', className]" [style.background-color]="color">
+  <div class="card-header flex flex-row items-center justify-between pb-2">
+    <div class="card-title text-sm font-medium">{{ title }}</div>
+    <div class="icon-container"><i [class]="icon"></i></div>
+  </div>
+  <div class="card-content">
+    <div class="value text-2xl font-bold">{{ value }}</div>
+    <p
+      *ngIf="description"
+      class="description text-xs text-muted-foreground mt-1"
+    >
+      {{ description }}
+    </p>
+  </div>
+</div>

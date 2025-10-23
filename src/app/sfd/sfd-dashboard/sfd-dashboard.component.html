@@ -1,0 +1,376 @@
+<div class="dashboard-container p-4 overflow-x-hidden">
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="fa-solid fa-chart-pie"></i>
+      <div>
+        <h2>Naval Fleet Maintenance Dashboard</h2>
+        <p>Comprehensive fleet maintenance overview and analytics</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6 w-full max-w-full">
+    <app-dashboard-card *ngFor="let metric of kpiMetrics" [title]="metric.title" [value]="metric.value"
+      [description]="metric.description" [iconClass]="metric.iconClass" [type]="metric.type" [color]="metric.color"
+      ></app-dashboard-card>
+  </div>
+
+  <!-- Enhanced Charts Grid with Modern Design -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12 w-full max-w-full">
+    <!-- Fleet Composition Chart Card -->
+    <div class="group relative bg-gradient-to-br from-white via-gray-50 to-blue-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-6 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+      <!-- Animated background overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-bl from-blue-400/20 to-transparent rounded-full transform group-hover:scale-150 transition-transform duration-700"></div>
+      <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-tr from-purple-400/20 to-transparent rounded-full transform group-hover:scale-125 transition-transform duration-700"></div>
+      
+      <!-- Card Header -->
+      <div class="relative z-10 flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300">
+            <i class="pi pi-chart-pie text-blue-600 text-lg group-hover:scale-110 transition-transform duration-300"></i>
+          </div>
+          <h6 class="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">Fleet Composition by Command & Type</h6>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+      </div>
+      
+      <!-- Chart Content -->
+      <div class="relative z-10 h-64">
+        <app-loading-spinner *ngIf="isLoadingCharts" class="flex items-center justify-center h-full"></app-loading-spinner>
+        <canvas baseChart *ngIf="fleetCompositionChartData && !isLoadingCharts" 
+                [data]="fleetCompositionChartData"
+                [options]="fleetCompositionChartOptions" 
+                [type]="fleetCompositionChartType"
+                class="group-hover:scale-105 transition-transform duration-500">
+        </canvas>
+      </div>
+      
+      <!-- Hover effect border -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-2xl"></div>
+    </div>
+
+    <!-- Common Equipment Distribution Chart Card -->
+    <div class="group relative bg-gradient-to-br from-white via-gray-50 to-green-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-6 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+      <!-- Animated background overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-green-500/5 via-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-bl from-green-400/20 to-transparent rounded-full transform group-hover:scale-150 transition-transform duration-700"></div>
+      <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-tr from-teal-400/20 to-transparent rounded-full transform group-hover:scale-125 transition-transform duration-700"></div>
+      
+      <!-- Card Header -->
+      <div class="relative z-10 flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center group-hover:from-green-200 group-hover:to-green-300 transition-all duration-300">
+            <i class="pi pi-cog text-green-600 text-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"></i>
+          </div>
+          <h6 class="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">Common Equipment Distribution</h6>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-orange-400 animate-pulse"></div>
+      </div>
+      
+      <!-- Chart Content -->
+      <div class="relative z-10 h-64">
+        <app-loading-spinner *ngIf="isLoadingCharts" class="flex items-center justify-center h-full"></app-loading-spinner>
+        <canvas baseChart *ngIf="commonEquipmentChartData && !isLoadingCharts" 
+                [data]="commonEquipmentChartData"
+                [options]="commonEquipmentChartOptions" 
+                [type]="commonEquipmentChartType"
+                class="group-hover:scale-105 transition-transform duration-500">
+        </canvas>
+      </div>
+      
+      <!-- Hover effect border -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-2xl"></div>
+    </div>
+
+    <!-- SFD/ILMS Mapping Status Chart Card -->
+    <div class="group relative bg-gradient-to-br from-white via-gray-50 to-purple-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-6 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+      <!-- Animated background overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-pink-500/5 to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-bl from-purple-400/20 to-transparent rounded-full transform group-hover:scale-150 transition-transform duration-700"></div>
+      <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-tr from-pink-400/20 to-transparent rounded-full transform group-hover:scale-125 transition-transform duration-700"></div>
+      
+      <!-- Card Header -->
+      <div class="relative z-10 flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center group-hover:from-purple-200 group-hover:to-purple-300 transition-all duration-300">
+            <i class="pi pi-link text-purple-600 text-lg group-hover:scale-110 transition-transform duration-300"></i>
+          </div>
+          <h6 class="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">SFD / ILMS Mapping Status</h6>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-purple-400 animate-pulse"></div>
+      </div>
+      
+      <!-- Chart Content with Center Text -->
+      <div class="relative z-10 h-64">
+        <app-loading-spinner *ngIf="isLoadingCharts" class="flex items-center justify-center h-full"></app-loading-spinner>
+        <div class="sfd-mapping-content relative" *ngIf="sfdIlmsMappingChartData && !isLoadingCharts">
+          <!-- Center Text Overlay -->
+          <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+            <div class="text-center bg-white/90 backdrop-blur-sm rounded-full p-4 shadow-lg group-hover:bg-white/95 transition-all duration-300">
+              <span class="block text-2xl font-black text-gray-800 group-hover:text-purple-600 transition-colors duration-300">{{ mappedPercentage | number:'1.0-0' }}%</span>
+              <span class="block text-sm font-semibold text-gray-600 group-hover:text-gray-700 transition-colors duration-300">Mapped</span>
+            </div>
+          </div>
+          <canvas baseChart [data]="sfdIlmsMappingChartData" 
+                  [options]="sfdIlmsMappingChartOptions"
+                  [type]="sfdIlmsMappingChartType"
+                  class="group-hover:scale-105 transition-transform duration-500">
+          </canvas>
+        </div>
+      </div>
+      
+      <!-- Enhanced Legend -->
+      <div class="relative z-10 flex justify-center gap-6 mt-4" *ngIf="sfdIlmsMappingChartData">
+        <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50 group-hover:bg-green-100 transition-colors duration-300">
+          <span class="w-3 h-3 rounded-full bg-green-500 shadow-sm"></span>
+          <span class="text-sm font-medium text-green-700">Mapped</span>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 group-hover:bg-red-100 transition-colors duration-300">
+          <span class="w-3 h-3 rounded-full bg-red-500 shadow-sm"></span>
+          <span class="text-sm font-medium text-red-700">Unmapped</span>
+        </div>
+      </div>
+      
+      <!-- Hover effect border -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-2xl"></div>
+    </div>
+
+    <!-- SFD Updates Velocity Chart Card (Full Width) -->
+    <div class="group relative bg-gradient-to-br from-white via-gray-50 to-indigo-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-6 border border-gray-200/50 backdrop-blur-sm overflow-hidden lg:col-span-2 xl:col-span-3">
+      <!-- Animated background overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 via-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute -top-4 -right-4 w-32 h-32 bg-gradient-to-bl from-indigo-400/20 to-transparent rounded-full transform group-hover:scale-150 transition-transform duration-700"></div>
+      <div class="absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-tr from-blue-400/20 to-transparent rounded-full transform group-hover:scale-125 transition-transform duration-700"></div>
+      
+      <!-- Floating particles -->
+      <div class="absolute top-8 right-16 w-2 h-2 bg-indigo-400 rounded-full opacity-0 group-hover:opacity-60 group-hover:animate-bounce transition-all duration-700 delay-100"></div>
+      <div class="absolute top-16 right-32 w-1 h-1 bg-blue-600 -400 rounded-full opacity-0 group-hover:opacity-40 group-hover:animate-bounce transition-all duration-700 delay-300"></div>
+      <div class="absolute bottom-16 left-16 w-1.5 h-1.5 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-50 group-hover:animate-bounce transition-all duration-700 delay-500"></div>
+      
+      <!-- Card Header -->
+      <div class="relative z-10 flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center group-hover:from-indigo-200 group-hover:to-indigo-300 transition-all duration-300">
+            <i class="pi pi-chart-line text-indigo-600 text-xl group-hover:scale-110 transition-transform duration-300"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">SFD Updates Velocity (Last 6 Months)</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-blue-600 -400 animate-pulse"></div>
+          <span class="text-sm text-gray-500 group-hover:text-gray-600 transition-colors duration-300">Live Data</span>
+        </div>
+      </div>
+      
+      <!-- Chart Content -->
+      <div class="relative z-10 h-80">
+        <app-loading-spinner *ngIf="isLoadingCharts" class="flex items-center justify-center h-full"></app-loading-spinner>
+        <canvas baseChart *ngIf="sfdUpdatesChartData && !isLoadingCharts" 
+                [data]="sfdUpdatesChartData"
+                [options]="sfdUpdatesChartOptions" 
+                [type]="sfdUpdatesChartType"
+                class="group-hover:scale-[1.02] transition-transform duration-500">
+        </canvas>
+      </div>
+      
+      <!-- Hover effect border -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-2xl"></div>
+    </div>
+  </div>
+
+  <!-- Enhanced Auxiliary Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 w-full max-w-full">
+    <!-- Recent Critical Alerts Card -->
+    <div class="group relative bg-gradient-to-br from-white via-gray-50 to-yellow-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+      <!-- Animated background overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-yellow-500/5 via-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-bl from-yellow-400/20 to-transparent rounded-full transform group-hover:scale-150 transition-transform duration-700"></div>
+      
+      <!-- Card Header -->
+      <div class="relative z-10 p-6 border-b border-gray-200/50">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center group-hover:from-yellow-200 group-hover:to-yellow-300 transition-all duration-300">
+            <i class="pi pi-exclamation-triangle text-yellow-600 text-lg group-hover:scale-110 transition-transform duration-300"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">Recent Critical Alerts</h3>
+        </div>
+      </div>
+      
+      <!-- Alerts Content -->
+      <div class="relative z-10 p-6">
+        <app-loading-spinner *ngIf="isLoadingAlerts; else alertsContent" class="flex items-center justify-center h-32"></app-loading-spinner>
+        <ng-template #alertsContent>
+          <div class="space-y-3  overflow-y-auto custom-scrollbar">
+            <div *ngFor="let alert of recentAlerts; let i = index" 
+                 class="group/alert flex items-center gap-4 p-4 rounded-xl bg-white/50 hover:bg-white/80 border border-gray-200/50 hover:border-gray-300/50 cursor-pointer transition-all duration-300 hover:shadow-md transform hover:-translate-y-1"
+                 (click)="onAlertClick(alert)"
+                 [style.animation-delay]="i * 100 + 'ms'">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+                     [ngClass]="{
+                       'bg-yellow-100 text-yellow-600': alert.type === 'Warning',
+                       'bg-red-100 text-red-600': alert.type === 'Critical',
+                       'bg-blue-600 -100 text-blue-600': alert.type === 'Maintenance'
+                     }">
+                  <i class="pi text-sm"
+                     [ngClass]="{
+                       'pi-exclamation-triangle': alert.type === 'Warning',
+                       'pi-times-circle': alert.type === 'Critical',
+                       'pi-info-circle': alert.type === 'Maintenance'
+                     }"></i>
+                </div>
+              </div>
+              <div class="flex-grow min-w-0">
+                <p class="text-sm font-medium text-gray-800 group-hover/alert:text-gray-900 transition-colors duration-300 truncate">{{ alert.message }}</p>
+                <p class="text-xs text-gray-500 group-hover/alert:text-gray-600 transition-colors duration-300">{{ alert.timestamp | date:'short' }}</p>
+              </div>
+              <div class="flex-shrink-0">
+                <i class="pi pi-chevron-right text-gray-400 group-hover/alert:text-gray-600 transition-colors duration-300"></i>
+              </div>
+            </div>
+            <div *ngIf="recentAlerts.length === 0" class="text-center py-12">
+              <i class="pi pi-check-circle text-4xl text-green-400 mb-4"></i>
+              <p class="text-gray-500 font-medium">No recent alerts</p>
+              <p class="text-sm text-gray-400">All systems operating normally</p>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      
+      <!-- Hover effect border -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-2xl"></div>
+    </div>
+
+    <!-- Global Fleet Distribution Card -->
+    <div class="group relative bg-gradient-to-br from-white via-gray-50 to-emerald-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+      <!-- Animated background overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      
+      <!-- Decorative elements -->
+      <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-bl from-emerald-400/20 to-transparent rounded-full transform group-hover:scale-150 transition-transform duration-700"></div>
+      
+      <!-- Card Header -->
+      <div class="relative z-10 p-6 border-b border-gray-200/50">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center group-hover:from-emerald-200 group-hover:to-emerald-300 transition-all duration-300">
+            <i class="pi pi-map text-emerald-600 text-lg group-hover:scale-110 transition-transform duration-300"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-300">Global Fleet Distribution</h3>
+        </div>
+      </div>
+      
+      <!-- Map Content -->
+      <div class="relative z-10 p-6">
+        <div class="text-center py-12">
+          <div class="relative inline-block">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center mb-6 group-hover:from-emerald-200 group-hover:to-emerald-300 transition-all duration-300 mx-auto">
+              <i class="pi pi-map text-3xl text-emerald-600 group-hover:scale-110 transition-transform duration-300"></i>
+            </div>
+            <!-- Animated rings -->
+            <div class="absolute inset-0 rounded-2xl border-2 border-emerald-300/50 animate-ping"></div>
+            <div class="absolute inset-2 rounded-2xl border-2 border-emerald-400/30 animate-ping" style="animation-delay: 0.5s;"></div>
+          </div>
+          <h4 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-gray-900 transition-colors duration-300">Interactive Map Coming Soon</h4>
+          <p class="text-sm text-gray-600 mb-6 group-hover:text-gray-700 transition-colors duration-300">Real-time fleet positioning and status</p>
+          
+          <!-- Placeholder Map with Enhanced Styling -->
+          <div class="relative rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+            <img src="https://placehold.co/400x300/a8dadc/1d3557?text=Global+Fleet+Map" 
+                 alt="Placeholder Map" 
+                 class="w-full h-auto group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <p class="text-sm font-medium">Fleet positions will be displayed here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hover effect border -->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-2xl"></div>
+    </div>
+  </div>
+
+  <!-- Enhanced Dialog Modals -->
+  <p-dialog header="Common Equipment Details" [(visible)]="showCommonEquipmentDetail" [modal]="true"
+    [style.width]="'80vw'" [closable]="true" styleClass="custom-dialog">
+    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6">
+      <app-loading-spinner *ngIf="isLoadingCommonEquipmentDetails" class="flex items-center justify-center h-32"></app-loading-spinner>
+      <div *ngIf="!isLoadingCommonEquipmentDetails" class="bg-white rounded-xl shadow-sm border border-gray-200/50 overflow-hidden">
+        <app-data-table [data]="commonEquipmentDetailData" [columns]="commonEquipmentDetailColumns"
+          emptyMessage="No equipment details found for this selection." class="custom-table"></app-data-table>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3">
+        <button pButton icon="pi pi-times" label="Close" 
+                class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-300"
+                (click)="showCommonEquipmentDetail = false"></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="SFD/ILMS Mapped Equipment Details" [(visible)]="showMappedEquipmentDetail" [modal]="true"
+    [style.width]="'80vw'" [closable]="true" styleClass="custom-dialog">
+    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6">
+      <app-loading-spinner *ngIf="isLoadingMappedEquipmentDetails" class="flex items-center justify-center h-32"></app-loading-spinner>
+      <div *ngIf="!isLoadingMappedEquipmentDetails" class="bg-white rounded-xl shadow-sm border border-gray-200/50 overflow-hidden">
+        <app-data-table [data]="mappedEquipmentDetailData" [columns]="mappedEquipmentDetailColumns"
+          emptyMessage="No mapped equipment details found for this selection." class="custom-table"></app-data-table>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3">
+        <button pButton icon="pi pi-times" label="Close" 
+                class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-300"
+                (click)="showMappedEquipmentDetail = false"></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="SFD Updates Details" [(visible)]="showSFDUpdatesDetail" [modal]="true" [style.width]="'80vw'"
+    [closable]="true" styleClass="custom-dialog">
+    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6">
+      <app-loading-spinner *ngIf="isLoadingSFDUpdatesDetails" class="flex items-center justify-center h-32"></app-loading-spinner>
+      <div *ngIf="!isLoadingSFDUpdatesDetails" class="bg-white rounded-xl shadow-sm border border-gray-200/50 overflow-hidden">
+        <app-data-table [data]="sfdUpdatesDetailData" [columns]="sfdUpdatesDetailColumns"
+          emptyMessage="No SFD updates found for this selection." class="custom-table"></app-data-table>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3">
+        <button pButton icon="pi pi-times" label="Close" 
+                class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-300"
+                (click)="showSFDUpdatesDetail = false"></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog header="Fleet Composition Details" [(visible)]="showFleetCompositionDetail" [modal]="true"
+    [style.width]="'80vw'" [closable]="true" styleClass="custom-dialog">
+    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6">
+      <app-loading-spinner *ngIf="isLoadingFleetCompositionDetails" class="flex items-center justify-center h-32"></app-loading-spinner>
+      <div *ngIf="!isLoadingFleetCompositionDetails" class="bg-white rounded-xl shadow-sm border border-gray-200/50 overflow-hidden">
+        <app-data-table [data]="fleetCompositionDetailData" [columns]="fleetCompositionDetailColumns"
+          emptyMessage="No ship details found for this selection." class="custom-table"></app-data-table>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3">
+        <button pButton icon="pi pi-times" label="Close" 
+                class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-300"
+                (click)="showFleetCompositionDetail = false"></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+</div>

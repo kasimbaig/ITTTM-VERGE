@@ -1,0 +1,37 @@
+<div class="card col-span-2 md:col-span-3">
+  <div class="card-header">
+    <h2 class="card-title">Job Information Cards (JIC)</h2>
+  </div>
+  <div class="card-content">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>JIC ID</th>
+          <th>Maintop ID</th>
+          <th class="hidden md:table-cell">Description</th>
+          <th>Status</th>
+          <th class="hidden md:table-cell">Date</th>
+          <th>Spares</th>
+          <th>Tools</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let jic of jics">
+          <td class="font-medium">{{ jic.jicid }}</td>
+          <td>{{ jic.maintopID }}</td>
+          <td class="hidden md:table-cell max-w-[200px] truncate">
+            {{ jic.description }}
+          </td>
+          <td>
+            <span [ngClass]="getStatusClass(jic.status)">
+              {{ jic.status }}
+            </span>
+          </td>
+          <td class="hidden md:table-cell">{{ jic.date }}</td>
+          <td>{{ jic.sparesCount }}</td>
+          <td>{{ jic.toolsCount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

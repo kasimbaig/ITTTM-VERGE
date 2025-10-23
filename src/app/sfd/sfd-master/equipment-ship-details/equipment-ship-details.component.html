@@ -1,0 +1,129 @@
+<!-- <div class="command-container"> -->
+  <!-- Header Section -->
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-ship"></i>
+      <div>
+        <h2>Fleet Ship Management</h2>
+        <p>View and manage all fleet ships and their specifications in the system</p>
+      </div>
+    </div>
+    
+    <!-- Action Buttons moved to header -->
+    <div class="command-actions">
+      <div class="control-right">
+        <div class="dropdown-filter">
+          <p-dropdown 
+            [options]="shipTypes" 
+            [(ngModel)]="filters.type" 
+            placeholder="Ship Type"
+            optionLabel="label" 
+            optionValue="value" 
+            [showClear]="true">
+          </p-dropdown>
+        </div>
+  
+        <div class="dropdown-filter">
+          <p-dropdown 
+            [options]="statuses" 
+            [(ngModel)]="filters.status" 
+            placeholder="Status"
+            optionLabel="label" 
+            optionValue="value" 
+            [showClear]="true">
+          </p-dropdown>
+        </div>
+        
+      
+      </div>
+    
+      <button class="btn primary" (click)="openNew()">
+        <i class="pi pi-plus"></i> ADD
+      </button>
+
+    </div>
+  </div>
+
+
+  <!-- Table Section -->
+  <div class="table-section">
+    <app-paginated-table
+      [data]="filteredShips"
+      [columns]="cols"
+      [showEndActions]="true"
+      (viewEvent)="viewDetails($event)"
+      (editEvent)="editShip($event)"
+      (deleteEvent)="deleteShip($event)"
+    ></app-paginated-table>
+  </div>
+<!-- </div> -->
+
+<!-- Add/Edit Modal using reusable AddFormComponent -->
+<app-add-form
+  [open]="shipDialog"
+  [fromTitle]="selectedShip ? 'Edit Ship' : 'Add New Ship'"
+  [submitLabel]="'Save'"
+  [isEditMode]="!!selectedShip"
+  [formData]="selectedShip || {}"
+  [formConfig]="shipFormConfig"
+  (onOpenChange)="shipDialog = $event"
+  (onSubmit)="saveShip($event)">
+</app-add-form>
+
+<!-- View Details Sidebar -->
+<p-sidebar [(visible)]="viewSidebarVisible" position="right" [modal]="true" [baseZIndex]="10001"
+  styleClass="ship-sidebar">
+  <div class="flex justify-between items-center mb-4 mt-4">
+    <h3 class="text-xl font-semibold text-primary">Ship Details</h3>
+    <button type="button" pButton icon="pi pi-times" class="p-button-rounded p-button-sm p-button-danger bg-primary"
+      (click)="viewSidebarVisible = false"></button>
+  </div>
+
+  <div class="space-y-4 text-sm">
+    <div class="d-flex flex-column gap-4 bg-white text-gray-800 p-4 rounded-xl shadow">
+      <div class="d-flex">
+        <h1>{{ viewedShip?.name }}</h1>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Type</label>
+        <div>{{ viewedShip?.type }}</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Commission Date</label>
+        <div>{{ viewedShip?.commissionDate | date }}</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Decommission Date</label>
+        <div>{{ viewedShip?.decommissionDate | date }}</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Class</label>
+        <div>{{ viewedShip?.className }}</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Ops Authority</label>
+        <div>{{ viewedShip?.opsAuthority }}</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Endurance</label>
+        <div>{{ viewedShip?.endurance }} nm</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <label class="block text-gray-500 font-semibold mb-1">Max Speed</label>
+        <div>{{ viewedShip?.speed }} knots</div>
+      </div>
+
+      <div class="col-span-2">
+        <label class="block text-gray-500 font-semibold mb-1">Remarks</label>
+        <div>{{ viewedShip?.remarks }}</div>
+      </div>
+    </div>
+  </div>
+</p-sidebar>

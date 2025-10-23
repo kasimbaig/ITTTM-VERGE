@@ -1,0 +1,169 @@
+<div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-2 flex ">
+        <div class="flex flex-wrap items-center gap-4 w-1/2">
+            <!-- Checkbox -->
+            <div class="flex items-center">
+                <input type="checkbox" id="includeAll" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" [(ngModel)]="isAdvanceSearch" >
+                <label for="includeAll" class="ml-2 text-sm font-medium text-gray-700">Advance Search</label>
+            </div>
+        </div>
+
+        <div class="w-1/2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">SRAR <span class="text-orange-600">Status</span></h2>
+            <div class="h-1 w-20 bg-blue-600 rounded"></div>
+        </div>
+    </div>
+
+    <!-- Advanced Search Section -->
+    <div *ngIf="isAdvanceSearch" class="mb-4 p-3 bg-blue-600 -100 rounded-lg border border-blue-200 inline-block">
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- Month Selection -->
+            <div class="flex items-center gap-2">
+                <label for="monthSelect" class="text-sm font-medium text-gray-700">Month:</label>
+                <p-dropdown 
+                    id="monthSelect" 
+                    [(ngModel)]="selectedMonth"
+                    (onChange)="onMonthChange()"
+                    [options]="[
+                        {label: 'Select Month', value: ''},
+                        {label: 'January', value: '1'},
+                        {label: 'February', value: '2'},
+                        {label: 'March', value: '3'},
+                        {label: 'April', value: '4'},
+                        {label: 'May', value: '5'},
+                        {label: 'June', value: '6'},
+                        {label: 'July', value: '7'},
+                        {label: 'August', value: '8'},
+                        {label: 'September', value: '9'},
+                        {label: 'October', value: '10'},
+                        {label: 'November', value: '11'},
+                        {label: 'December', value: '12'}
+                    ]"
+                    placeholder="Select Month"
+                    styleClass="text-xs">
+                </p-dropdown>
+            </div>
+            
+            <!-- Year Selection -->
+            <div class="flex items-center gap-2">
+                <label for="yearSelect" class="text-sm font-medium text-gray-700">Year:</label>
+                <p-dropdown 
+                    id="yearSelect" 
+                    [(ngModel)]="selectedYear"
+                    (onChange)="onYearChange()"
+                    [options]="[
+                        {label: 'Select Year', value: ''},
+                        {label: '2024', value: '2024'},
+                        {label: '2023', value: '2023'},
+                        {label: '2022', value: '2022'},
+                        {label: '2021', value: '2021'},
+                        {label: '2020', value: '2020'}
+                    ]"
+                    placeholder="Select Year"
+                    styleClass="text-xs">
+                </p-dropdown>
+            </div>
+
+
+
+            <button class="px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-yellow-500 text-white border-yellow-600 hover:bg-yellow-600" (click)="onSearch()">
+                Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Filters -->
+    <div class="mb-6">
+        <div class="flex flex-wrap gap-2">
+            <button (click)="setActiveFilter('IN')" 
+                    [class]="activeFilter === 'IN' ? 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-blue-600 -400 text-white border-blue-600 hover:bg-blue-600 -500' : 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-blue-600 -50 text-blue-600 border-blue-200 hover:bg-blue-600 -100'">
+                IN
+            </button>
+            <button (click)="setActiveFilter('WNC')" 
+                    [class]="activeFilter === 'WNC' ? 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-green-400 text-white border-green-600 hover:bg-green-500' : 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-green-50 text-green-600 border-green-200 hover:bg-green-100'">
+                WNC
+            </button>
+            <button (click)="setActiveFilter('ENC')" 
+                    [class]="activeFilter === 'ENC' ? 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-purple-400 text-white border-purple-600 hover:bg-purple-500' : 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100'">
+                ENC
+            </button>
+            <button (click)="setActiveFilter('SNC')" 
+                    [class]="activeFilter === 'SNC' ? 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-orange-400 text-white border-orange-600 hover:bg-orange-500' : 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-100'">
+                SNC
+            </button>
+            <button (click)="setActiveFilter('ANC')" 
+                    [class]="activeFilter === 'ANC' ? 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-red-400 text-white border-red-600 hover:bg-red-500' : 'px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-red-50 text-red-600 border-red-200 hover:bg-red-100'">
+                ANC
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="rounded-lg p-6 border border-amber-200 bg-amber-50 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Total Ship Card -->
+            <div class="flex-shrink-0 px-3 sm:px-4 py-3 border cursor-pointer transition-all duration-200 rounded text-blue-500 bg-blue-600 -50 border-blue-500 hover:bg-blue-600 -100 hover:text-blue-600">
+                <div class="flex flex-col space-y-2 items-center text-center sm:flex-row sm:justify-between sm:items-center sm:text-left sm:space-y-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-ship text-xl sm:text-2xl"></i>
+                        <span class="text-base sm:text-lg font-medium whitespace-nowrap">
+                            TOTAL SHIP
+                        </span>
+                    </div>
+                    <span class="inline-flex items-center justify-center rounded px-2 sm:px-3 py-1 text-xs sm:text-sm font-bold border-2 text-blue-50 bg-blue-600 -500 border-blue-500">
+                        Total ship : {{ 1 }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- SRAR Render Card -->
+            <div class="flex-shrink-0 px-3 sm:px-4 py-3 border cursor-pointer transition-all duration-200 rounded text-green-500 bg-green-50 border-green-500 hover:bg-green-100 hover:text-green-600">
+                <div class="flex flex-col space-y-2 items-center text-center sm:flex-row sm:justify-between sm:items-center sm:text-left sm:space-y-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-xl sm:text-2xl"></i>
+                        <span class="text-base sm:text-lg font-medium whitespace-nowrap">
+                            SRAR RENDER
+                        </span>
+                    </div>
+                    <span class="inline-flex items-center justify-center rounded px-2 sm:px-3 py-1 text-xs sm:text-sm font-bold border-2 text-green-50 bg-green-500 border-green-500">
+                        Total ship : {{ 200 }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- SRAR Pending Card -->
+            <div class="flex-shrink-0 px-3 sm:px-4 py-3 border cursor-pointer transition-all duration-200 rounded text-yellow-500 bg-yellow-50 border-yellow-500 hover:bg-yellow-100 hover:text-yellow-600">
+                <div class="flex flex-col space-y-2 items-center text-center sm:flex-row sm:justify-between sm:items-center sm:text-left sm:space-y-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-clock text-xl sm:text-2xl"></i>
+                        <span class="text-base sm:text-lg font-medium whitespace-nowrap">
+                            SRAR PENDING
+                        </span>
+                    </div>
+                    <span class="inline-flex items-center justify-center rounded px-2 sm:px-3 py-1 text-xs sm:text-sm font-bold border-2 text-yellow-50 bg-yellow-500 border-yellow-500">
+                        Total ship : {{ 200 }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span class="ml-2 text-gray-600">Loading...</span>
+    </div>
+
+    <!-- Reusable Table -->
+    <div *ngIf="!isLoading">
+        <app-resuable-table
+            [gridColumns]="tableColumns"
+            [filteredData]="tableData"
+            
+            [isPaginator]="true"
+            [isShearchDisable]="'N'"
+            >
+        </app-resuable-table>
+    </div>
+</div>

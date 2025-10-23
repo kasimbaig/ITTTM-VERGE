@@ -1,0 +1,89 @@
+<!-- sfd-main.component.html -->
+<div class="sfd-main-container px-3 py-1  min-h-screen">
+    <!-- SFD Dashboard Header -->
+    <!-- Sub-navigation for SFD sections -->
+    <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <button class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out font-semibold"
+            [ngClass]="{'active active-head text-white shadow-lg': activeSubPath === 'sfd-dashboard', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'sfd-dashboard'}"
+            (click)="navigateToSFD('sfd-dashboard')">
+            <i class="fa-solid fa-gauge me-3"></i>
+            <span>Dashboard</span>
+        </button>
+
+        <!-- Masters Button with Dropdown Toggle -->
+        <div class="relative masters-dropdown-container">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button font-semibold"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'sfd-masters', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'sfd-masters'}"
+                (click)="navigateToSFD('sfd-masters')">
+                <i class="fa-solid fa-database me-3 "></i>
+                <span>Masters</span>
+                <i class="fa-solid ml-2 text-xs"
+                    [ngClass]="showMasterDropdown ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </button>
+
+            <!-- Masters Dropdown Menu -->
+            <div *ngIf="showMasterDropdown"
+                class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none masters-dropdown-menu h-96 overflow-y-auto overflow-x-hidden">
+                <button *ngFor="let item of masterMenuItems"
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center transition-colors duration-150 ease-in-out"
+                    (click)="navigateToMasterSubItem(item.path)">
+                    <i [ngClass]="item.icon" class="mr-3 w-5 text-center text-blue-600"></i>
+                    {{ item.label }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Transactions Button with Dropdown Toggle -->
+        <div class="relative transactions-dropdown-container">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out transactions-button font-semibold"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'sfd-transactions', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'sfd-transactions'}"
+                (click)="navigateToSFD('sfd-transactions')">
+                <i class="fa-solid fa-exchange-alt me-3 "></i>
+                <span>Transactions</span>
+                <i class="fa-solid ml-2 text-xs"
+                    [ngClass]="showTransactionsDropdown ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </button>
+
+            <!-- Transactions Dropdown Menu -->
+            <div *ngIf="showTransactionsDropdown"
+                class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none transactions-dropdown-menu h-96 overflow-y-auto overflow-x-hidden">
+                <button *ngFor="let item of transactionMenuItems"
+                    class="block w-full text-left px-4 py-2 text-sm bg-white border-none flex items-center transition-colors duration-150 ease-in-out"
+                    (click)="navigateToTransactionSubItem(item.path)">
+                    <i [ngClass]="item.icon" class="mr-3 w-5 text-center text-blue-600"></i>
+                    {{ item.label }}
+                </button>
+            </div>
+        </div>
+
+        <div class="relative transactions-dropdown-container">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out transactions-button font-semibold"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'reports', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'reports'}"
+                (click)="navigateToSFD('reports')">
+                <i class="fa-solid fa-chart-bar me-3 "></i>
+                <span>Reports</span>
+                <i class="fa-solid ml-2 text-xs"
+                    [ngClass]="showReportsDropdown ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </button>
+
+            <!-- Transactions Dropdown Menu -->
+            <div *ngIf="showReportsDropdown"
+                class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none transactions-dropdown-menu h-96 overflow-y-auto overflow-x-hidden">
+                <button *ngFor="let item of reportsMenuItems"
+                    class="block w-full text-left px-4 py-2 text-sm bg-white border-none flex items-center transition-colors duration-150 ease-in-out"
+                    (click)="navigateToReportsSubItem(item)">
+                    <i [ngClass]="item.icon" class="mr-3 w-5 text-center text-blue-600"></i>
+                    {{ item.label }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Router Outlet for SFD Sub-components -->
+    <div class="" [ngClass]="activeSubPath==='sfd-dashboard' ? 'px-0' : 'max-w-screen-xl mx-auto'">
+        <router-outlet></router-outlet>
+    </div>
+</div>

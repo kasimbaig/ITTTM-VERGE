@@ -1,0 +1,236 @@
+<div class="user-access-container">
+  <!-- Header -->
+  <div class="user-access-header">
+    <div class="header-content">
+      <div class="header-left">
+        <button class="btn-back" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i>
+          Back to Setup
+        </button>
+        <h1 class="page-title">User Access</h1>
+      </div>
+      <div class="header-right">
+        <button class="btn-switch-mode" (click)="openSwitchModeDialog()">
+          <i class="pi pi-th-large"></i>
+        </button>
+        <button class="btn-add-primary" (click)="addNewMenu()">
+          <i class="pi pi-plus"></i>
+          Add Menu
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- User Selection Area -->
+  <div class="w-full bg-white p-4 rounded-md shadow-sm mb-4">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="w-full md:w-1/2">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Select User:</label>
+        <div class="flex items-center gap-2">
+          <p-dropdown 
+            [options]="users" 
+            [(ngModel)]="selectedUser" 
+            optionLabel="label" 
+            placeholder="Select a User"
+            (onChange)="onUserSelect($event)"
+            [showClear]="true"
+            styleClass="w-full">
+          </p-dropdown>
+          <button class="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors" 
+                  (click)="refreshUsers()" 
+                  title="Refresh Users">
+            <i class="pi pi-refresh"></i>
+          </button>
+        </div>
+      </div>
+      <div class="w-full md:w-auto mt-4 md:mt-0">
+        <button class="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors" 
+                (click)="saveChanges()" 
+                [disabled]="isLoadingUserAccess">
+          <i *ngIf="!isLoadingUserAccess" class="pi pi-save"></i>
+          <i *ngIf="isLoadingUserAccess" class="pi pi-spinner pi-spin"></i>
+          {{ isLoadingUserAccess ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-section">
+    <div *ngIf="!selectedUser" class="no-user-selected">
+      <div class="no-user-content">
+        <i class="pi pi-user no-user-icon"></i>
+        <h2 class="no-user-title">No User Selected</h2>
+        <p class="no-user-description">Please select a user from the dropdown above to configure their access permissions</p>
+      </div>
+    </div>
+
+    <div *ngIf="selectedUser" class="user-permissions">
+      <div class="permissions-content">
+        <h3>Permissions for {{ selectedUser.label || selectedUser.name }}</h3>
+        
+        <!-- Loading state -->
+        <div *ngIf="isLoadingUserAccess" class="loading-state">
+          <i class="pi pi-spinner pi-spin"></i>
+          <span>Loading user permissions...</span>
+        </div>
+
+        <!-- Permissions table -->
+        <div *ngIf="!isLoadingUserAccess && modules.length > 0" class="permissions-table">
+          <table class="permissions-table-content">
+            <thead>
+              <tr>
+                <th class="module-column">Module</th>
+                <th *ngFor="let privilege of availablePrivileges" class="privilege-column">{{ privilege.name }}</th>
+                <th class="enabled-column">Enabled</th>
+                <th class="actions-column">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let module of flattenedModules">
+                <tr [ngClass]="{'sub-module': module.level > 0}" [style.padding-left.px]="module.level * 20">
+                  <td class="module-name">
+                    <span *ngIf="module.hasSubModules" 
+                          class="expand-icon" 
+                          (click)="toggleModuleExpansion(module.id)"
+                          [ngClass]="{'expanded': module.isExpanded}">
+                      <i class="pi" [ngClass]="module.isExpanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+                    </span>
+                    <i *ngIf="module.icon" [ngClass]="module.icon" class="module-icon"></i>
+                    {{ module.name }}
+                  </td>
+                  <td *ngFor="let privilege of availablePrivileges" class="privilege-cell">
+                    <p-checkbox 
+                      [binary]="true" 
+                      [ngModel]="getPrivilegeValue(module, privilege.name)"
+                      (onChange)="onPrivilegeChange(module.id, privilege.name, $event.checked)">
+                    </p-checkbox>
+                  </td>
+                  <td class="enabled-cell">
+                    <p-inputSwitch 
+                      [ngModel]="module.enabled"
+                      (onChange)="onToggleChange(module.id, $event.checked)">
+                    </p-inputSwitch>
+                  </td>
+                  <td class="actions-cell">
+                    <div class="action-buttons">
+                      <button class="btn-action btn-add-sub" 
+                              pButton 
+                              type="button" 
+                              icon="pi pi-plus" 
+                              (click)="addSubModuleFromTable(module)"
+                              pTooltip="Add Sub Module">
+                      </button>
+                      <button class="btn-action btn-edit" 
+                              pButton 
+                              type="button" 
+                              icon="pi pi-pencil" 
+                              (click)="editModule(module)"
+                              pTooltip="Edit Module">
+                      </button>
+                      <button class="btn-action btn-delete" 
+                              pButton 
+                              type="button" 
+                              icon="pi pi-trash" 
+                              (click)="deleteModule(module)"
+                              pTooltip="Delete Module">
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- No permissions message -->
+        <div *ngIf="!isLoadingUserAccess && modules.length === 0" class="no-permissions">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>No modules found for this user.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)">
+          <div class="tile-icon">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Add Menu Form -->
+  <app-add-form
+    *ngIf="showAddMenuForm"
+    [open]="showAddMenuForm"
+    [formConfig]="menuFormConfig"
+    [formData]="newMenu"
+    [fromTitle]="'Add New Menu'"
+    [submitLabel]="'Add Menu'"
+    (onOpenChange)="closeAddMenuForm()"
+    (onSubmit)="handleAddMenuSubmit($event)">
+  </app-add-form>
+
+  <!-- Add Sub Module Form -->
+  <app-add-form
+    *ngIf="showSubModuleForm"
+    [open]="showSubModuleForm"
+    [formConfig]="subModuleFormConfig"
+    [formData]="newSubModule"
+    [fromTitle]="'Add New Sub Module'"
+    [submitLabel]="'Add Sub Module'"
+    (onOpenChange)="closeSubModuleForm()"
+    (onSubmit)="handleAddSubModuleSubmit($event)">
+  </app-add-form>
+
+  <!-- Edit Module Form Modal -->
+  <app-add-form
+    [open]="showEditModuleForm"
+    [formConfig]="moduleEditFormConfig"
+    [formData]="moduleEditData"
+    [fromTitle]="'Edit Module'"
+    [submitLabel]="'Update Module'"
+    [isEditMode]="true"
+    (onOpenChange)="closeEditModuleForm()"
+    (onSubmit)="handleModuleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- Delete Module Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="showDeleteModuleModal"
+    [visible]="showDeleteModuleModal"
+    [itemName]="selectedModule?.name || ''"
+    (onConfirm)="confirmModuleDelete()"
+    (onCancel)="closeDeleteModuleModal()">
+  </app-delete-confirmation-modal>
+</div>

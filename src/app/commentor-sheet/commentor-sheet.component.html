@@ -1,0 +1,343 @@
+<div class="bg-gray-50 {{className}} h-screen p-0 m-0">
+  <div class="w-full h-full shadow-lg rounded-2xl overflow-hidden bg-white flex flex-col">
+    <!-- Toggle Header -->
+    <div class="bg-white border-b border-gray-200 p-6">
+      
+      <!-- Edit Route Config Button - Full Width, Only in Edit Mode -->
+     
+      
+      <div class="flex justify-center">
+        <div class="bg-gray-100 p-1 flex">
+          <button
+            (click)="setViewMode('form')"
+            [class]="'flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 ' + 
+              (viewMode === 'form' ? 'bg-blue-500 text-white shadow-lg' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200')"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span class="font-medium">{{customForm ? "Maritime Docking Form" : "Data Entry Form"}}</span>
+          </button>
+          <button
+            (click)="setViewMode('comments')"
+            [class]="'flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 ' + 
+              (viewMode === 'comments' ? 'bg-blue-500 text-white shadow-lg' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200')"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+            <span class="font-medium">Comments & Feedback</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="flex flex-col lg:flex-row flex-1 min-h-0">
+      <!-- Comments Section -->
+      <section 
+        *ngIf="viewMode === 'comments'" 
+        #commentsSection
+        class="flex-1 min-w-80 bg-white p-8 flex flex-col h-full overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 hover:scrollbar-thumb-blue-600 scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-semibold text-gray-800 pb-4 border-b-2 border-blue-500">
+            Comments & Feedback
+          </h2>
+          <div class="flex gap-3">
+            <!-- Add Comment Button - Hidden in view mode -->
+            <button
+              *ngIf="mode !== 'view'"
+              (click)="handleAddCommentClick()"
+              class="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 bg-blue-500 hover:bg-blue-600"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+              <span class="font-medium">Add Comment</span>
+            </button>
+            <button
+              (click)="downloadCommentsPDF()"
+              class="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span class="font-medium">Download PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Add Comment Form - Hidden in view mode -->
+        <div *ngIf="showCommentForm && mode !== 'view'" class="border-t border-gray-200 pt-4 bg-white">
+          <div class="mb-3">
+            <h3 class="text-sm font-semibold text-gray-800 mb-2">Add New Comment</h3>
+          </div>
+          <form [formGroup]="commentForm" (ngSubmit)="handleAddComment($event)" class="space-y-3">
+            <div class="flex space-x-2">
+              <textarea
+                formControlName="text"
+                placeholder="Type your message..."
+                required
+                rows="2"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none bg-white text-sm"
+              ></textarea>
+              <button
+                type="submit"
+                [disabled]="loading"
+                [class]="'px-4 py-2 text-white rounded-lg transition-all duration-300 flex items-center justify-center ' + 
+                  (loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600')"
+              >
+                <div *ngIf="loading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <svg *ngIf="!loading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="flex justify-end">
+              <button
+                type="button"
+                (click)="showCommentForm = false; commentForm.reset()"
+                class="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Comments Container -->
+        <div class="flex-1 flex flex-col">
+          <div class="flex-1 overflow-y-auto space-y-4 mb-4">
+            <div *ngFor="let comment of commentsList" class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+              <!-- Avatar -->
+              <div class="flex-shrink-0">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                  {{comment.avatar}}
+                </div>
+              </div>
+              
+              <!-- Comment Content -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center space-x-2 mb-1">
+                  <span class="font-semibold text-gray-900 text-sm">{{comment.author}}</span>
+                  <span class="text-xs text-gray-500">{{comment.date}}</span>
+                </div>
+                <p class="text-gray-700 text-sm leading-relaxed">{{comment.text}}</p>
+                
+                <!-- Digital Signature Badge -->
+                <div class="flex items-center mt-2 space-x-2">
+                  <div class="flex items-center text-xs text-gray-500">
+                    <svg class="w-3 h-3 mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span>Digitally signed</span>
+                  </div>
+                  <span class="text-xs text-gray-400">•</span>
+                  <span class="text-xs text-gray-400">ID: #{{comment.id}}</span>
+                </div>
+              </div>
+              
+              <!-- QR Code -->
+              <div class="flex-shrink-0">
+                <img 
+                  *ngIf="qrCodes[comment.id]" 
+                  [src]="qrCodes[comment.id]" 
+                  [alt]="'Digital signature for ' + comment.author"
+                  class="w-24 h-24 rounded border border-blue-200 qr-code-hover"
+                />
+                <div *ngIf="!qrCodes[comment.id]" class="w-24 h-24 bg-gray-200 rounded border border-gray-300 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Vertical Separator -->
+      <div *ngIf="viewMode === 'comments'" class="hidden lg:flex items-center justify-center w-1 bg-gray-200">
+      </div>
+      
+      <!-- Form Section -->
+      <section 
+        [class]="'min-w-80 bg-white p-8 text-gray-800 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 hover:scrollbar-thumb-blue-600 scrollbar-thumb-rounded-full scrollbar-track-rounded-full ' + 
+          (viewMode === 'form' ? 'flex-1' : 'flex-1')"
+      >
+        <h2 class="text-2xl font-semibold mb-6 pb-4 border-b-2 border-blue-500">
+          {{customForm ? "" : ""}}
+        </h2>
+      
+        <div *ngIf="customFormComponent; else defaultForm">
+          <ng-container [ngComponentOutlet]="customFormComponent" [ngComponentOutletInputs]="getFormInputs()"></ng-container>
+        </div>
+        
+        <ng-template #defaultForm>
+          <form (ngSubmit)="handleSubmit($event)" class="space-y-5">
+            <div *ngIf="formFields.showFirstName" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="firstName" class="block mb-2 font-medium text-gray-700">
+                  First Name <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="firstName" 
+                  name="firstName"
+                  placeholder="Enter your first name"
+                  [value]="formData.firstName"
+                  (input)="handleInputChange($event)"
+                  required 
+                  class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+              
+              <div *ngIf="formFields.showLastName">
+                <label for="lastName" class="block mb-2 font-medium text-gray-700">
+                  Last Name <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="lastName" 
+                  name="lastName"
+                  placeholder="Enter your last name"
+                  [value]="formData.lastName"
+                  (input)="handleInputChange($event)"
+                  required 
+                  class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+            </div>
+            
+            <div *ngIf="formFields.showEmail">
+              <label for="email" class="block mb-2 font-medium text-gray-700">
+                Email Address <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                placeholder="Enter your email"
+                [value]="formData.email"
+                (input)="handleInputChange($event)"
+                required 
+                class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+            
+            <div *ngIf="formFields.showDepartment">
+              <label for="department" class="block mb-2 font-medium text-gray-700">
+                Department
+              </label>
+              <select 
+                id="department" 
+                name="department"
+                [value]="formData.department"
+                (change)="handleInputChange($event)"
+                class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+              >
+                <option value="" disabled>Select your department</option>
+                <option *ngFor="let dept of departments" [value]="getDepartmentValue(dept)">{{dept}}</option>
+              </select>
+            </div>
+            
+            <div *ngIf="formFields.showEmployeeId || formFields.showHireDate" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div *ngIf="formFields.showEmployeeId">
+                <label for="employeeId" class="block mb-2 font-medium text-gray-700">
+                  Employee ID <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="employeeId" 
+                  name="employeeId"
+                  placeholder="Enter your ID"
+                  [value]="formData.employeeId"
+                  (input)="handleInputChange($event)"
+                  required 
+                  class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+              
+              <div *ngIf="formFields.showHireDate">
+                <label for="hireDate" class="block mb-2 font-medium text-gray-700">
+                  Hire Date
+                </label>
+                <input 
+                  type="date" 
+                  id="hireDate" 
+                  name="hireDate"
+                  [value]="formData.hireDate"
+                  (change)="handleInputChange($event)"
+                  class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+            </div>
+            
+            <div *ngIf="formFields.showProject">
+              <label for="project" class="block mb-2 font-medium text-gray-700">
+                Current Project
+              </label>
+              <input 
+                type="text" 
+                id="project" 
+                name="project"
+                placeholder="Enter project name"
+                [value]="formData.project"
+                (input)="handleInputChange($event)"
+                class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+              />
+            </div>
+            
+            <div *ngIf="formFields.showComments">
+              <label for="comments" class="block mb-2 font-medium text-gray-700">
+                Additional Comments
+              </label>
+              <textarea 
+                id="comments" 
+                name="comments"
+                placeholder="Enter any additional information"
+                [value]="formData.comments"
+                (input)="handleInputChange($event)"
+                rows="4"
+                class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-vertical"
+              ></textarea>
+            </div>
+            
+            <div *ngIf="formFields.showFile">
+              <label for="file" class="block mb-2 font-medium text-gray-700">
+                Upload File
+              </label>
+              <input 
+                type="file" 
+                id="file" 
+                name="file"
+                (change)="handleInputChange($event)"
+                class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
+              />
+            </div>
+            
+            <button 
+              type="submit"
+              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              Submit Data
+            </button>
+            
+            <div class="text-center text-sm text-gray-600 mt-6">
+              By submitting this form, you agree to our
+              <a href="#" class="text-blue-500 hover:text-blue-600 transition-colors duration-300">
+                terms of service
+              </a>
+              and
+              <a href="#" class="text-blue-500 hover:text-blue-600 transition-colors duration-300">
+                privacy policy
+              </a>
+              .
+            </div>
+          </form>
+        </ng-template>
+      </section>
+    </div>
+  </div>
+</div>

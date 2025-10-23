@@ -1,0 +1,156 @@
+<div class="container overflow-x-hidden">
+  <div class="dashboard-header">
+    <h2>🚢 Fleet Ship Management</h2>
+    <!-- <p>Overview</p> -->
+  </div>
+
+  <div class="stats-grid w-full max-w-full">
+    <div class="stat-card card-blue">
+      <h3>
+        Total Equipment
+        <span class="icon">💾</span>
+      </h3>
+      <div class="number">5</div>
+      <div class="caption">5 in active state</div>
+    </div>
+
+    <div class="stat-card card-green">
+      <h3>
+        Equipment Categories
+        <span class="icon">📊</span>
+      </h3>
+      <div class="number">4</div>
+      <div class="caption">Major equipment groups</div>
+    </div>
+
+    <div class="stat-card card-purple">
+      <h3>
+        Recent Fittings
+        <span class="icon">⚓</span>
+      </h3>
+      <div class="number">2</div>
+      <div class="caption">New equipment installations</div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid w-full max-w-full">
+    <div class="main-content">
+      <div class="section">
+        <h3 class="section-title">Equipment</h3>
+        <div class="search-filter">
+          <input
+            type="text"
+            class="search-input w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+            placeholder="🔍 Search equipment..."
+          />
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Equipment ID</th>
+              <th>Equipment Name</th>
+              <th>Location</th>
+              <th>Installation Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ENG001</td>
+              <td>Gas Turbine Engine</td>
+              <td>ME-01</td>
+              <td>8/15/2022</td>
+              <td><span class="status-badge">Active</span></td>
+            </tr>
+            <tr>
+              <td>RAD001</td>
+              <td>Surveillance Radar</td>
+              <td>BR-01</td>
+              <td>8/10/2022</td>
+              <td><span class="status-badge">Active</span></td>
+            </tr>
+            <tr>
+              <td>ENG002</td>
+              <td>Diesel Generator</td>
+              <td>AUX-01</td>
+              <td>1/15/2023</td>
+              <td><span class="status-badge">Active</span></td>
+            </tr>
+            <tr>
+              <td>COM001</td>
+              <td>Satellite Communication System</td>
+              <td>BR-02</td>
+              <td>11/1/2016</td>
+              <td><span class="status-badge">Active</span></td>
+            </tr>
+            <tr>
+              <td>WEP002</td>
+              <td>Torpedo Launch System</td>
+              <td>WS-02</td>
+              <td>12/5/2016</td>
+              <td><span class="status-badge">Active</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="section">
+        <h3>Equipment Distribution</h3>
+        <div class="donut-chart">
+          <svg viewBox="0 0 200 200">
+            <ng-container *ngFor="let segment of donutSegments">
+              <circle
+                cx="100"
+                cy="100"
+                [attr.r]="circleRadius"
+                fill="transparent"
+                [attr.stroke]="segment.color"
+                stroke-width="30"
+                [attr.stroke-dasharray]="segment.dasharray"
+                [attr.stroke-dashoffset]="segment.dashoffset"
+              ></circle>
+            </ng-container>
+            <circle
+              cx="100"
+              cy="100"
+              [attr.r]="circleRadius - 20"
+              fill="white"
+            ></circle>
+          </svg>
+
+          <div style="margin-top: 1rem; text-align: left">
+            <div *ngFor="let item of chartData" style="margin: 0.5rem 0">
+              <span
+                [style.background]="item.color"
+                style="
+                  width: 12px;
+                  height: 12px;
+                  display: inline-block;
+                  margin-right: 5px;
+                "
+              ></span>
+              {{ item.label }} ({{ item.count }})
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Recent Equipment Fittings</h3>
+        <div class="fitting-item">
+          <div class="fitting-date">8/15/2022</div>
+          <div class="fitting-title">Gas Turbine Engine (ENG001)</div>
+          <div class="fitting-detail">Location: ME-01</div>
+        </div>
+        <div class="fitting-item">
+          <div class="fitting-date">8/10/2022</div>
+          <div class="fitting-title">Surveillance Radar (RAD001)</div>
+          <div class="fitting-detail">Location: BR-01</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

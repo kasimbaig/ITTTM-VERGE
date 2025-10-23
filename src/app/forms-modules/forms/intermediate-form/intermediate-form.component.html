@@ -1,0 +1,299 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="w-full px-0 sm:px-0 lg:px-0">
+    <!-- Header -->
+    <!-- <div class="bg-primary-blue shadow-sm border border-gray-200 mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl font-bold text-center flex-1">
+            Intermediate Underwater Hull Inspection
+          </h1>
+        
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Table View -->
+    <div *ngIf="showTableView && !formOnlyMode">
+      <app-intermediate-form-table
+        title="Intermediate Form Records"
+        apiUrl="/hitu/intermediate-underwater-hull-inspection-reports/"
+        (editEvent)="onEditForm($event)"
+        (viewEvent)="onViewForm($event)"
+        (deleteEvent)="onDeleteForm($event)">
+      </app-intermediate-form-table>
+    </div>
+
+    <!-- Form View -->
+    <div *ngIf="!showTableView || formOnlyMode">
+
+    <form [formGroup]="intermediateForm" (ngSubmit)="onSubmit()" class="">
+      
+      
+      <!-- Inspection Details Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-2 border-b border-gray-200 bg-primary-blue">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold">Inspection Details</h2>
+            <!-- Back to Table button (for same component) -->
+            <button 
+              *ngIf="!formOnlyMode"
+              type="button"
+              (click)="toggleView()"
+              class="px-4 py-2 bg-transparent text-white font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 rounded border border-primary-blue">
+              <i class="pi pi-arrow-left mr-2"></i> Back to Table
+            </button>
+            <!-- Back to List button (for Commentor Sheet) -->
+            <button 
+              *ngIf="formOnlyMode && (mode === 'edit' || mode === 'view')"
+              type="button"
+              (click)="goBackToList()"
+              class="px-4 py-2 bg-transparent text-white font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 rounded border border-primary-blue">
+              <i class="pi pi-arrow-left mr-2"></i> Back to List
+            </button>
+          </div>
+        </div>
+           <!-- Route Configuration Section - Only show in edit mode -->
+      <div *ngIf="!isAddMode && intermediateForm.get('id')?.value" class="bg-white shadow-sm border border-gray-200">
+        <!-- <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">Route Configuration</h2>
+        </div> -->
+        
+        <div class="p-6">
+          <app-route-config 
+            [useApi]="true"
+            [transactionId]="intermediateForm.get('id')?.value"
+            [submodule]="3"
+            [vesselId]="intermediateForm.get('inspectionType')?.value"
+            [formTitle]="'Intermediate Form Route Config'"
+            [hideButtons]="isViewMode"
+            (routeConfigSaved)="onRouteConfigSaved($event)"
+            (nextStepClicked)="onNextStep($event)"
+            (timelineToggled)="onTimelineToggle($event)">
+          </app-route-config>
+        </div>
+      </div>
+  
+        
+        <div class="p-6 space-y-6">
+          <!-- Inspection Details in Single Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                INTERMEDIATE UNDERWATER HULL INSPECTION - INS <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="ship_id"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="intermediateForm.get('ship_id')?.invalid && intermediateForm.get('ship_id')?.touched"
+                [disabled]="loading">
+                <option value="">--Select Ship--</option>
+                <option *ngFor="let ship of ships" [value]="ship.id">
+                  {{ ship.name }}
+                </option>
+              </select>
+              <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
+            </div>
+            
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Date of Inspection <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="date"
+                formControlName="inspectionDate"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="intermediateForm.get('inspectionDate')?.invalid && intermediateForm.get('inspectionDate')?.touched">
+            </div>
+            
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Authority for Inspection <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text"
+                formControlName="inspectionAuthority"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="intermediateForm.get('inspectionAuthority')?.invalid && intermediateForm.get('inspectionAuthority')?.touched">
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- HULL SURVEY & REPAIRS Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">HULL SURVEY & REPAIRS</h2>
+        </div>
+        
+        <div class="p-6 space-y-6">
+          <!-- Type of Survey -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">
+              Type of Survey <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text"
+              formControlName="typeOfSurvey"
+              class="w-auto px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="intermediateForm.get('typeOfSurvey')?.invalid && intermediateForm.get('typeOfSurvey')?.touched">
+          </div>
+
+          <!-- Hull Survey Observations -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title=""
+              [columns]="hullSurveyColumns"
+              [formArray]="hullSurveyObservations"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createHullSurveyRow.bind(this)"
+              (rowCountChange)="updateHullSurveyRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTS UNDERTAKEN TO PROVE THE EFFICACY OF HULL REPAIRS Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">TESTS UNDERTAKEN TO PROVE THE EFFICACY OF HULL REPAIRS</h2>
+        </div>
+        
+        <div class="p-6 space-y-6">
+          <!-- Test (a) -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">
+              (a) Pressure testing of tanks in way of hot work <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text"
+              formControlName="pressureTestingTanks"
+              class="w-auto px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="intermediateForm.get('pressureTestingTanks')?.invalid && intermediateForm.get('pressureTestingTanks')?.touched">
+          </div>
+
+          <!-- Test (b) -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">
+              (b) Pressure testing of sea tubes in way of hot work <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text"
+              formControlName="pressureTestingSeaTubes"
+              class="w-auto px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="intermediateForm.get('pressureTestingSeaTubes')?.invalid && intermediateForm.get('pressureTestingSeaTubes')?.touched">
+          </div>
+
+          <!-- Test (c) -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">
+              (c) NDT Undertaken in way of hot work locations <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text"
+              formControlName="ndtUndertaken"
+              class="w-auto px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="intermediateForm.get('ndtUndertaken')?.invalid && intermediateForm.get('ndtUndertaken')?.touched">
+          </div>
+        </div>
+      </div>
+
+      <!-- DEFECT RECTIFICATION / PRESERVATION OF INTERNAL U/W COMPARTMENTS / TANKS Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">DEFECT RECTIFICATION / PRESERVATION OF INTERNAL U/W COMPARTMENTS / TANKS</h2>
+        </div>
+        
+        <div class="p-6 space-y-4">
+          <app-dynamic-table
+            title=""
+            [columns]="hullSurveyColumns"
+            [formArray]="defectRectificationObservations"
+            [minRows]="0"
+            [maxRows]="20"
+            [showRowCounter]="true"
+            [showLabel]="false"
+            [createRowFunction]="createHullSurveyRow.bind(this)"
+            (rowCountChange)="updateDefectRectificationRows($event)">
+          </app-dynamic-table>
+        </div>
+      </div>
+
+      <!-- New Observations Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">New Observations</h2>
+        </div>
+        
+        <div class="p-6 space-y-4">
+          <app-dynamic-table
+            title=""
+            [columns]="hullSurveyColumns"
+            [formArray]="newObservations"
+            [minRows]="0"
+            [maxRows]="20"
+            [showRowCounter]="true"
+            [showLabel]="false"
+            [createRowFunction]="createHullSurveyRow.bind(this)"
+            (rowCountChange)="updateNewObservationsRows($event)">
+          </app-dynamic-table>
+        </div>
+      </div>
+
+
+
+      <!-- Action Buttons - Hide in view mode -->
+      <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+        <div class="flex flex-wrap justify-center gap-4 py-6 px-6">
+          <button 
+            type="button"
+            class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+            <i class="pi pi-download mr-2"></i>Fetch Drafts
+          </button>
+          <button 
+            type="button"
+            (click)="onSaveDraft()"
+            class="px-6 py-2 bg-yellow-500 text-white font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+            <i class="pi pi-save mr-2"></i>SAVE DRAFT
+          </button>
+          <button 
+            type="button"
+            class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+            <i class="pi pi-trash mr-2"></i>Clear
+          </button>
+          <button 
+            type="submit"
+            class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded">
+            <i class="pi pi-check mr-2"></i>Save
+          </button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- Route Configuration Popup using Reusable Component -->
+<app-route-config-popup
+  [isVisible]="showRouteConfigPopup"
+  [title]="'Intermediate Form Route Config'"
+  [subtitle]="'Smart Configuration'"
+  [submodule]="3"
+  [shipId]="intermediateForm.get('inspectionType')?.value"
+  [transactionId]="intermediateForm.get('id')?.value"
+  [useApi]="true"
+  (close)="onCloseRouteConfigPopup()"
+  (configureRoute)="onConfigureRoute()"
+  (saveDirectly)="onSaveDirectly()"
+  (routeConfigSaved)="onRouteConfigSaved($event)"
+  (refreshTimeline)="onRefreshTimeline()">
+</app-route-config-popup>
+
+<!-- Route Configuration Modal (for Configure Route option) -->
+<div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+    <!-- Modal Header -->
+  </div>
+</div>

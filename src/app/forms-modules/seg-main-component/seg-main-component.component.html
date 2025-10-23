@@ -1,0 +1,52 @@
+<!-- seg-main-component.component.html -->
+<div class="px-3 py-1 min-h-screen">
+    <!-- SEG Sub-navigation (Same as Masters) -->
+    <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <!-- Transaction Button -->
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'transaction', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'transaction'}"
+                (click)="navigateToSeg('transaction')">
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <span>Transaction</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'transaction'">
+        <!-- Table View -->
+        <div *ngIf="showTableView && !formOnlyMode">
+            <app-seg-form-table
+                (editEvent)="onEditForm($event)"
+                (viewEvent)="onViewForm($event)"
+                (deleteEvent)="deleteReportDetails($event)"
+                (tabChanged)="onTabChange($event)">
+            </app-seg-form-table>
+        </div>
+
+        <!-- Form View -->
+        <div *ngIf="!showTableView || formOnlyMode">
+            <app-seg-form
+                [formOnlyMode]="formOnlyMode"
+                [mode]="isAddMode ? 'add' : 'edit'"
+                [isEditMode]="!isAddMode"
+                [record]="selectedReport"
+                (formCancel)="toggleView()"
+                (refreshData)="refreshTableData()">
+            </app-seg-form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+    [visible]="showDeleteDialog"
+    [message]="'Are you sure you want to delete this SEG Form Report?'"
+    (onConfirm)="confirmDeletion()"
+    (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<app-toast></app-toast>
+

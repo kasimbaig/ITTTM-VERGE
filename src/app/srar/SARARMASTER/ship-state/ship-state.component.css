@@ -1,0 +1,168 @@
+/* Ship State Component Styles */
+.ship-state-container {
+  padding: 20px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.ship-state-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ship-state-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.ship-state-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ship-state-table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.ship-state-dialog {
+  min-width: 500px;
+}
+
+.ship-state-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ship-state-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ship-state-form-label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.ship-state-form-input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.ship-state-form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ship-state-form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ship-state-form-checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+.ship-state-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ship-state-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.ship-state-button-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.ship-state-button-primary:hover {
+  background: #2563eb;
+}
+
+.ship-state-button-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.ship-state-button-secondary:hover {
+  background: #e5e7eb;
+}
+
+.ship-state-button-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.ship-state-button-danger:hover {
+  background: #dc2626;
+}
+
+/* Status indicators */
+.status-active {
+  background: #dcfce7;
+  color: #166534;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-inactive {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .ship-state-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .ship-state-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .ship-state-dialog {
+    min-width: 90vw;
+    margin: 10px;
+  }
+} 

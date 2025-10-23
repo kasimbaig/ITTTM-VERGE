@@ -1,0 +1,51 @@
+<div class="sfd-dashboard-container overflow-x-hidden">
+  <div class="dashboard-title">
+    <h1>Ship & Fleet Dashboard</h1>
+    <p>Real-time operational view across ships, equipment, and fittings</p>
+  </div>
+
+  <div class="stats-grid w-full max-w-full">
+    <div class="stat-card" *ngFor="let card of statCards">
+      <div class="card-header">
+        <h4>{{ card.title }}</h4>
+        <a [routerLink]="card.route" class="redirect-icon" title="Go to {{ card.title }}">
+          ➜
+        </a>
+      </div>
+  
+      <div class="card-content">
+        <div class="card-number">{{ card.count }}</div>
+        <div class="card-caption">{{ card.caption }}</div>
+      </div>
+  
+      <i class="pi" [ngClass]="card.icon" class="card-icon"></i>
+    </div>
+  </div>
+  
+
+  <div class="dashboard-sections w-full max-w-full">
+    <div class="section">
+      <h2>Ships</h2>
+      <input type="text" class="search-input w-full p-2 border-2 border-gray-500 rounded-sm bg-white" placeholder="Search ships..." />
+      <app-paginated-table [data]="ships" [columns]="shipcols" [showEndActions]="false"></app-paginated-table>
+    </div>
+
+    <div class="section">
+      <h2>Ship Equipment</h2>
+      <div class="filter-row">
+        <div class="dropdowns-sec" *ngFor="let card of cards">
+          <label>{{ card.label }}</label>
+          <p-dropdown
+            [options]="card.options"
+            [(ngModel)]="card.selectedOption"
+            placeholder="Select {{ card.label }}"
+            (onChange)="applyFilter(card.label, $event.value)">
+          </p-dropdown>
+        </div>
+        <button class="btn reset-btn" (click)="resetFilters()">Reset</button>
+      </div>
+
+      <app-paginated-table [data]="equipmentDetails" [columns]="eqcols" [showEndActions]="false"></app-paginated-table>
+    </div>
+  </div>
+</div>

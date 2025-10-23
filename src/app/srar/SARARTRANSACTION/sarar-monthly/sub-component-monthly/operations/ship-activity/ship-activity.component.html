@@ -1,0 +1,118 @@
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-6 text-center">
+    <h3 class="text-lg font-semibold text-blue-600">Ship Activity - <span class="text-orange-500">Filling Process</span></h3>
+  </div>
+
+  <!-- Notice Section -->
+  <div class="mb-4 p-3 bg-red-100 border border-red-200 rounded flex items-center gap-2">
+    <div class="text-red-600 text-md font-medium">
+      <i class="pi pi-info-circle"></i>
+      Note:
+    </div>
+    <div class="text-red-600 text-md">1.Only one activity to be selected for one date (one date -one activity) and not multiple activities for same day allowed.</div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="mb-6">
+    <div class="flex items-center gap-4 mb-4">
+      <label class="text-sm font-medium">From:</label>
+      <p-calendar class="w-80" [showButtonBar]="true" [showIcon]="true" [(ngModel)]="fromDate"></p-calendar>
+      <label class="text-sm font-medium">To:</label>
+      <p-calendar class="w-80" [showButtonBar]="true" [showIcon]="true" [(ngModel)]="toDate"></p-calendar>
+      <button class="bg-blue-600 -500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 -600" (click)="onGoClick()">Go</button>
+    </div>
+  </div>
+ 
+  <!-- Main Table -->
+  <div class="overflow-x-auto mb-6 table-container">
+    <table class="w-full border-collapse border border-gray-400 ">
+      <thead>
+        <tr class="bg-gray-600 text-white">
+          <th class="border border-gray-400 p-2 text-center">Ship State</th>
+          <th class="border border-gray-400 p-2 text-center">Ship Location</th>
+          <th class="border border-gray-400 p-2 text-center">Activity Type</th>
+          <th class="border border-gray-400 p-2 text-center">Activity Details</th>
+          <th class="border border-gray-400 p-2 text-center">Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-white">
+          <td class="border border-gray-400 p-2 text-center dropdown-cell ">
+            <p-dropdown [options]="shipNames" placeholder="--Select Ship State--" [(ngModel)]="selectedShipName" optionLabel="name" [filter]="true" class="w-full p-2" [disabled]="!isFormEnabled"></p-dropdown>
+          </td>
+          <td class="border border-gray-400 p-2 text-center dropdown-cell">
+                <p-dropdown [options]="shipLocations" placeholder="--Select Ship Location--" [(ngModel)]="selectedShipLocation" optionLabel="name" [filter]="true" class="w-full p-2" [disabled]="!isFormEnabled"></p-dropdown>
+            </td>
+          <td class="border border-gray-400 p-2 text-center dropdown-cell">
+            <p-dropdown [options]="activityTypes" placeholder="--Select Activity Type--" [(ngModel)]="selectedActivityType" optionLabel="name" [filter]="true" class="w-full p-2" [disabled]="!isFormEnabled"></p-dropdown>
+          </td>
+          <td class="border border-gray-400 p-2 text-center dropdown-cell">
+            <p-dropdown [options]="activityDetails" placeholder="--Select Activity Details--" [(ngModel)]="selectedActivityDetails" optionLabel="name" [filter]="true" class="w-full p-2" [disabled]="!isFormEnabled"></p-dropdown>
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+                <input type="text" placeholder="Enter Remarks" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" [(ngModel)]="selectedRemarks" [disabled]="!isFormEnabled">
+          </td>
+        </tr>
+        <tr>
+            <td colspan="5" class="border border-gray-400 p-4 text-center">
+                
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Notice -->
+  <div class="mb-4 p-3 bg-red-100 border border-red-200 rounded ">
+    <div class="text-red-600 text-md flex  gap-2">
+        <div class="flex items-top gap-2">
+            <i class="pi pi-info-circle mt-1"></i>
+            <span class="font-medium mb-1">Note:</span>
+        </div>
+      <div class="text-red-600 text-md  ">     
+       1. Ship under Refit/Amp/Smp days to mark under Material Not Ready Activity<br>
+       2. Ship to mark "Sea Trials" under Material ready in Refit/Amp/Smp for the Dates.
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Section with Dropdown and Button -->
+  <div class="flex items-center justify-end mt-1">
+       
+    <button class="bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600" (click)="onAddClick()" [disabled]="!isFormEnabled">Add</button>
+  </div>
+
+  <!-- Bottom Table -->
+  <div class="overflow-x-auto mt-6">
+    <table class="w-full border-collapse border border-gray-400 text-xs">
+      <thead>
+        <tr class="bg-gray-600 text-white">
+          <th class="border border-gray-400 p-2 text-center">Ship Date (From - To)</th>
+          <th class="border border-gray-400 p-2 text-center">Ship Name</th>
+          <th class="border border-gray-400 p-2 text-center">Ship Location</th>
+          <th class="border border-gray-400 p-2 text-center">Activity Type</th>
+          <th class="border border-gray-400 p-2 text-center">Activity Details</th>
+          <th class="border border-gray-400 p-2 text-center">Remarks</th>
+          <th class="border border-gray-400 p-2 text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-white" *ngFor="let row of tableData">
+          <td class="border border-gray-400 p-2 text-center">{{row.fromDate | date:'dd/MM/yyyy'}} - {{row.toDate | date:'dd/MM/yyyy'}}</td>
+          <td class="border border-gray-400 p-2 text-center">{{row.shipName}}</td>
+          <td class="border border-gray-400 p-2 text-center">{{row.shipLocation}}</td>
+          <td class="border border-gray-400 p-2 text-center">{{row.activityType}}</td>
+          <td class="border border-gray-400 p-2 text-center">{{row.activityDetails}}</td>
+          <td class="border border-gray-400 p-2 text-center">{{row.remarks}}</td>
+          <td class="border border-gray-400 p-2 text-center">
+            <button class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600" (click)="onDeleteClick(row.id)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="tableData.length === 0">
+          <td colspan="7" class="border border-gray-400 p-4 text-center text-gray-500">No data available</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

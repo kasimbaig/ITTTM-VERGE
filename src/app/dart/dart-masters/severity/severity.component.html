@@ -1,0 +1,67 @@
+<div class="">
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="fa-solid fa-exclamation-triangle"></i>
+      <div>
+        <h2>Severity</h2>
+        <p>View & manage severity configurations and settings</p>
+      </div>
+    </div>
+    <div class="command-actions">
+      <button class="btn outlined" (click)="exportMenu.toggle($event)">
+        <i class="pi pi-file"></i>
+        Export <i class="pi pi-chevron-down"></i>
+      </button>
+      <button class="btn outlined">
+        <i class="pi pi-upload"></i>
+        Bulk Upload
+      </button>
+      <button class="btn primary" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i>
+        Add Severity
+      </button>
+      <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+    </div>
+  </div>
+
+  <app-paginated-table *ngIf="toggleTable"
+    [columns]="cols" 
+    [apiUrl]="apiUrl"
+    [totalCount]="totalCount"
+     [data]="departments"
+    [showEndActions]="true"
+    (viewEvent)="viewDeptDetails($event)" 
+    (editEvent)="editDetails($event, true)"
+    (deleteEvent)="deleteDeptDetails($event)"
+     >
+  </app-paginated-table>
+</div>
+
+<!-- Add Form -->
+<app-add-form *ngIf="isFormOpen" [open]="isFormOpen" [formConfig]="formConfigForNewDetails" [formData]="newDetails"
+  [fromTitle]="title" (onOpenChange)="isFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+
+<!-- Edit Form -->
+<app-add-form *ngIf="isEditFormOpen" [open]="isEditFormOpen" [formConfig]="formConfigForNewDetails"
+  [formData]="selectedDetails" [fromTitle]="editTitle" [isEditMode]="true" (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"></app-add-form>
+
+<app-toast></app-toast>
+
+<p-dialog [(visible)]="deletedisplayModal" [modal]="true" [closable]="false" header="Confirm Deletion"
+  [style]="{ width: '400px' }">
+  <div class="p-3">
+    <p>Are you sure you want to delete <strong>{{ selectedDetails?.name }}</strong>?</p>
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="p-d-flex p-jc-end p-mt-3">
+      <button type="button" pButton icon="pi pi-times" label="Cancel" class="p-button-text p-button-sm"
+        (click)="closeDialog()" style="margin-right: 0.5rem"></button>
+      <button type="button" pButton icon="pi pi-check" label="Confirm" class="p-button-danger p-button-sm"
+        (click)="confirmDeletion()"></button>
+    </div>
+  </ng-template>
+
+</p-dialog>

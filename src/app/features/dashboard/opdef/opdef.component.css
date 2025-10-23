@@ -1,0 +1,16 @@
+.chart-card{
+  /* background-color: #f6f9fc;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); */
+
+  .chart-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1e40af !important;
+  }
+}

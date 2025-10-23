@@ -1,0 +1,120 @@
+<div class="overflow-x-hidden">
+  <div class="command-header shadow-sm rounded-lg p-4 mb-6 bg-white">
+    <div class="command-title-block">
+      <i class="fa-solid fa-chart-pie text-primary text-2xl"></i>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Maintop Operational Insights</h2>
+        <p class="text-gray-600">Comprehensive maintenance operational analytics and reporting</p>
+      </div>
+    </div>
+    <div class="command-actions flex gap-3">
+      <p-dropdown [options]="organizationalFilterOptions" [(ngModel)]="selectedOrganizationalFilter"
+                  (onChange)="onOrganizationalFilterChange($event)"
+                  placeholder="Select Organization"
+                  optionLabel="label"
+                  optionValue="value"
+                  styleClass="filter-dropdown"
+                  [appendTo]="'body'"
+                  [showClear]="false"></p-dropdown>
+
+      <p-dropdown [options]="commandOptions" [(ngModel)]="selectedCommand"
+                  (onChange)="onCommandChange($event)"
+                  placeholder="Select Command"
+                  optionLabel="label"
+                  optionValue="value"
+                  [showClear]="false" 
+                  styleClass="filter-dropdown"
+                  [appendTo]="'body'"></p-dropdown>
+
+      <p-dropdown [options]="shipOptions" [(ngModel)]="selectedShip"
+                  (onChange)="onShipChange($event)"
+                  placeholder="Select Ship"
+                  optionLabel="label"
+                  optionValue="value"
+                  [showClear]="false" 
+                  styleClass="filter-dropdown"
+                  [appendTo]="'body'"></p-dropdown>
+
+      </div>
+  </div>
+
+  <div class="kpi-cards-grid w-full max-w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <app-dashboard-card
+      *ngFor="let metric of kpiMetrics"
+      [title]="metric.title"
+      [value]="metric.value"
+      [description]="metric.description"
+      [iconClass]="metric.iconClass"
+      [type]="metric.type"
+      [color]="metric.color"
+      (cardClick)="drillDown($event, metric.type)"
+      class="hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+    ></app-dashboard-card>
+  </div>
+
+  <div class="charts-grid w-full max-w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="chart-container bg-white p-4 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Maintenance Task Status</h3>
+      <p-chart type="doughnut" [data]="taskStatusData" [options]="taskStatusOptions" (onDataSelect)="drillDown($event, 'TASK_STATUS')"></p-chart>
+    </div>
+
+    <div class="chart-container bg-white p-4 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Monthly Task Completion Trend</h3>
+      <p-chart type="line" [data]="monthlyCompletionData" [options]="monthlyCompletionOptions" (onDataSelect)="drillDown($event, 'MONTHLY_TREND')"></p-chart>
+    </div>
+
+    <div class="chart-container bg-white p-4 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Acquaints Raised by Reason</h3>
+      <p-chart type="bar" [data]="acquaintsByReasonData" [options]="acquaintsByReasonOptions" (onDataSelect)="drillDown($event, 'ACQUAINTS_REASON')"></p-chart>
+    </div>
+
+    <div class="chart-container bg-white p-4 rounded-lg shadow-sm">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Spares Consumption by Category</h3>
+      <p-chart type="pie" [data]="sparesConsumptionData" [options]="sparesConsumptionOptions" (onDataSelect)="drillDown($event, 'SPARES_CONSUMPTION')"></p-chart>
+    </div>
+
+    <div class="chart-container large-chart bg-white p-4 rounded-lg shadow-sm col-span-1 md:col-span-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">OEM Routine Efficiency Score</h3>
+      <p-chart type="bar" [data]="oemEfficiencyData" [options]="oemEfficiencyOptions" (onDataSelect)="drillDown($event, 'OEM_EFFICIENCY')"></p-chart>
+    </div>
+  </div>
+
+  <p-dialog [(visible)]="displayDrilldownDialog" [header]="drilldownDialogTitle" [modal]="true"
+            [style]="{ width: '70vw', maxWidth: '900px' }" [baseZIndex]="10000" (onHide)="onHideDrilldownDialog()"
+            styleClass="custom-dialog">
+    <ng-template pTemplate="content">
+      <p-table [value]="drilldownTableData" [columns]="drilldownTableCols" [paginator]="true" [rows]="10"
+               [rowHover]="true" styleClass="p-datatable-sm p-datatable-gridlines">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="text-sm font-semibold">
+              {{ col.header }}
+              <p-sortIcon *ngIf="col.field" [field]="col.field"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr class="hover:bg-gray-50">
+            <td *ngFor="let col of columns" class="text-sm">
+              <ng-container *ngIf="col.field === 'displayColor'; else otherCells">
+                <div [style.backgroundColor]="rowData[col.field]" class="color-box rounded-full w-4 h-4 inline-block mr-2"></div>
+                <span>{{ rowData[col.field] }}</span>
+              </ng-container>
+              <ng-template #otherCells>
+                {{ rowData[col.field] }}
+              </ng-template>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptyMessage">
+            <tr>
+                <td [attr.colspan]="drilldownTableCols.length" class="text-center py-4 text-gray-500">No records found.</td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p-button label="Close" icon="pi pi-times" (click)="onHideDrilldownDialog()" styleClass="p-button-secondary"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>

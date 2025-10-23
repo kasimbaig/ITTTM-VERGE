@@ -1,0 +1,121 @@
+<!-- Custom Fullscreen Modal using Tailwind CSS -->
+<div *ngIf="openFullScreenSararMonthly"
+    class="fixed inset-0 z-[99999] flex items-center justify-center bg-black bg-opacity-60">
+    <div class="relative w-screen h-screen bg-white shadow-lg flex flex-col overflow-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-2  bg-blue-600 -950 text-white">
+            <p class="text-2xl font-bold text-white">{{reportName?.label || 'SRAR Report'}}</p>
+            <div class="flex items-center gap-4 justify-end">
+                <button 
+                    type="button"
+                    class="px-6 py-2 bg-yellow-50 text-yellow-500 rounded hover:bg-yellow-100 transition-colors duration-200 flex items-center gap-2 font-semibold"
+                    (click)="viewReport()">
+                    <i class="pi pi-eye"></i>
+                    View Report
+                </button>
+                <button
+                    class="text-white hover:text-gray-200 text-2xl font-bold focus:outline-none bg-blue-600 -500 px-2 py-1 rounded"
+                    (click)=" redirectToSFD('/srar/srar-dashboard')" aria-label="Close">
+                    <i class="pi pi-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class=" flex-1 overflow-auto bg-amber-100">
+            <div class="  p-2 mb-6  bg-blue-600 -950">
+                <form [formGroup]="headerFrom">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-white">
+                        <!-- Command Dropdown -->
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">Command :</label>
+                            <p-dropdown [options]="commandOptions" formControlName="Command" (onChange)="handleSelectChange($event,'command')"
+                                placeholder="--Select Command--" optionLabel="name" [filter]="true" filterBy="name"
+                                styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                          <!-- Class Dropdown -->
+                          <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">Class :</label>
+                            <p-dropdown [options]="classOptions" formControlName="Class" (onChange)="handleSelectChange($event,'class')" placeholder="--Select Class--"
+                                optionLabel="name" [filter]="true" filterBy="name" 
+                                styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                        <!-- Ship Dropdown -->
+                        <div class="flex items-center gap-4 ">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">Ship :</label>
+                            <p-dropdown [options]="shipOptions" formControlName="Ship" placeholder="--Select Ship--" (onChange)="handleSelectChange($event,'ship')"
+                                optionLabel="name" [filter]="true" filterBy="name" 
+                                styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                      
+                        <!-- Equipments Dropdown -->
+                        <!-- <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">Equipments :</label>
+                            <p-dropdown [options]="equipmentOptions" formControlName="Equipment" (onChange)="handleSelectChange($event,'equipment')"
+                            placeholder="--Select Equipment--" optionLabel="name" [filter]="true" filterBy="name"
+                            class="flex-1 overflow-x-hidden"
+                            >
+                        </p-dropdown>
+                           
+                        </div> -->
+
+
+                        <div class="flex items-center gap-4 ">
+                            <label class="text-sm font-bold w-32 flex-shrink-0">Equipments :</label>
+                            <select formControlName="Equipment"  class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white text-gray-900">
+                                <option value="" selected>--Select Equipment--</option>
+                                <option *ngFor="let option of equipmentOptions" [ngValue]="option" >{{ option.name }}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-white mt-2">
+                        <!-- From Month Dropdown -->
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">From Month :</label>
+                            <p-dropdown [options]="monthOptions" formControlName="From Month"
+                                placeholder="--Select Month--" optionLabel="name" [filter]="true" filterBy="name"
+                                 styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                        <!-- From Year Dropdown -->
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">From Year :</label>
+                            <p-dropdown [options]="yearOptions" formControlName="From Year" placeholder="--Select Year--"
+                                optionLabel="name" [filter]="true" filterBy="name" 
+                                styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                        <!-- To Month Dropdown -->
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">To Month :</label>
+                            <p-dropdown [options]="monthOptions" formControlName="To Month"
+                                placeholder="--Select Month--" optionLabel="name" [filter]="true" filterBy="name"
+                                styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                        <!-- To Year Dropdown -->
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">To Year :</label>
+                            <p-dropdown [options]="yearOptions" formControlName="To Year" placeholder="--Select Year--"
+                                optionLabel="name" [filter]="true" filterBy="name" 
+                                styleClass="flex-1 w-32">
+                            </p-dropdown>
+                        </div>
+                       
+
+                    </div>
+                </form>
+
+            </div>
+            <div *ngIf="isReportGenerating" class="border-2 border-slate-500 mx-1 px-1 min-h-[500px]">
+                <app-report [reportData]="headerFrom.value" [headerRows]="reportHeader" [tableData]="tableData"></app-report>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

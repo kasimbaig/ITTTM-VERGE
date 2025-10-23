@@ -1,0 +1,114 @@
+<!-- etma-main-component.component.html -->
+<div class="px-3 py-1 min-h-screen">
+    <!-- ETMA Sub-navigation (Same as Masters) -->
+    <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <!-- Transaction Button -->
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'transaction', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'transaction'}"
+                (click)="navigateToEtma('transaction')">
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <span>Transaction</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'transaction'">
+        <!-- Status Tabs -->
+        <app-status-tabs 
+            [activeTab]="activeTab"
+            (tabChange)="onTabChange($event)">
+        </app-status-tabs>
+
+        <!-- GTG Load Trial Reports Table View -->
+        <div class="command-header">
+            <div class="command-title-block">
+                <i class="pi pi-file-alt"></i>
+                <div>
+                    <h2>GTG Load Trial Reports</h2>
+                    <p>View and manage all GTG Load Trial Reports in the system</p>
+                </div>
+            </div>
+
+            <div class="command-actions">
+                <button class="btn primary btn-sm" (click)="goBack()">
+                    <i class="pi pi-arrow-left"></i> Back
+                </button>
+
+                <button class="btn primary btn-sm" (click)="openAddReport()">
+                    <i class="pi pi-plus"></i> Add Report
+                </button>
+
+                <!-- <button class="btn outlined btn-sm">
+                    <i class="pi pi-upload"></i> Bulk Upload
+                </button> -->
+
+                <div class="menu-group">
+                    <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+                    <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event);">
+                        <i class="pi pi-file-export"></i> Export
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginated Table -->
+        <app-paginated-table *ngIf="toggleTable"
+            #paginatedTable
+            [columns]="cols"
+            [apiUrl]="currentApiUrl"
+            [totalCount]="totalCount"
+            [data]="[]"
+            [showEndActions]="true"
+            (viewEvent)="viewDetails($event)"
+            (editEvent)="editDetails($event)"
+            (deleteEvent)="deleteReportDetails($event)"
+            (dataLoaded)="onDataLoaded($event)">
+        </app-paginated-table>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+    [visible]="showDeleteDialog"
+    [message]="'Are you sure you want to delete this GTG Load Trial Report?'"
+    (onConfirm)="confirmDeletion()"
+    (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<app-toast></app-toast>
+
+<!-- GTG Load Trial Report Form (View Mode) -->
+<app-gtg-load-trial-report 
+    *ngIf="isViewFormOpen" 
+    [isEditMode]="false"
+    [isViewMode]="true"
+    [isFormOpen]="isViewFormOpen"
+    [reportData]="selectedReport"
+    (formSubmit)="onFormSubmit($event)"
+    (formCancel)="closeDialog()">
+</app-gtg-load-trial-report>
+
+<!-- GTG Load Trial Report Form (Add Mode) -->
+<app-gtg-load-trial-report 
+    #gtgFormComponent
+    *ngIf="isFormOpen && !isEditFormOpen" 
+    [isEditMode]="false"
+    [isFormOpen]="isFormOpen"
+    [reportData]="null"
+    (formSubmit)="onFormSubmit($event)"
+    (formCancel)="closeDialog()">
+</app-gtg-load-trial-report>
+
+<!-- GTG Load Trial Report Form (Edit Mode) -->
+<app-gtg-load-trial-report 
+    #gtgFormComponent
+    *ngIf="isEditFormOpen" 
+    [isEditMode]="true"
+    [isFormOpen]="isEditFormOpen"
+    [reportData]="selectedReport"
+    (formSubmit)="onFormSubmit($event)"
+    (formCancel)="closeDialog()">
+</app-gtg-load-trial-report>

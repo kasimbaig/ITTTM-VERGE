@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="95px" viewBox="0 0 200 95" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(0.000000, 30.000000)" fill="#001F54" fill-rule="nonzero">
+            <!-- Ship hull -->
+            <path d="M0,40 C20,40 40,30 60,30 L140,30 C160,30 180,40 200,40 L200,65 L0,65 L0,40 Z" opacity="0.8"></path>
+            <!-- Main deck structure -->
+            <rect x="50" y="15" width="100" height="15" rx="2"></rect>
+            <!-- Bridge tower -->
+            <rect x="70" y="0" width="30" height="15" rx="1"></rect>
+            <!-- Funnel/Smokestack -->
+            <rect x="110" y="5" width="15" height="10" rx="1"></rect>
+            <!-- Mast -->
+            <rect x="85" y="-20" width="2" height="20"></rect>
+            <!-- Radar dish -->
+            <ellipse cx="86" cy="-20" rx="8" ry="3"></ellipse>
+        </g>
+    </g>
+</svg>

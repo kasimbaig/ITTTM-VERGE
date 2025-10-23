@@ -1,0 +1,513 @@
+
+/* Main container for the OCRC component */
+.ocrc-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa; /* Light background */
+  border-radius: 12px;
+  overflow: hidden; /* Ensure content within container is clipped */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth */
+ 
+}
+.w-85vw{
+  width: 82vw;
+}
+.w-93vw{
+  width: 93vw;
+}
+/* Main content area, takes available vertical space */
+.ocrc-main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Allow internal scrolling for timeline body */
+}
+
+/* Header section containing filters and navigation */
+.ocrc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 1rem; /* Space between header sections */
+}
+
+/* Left and right sections within the header */
+.ocrc-header-left,
+.ocrc-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Date navigation buttons and display */
+.date-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Styling for navigation buttons */
+.nav-btn, .today-btn {
+  background-color: #022B5A; /* Dark blue */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:hover, .today-btn:hover {
+  background-color: #003d7a; /* Darker blue on hover */
+}
+
+/* Current date range display */
+.current-date {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Container for header controls (dropdowns, buttons) */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Date range picker container */
+.date-range-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* PrimeNG Calendar input styling */
+.ocrc-calendar-dropdown .p-inputtext {
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+  border: 1px solid #ced4da;
+}
+.ocrc-calendar-dropdown .p-button {
+  border-radius: 8px;
+}
+
+/* PrimeNG Dropdown styling */
+.ocrc-control-dropdown .p-dropdown {
+  border-radius: 8px;
+  font-size: 0.875rem;
+  border: 1px solid #ced4da;
+}
+
+.ocrc-control-dropdown .p-dropdown-label {
+  padding: 0.6rem 0.8rem;
+}
+
+/* Styling for action buttons */
+.add-btn {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.add-btn:hover {
+  background-color: #45a049;
+}
+
+.apply-btn {
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.apply-btn:hover {
+  background-color: #0056b3;
+}
+
+.clear-btn {
+  background-color: #dc3545; /* Red */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.clear-btn:hover {
+  background-color: #c82333;
+}
+
+/* Timeline layout */
+.timeline-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ensures horizontal scrolling works correctly */
+}
+
+/* Timeline header for time slots */
+.timeline-time-header {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f0f2f5;
+  position: sticky;
+  top: 0;
+  z-index: 10; /* Keep header sticky on scroll */
+}
+
+/* Fixed column for ship names in the header */
+.timeline-fixed-col {
+  width: 250px; /* Fixed width for ship names */
+  min-width: 250px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: #022B5A;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  background-color: #f0f2f5;
+}
+
+/* Scrollable area for time slots */
+.timeline-scroll-area {
+  flex-grow: 1;
+  overflow-x: auto; /* Enable horizontal scrolling for time slots */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Grid for individual time slots (days) */
+.time-slots-grid {
+  display: flex;
+  min-width: 100%; /* Ensure it takes full width initially */
+}
+
+/* Individual time slot (day) styling */
+.time-slot {
+  flex-shrink: 0; /* Prevent shrinking */
+  width: 100px; /* Each day is 100px wide */
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #555;
+  border-right: 1px solid #e9ecef;
+}
+
+/* Scrollable body for resource rows and tasks */
+.timeline-body-scroll {
+  flex-grow: 1;
+  overflow: auto; /* Enable scrolling for the entire body */
+  -webkit-overflow-scrolling: touch;
+}
+
+.timeline-body-content {
+  display: flex;
+  flex-direction: column;
+  min-width: fit-content; /* Allow content to dictate width for horizontal scroll */
+}
+
+/* Resource group header (e.g., Naval Fleet) */
+.resource-group-header {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #e6eff7; /* Light blue for group headers */
+  border-bottom: 1px solid #d0dbe8;
+  cursor: pointer;
+  font-weight: 600;
+  color: #022B5A;
+}
+
+.group-toggle {
+  margin-right: 0.5rem;
+}
+
+.group-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.group-count {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.group-timeline-track {
+  flex-grow: 1;
+  height: 100%; /* Match height of resource-group-header */
+  position: relative;
+  border-left: 1px solid #d0dbe8;
+}
+
+/* Individual resource row (ship) */
+.resource-row {
+  display: flex;
+  min-height: 60px; /* Height for each ship row */
+  border-bottom: 1px solid #e9ecef;
+  background-color: #ffffff;
+}
+
+/* Fixed info column for each resource */
+.resource-info {
+  width: 250px; /* Fixed width for ship info */
+  min-width: 250px;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-right: 1px solid #e0e0e0;
+  gap: 0.75rem;
+}
+
+.resource-indent {
+  width: 1rem; /* Indent for nested resources if needed */
+}
+
+.resource-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.resource-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resource-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Hide overflow for long names */
+}
+
+.resource-name {
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resource-role {
+  font-size: 0.75rem;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Timeline track for tasks */
+.timeline-track {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden; /* Hide overflow from tasks */
+  display: flex; /* Use flex to align tasks */
+  align-items: center; /* Vertically center tasks */
+  min-width: 100%; /* Ensure it takes full width for horizontal scroll */
+}
+
+/* Background grid for time cells */
+.time-grid-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.time-cell-bg {
+  flex-shrink: 0;
+  width: 100px; /* Should match .time-slot width */
+  border-right: 1px solid #f0f0f0;
+  background-color: transparent;
+}
+
+/* Alternating background for better readability */
+.time-cell-bg:nth-child(even) {
+  background-color: #fbfbfb;
+}
+
+/* Overlay for task items */
+.tasks-overlay {
+  position: relative;
+  width: 100%; /* Take full width of the track */
+  height: 100%;
+  display: flex;
+  align-items: center; /* Vertically center tasks within the overlay */
+}
+
+/* Individual task item styling */
+.task-item {
+  position: absolute;
+  height: 30px; /* Height of the task bar */
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  font-size: 0.8rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 5px; /* Minimum width for very short tasks */
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.task-content {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-title {
+  font-weight: 500;
+}
+
+/* Status indicator dot */
+.task-status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Task Status Colors */
+.status-completed {
+  background-color: #28a745; /* Green */
+}
+
+.status-progress {
+  background-color: #ffc107; /* Yellow */
+}
+
+.status-pending {
+  background-color: #17a2b8; /* Cyan */
+}
+
+/* Dialog Styling */
+.ocrc-dialog .p-dialog-header {
+  background-color: #022B5A;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.ocrc-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.ocrc-dialog .p-dialog-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  text-align: right;
+}
+
+.p-field label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.p-field div {
+  color: #555;
+  padding-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .ocrc-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ocrc-header-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .header-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .ocrc-control-dropdown, .date-range-picker {
+    width: 100%;
+  }
+  .ocrc-calendar-dropdown {
+    width: 100%;
+  }
+  .apply-btn, .clear-btn, .add-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-fixed-col, .resource-info {
+    width: 150px; /* Smaller fixed column for mobile */
+    min-width: 150px;
+    padding: 0.5rem;
+  }
+  .resource-avatar {
+    width: 30px;
+    height: 30px;
+  }
+  .resource-name {
+    font-size: 0.9rem;
+  }
+  .resource-role {
+    font-size: 0.65rem;
+  }
+  .time-slot {
+    width: 80px; /* Smaller day width */
+    padding: 0.5rem 0.2rem;
+    font-size: 0.75rem;
+  }
+  .task-item {
+    height: 25px;
+    font-size: 0.7rem;
+    padding: 0 0.3rem;
+  }
+}

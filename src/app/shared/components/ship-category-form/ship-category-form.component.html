@@ -1,0 +1,132 @@
+<p-dialog 
+  [(visible)]="visible" 
+  [modal]="true" 
+  [closable]="true" 
+  [draggable]="false"
+  [resizable]="false"
+  [header]="formTitle"
+  [style]="{ width: '90vw', maxWidth: '800px', height: '70vh', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', margin: '0' }"
+  [contentStyle]="{ padding: '0', overflow: 'hidden' }"
+  [styleClass]="'ship-category-form-dialog'"
+  (onHide)="onHide()">
+  
+  <div class="form-container">
+    <form [formGroup]="categoryForm" (ngSubmit)="handleSubmit()" class="category-form">
+      
+      <!-- Basic Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Category Information</h3>
+        <div class="form-grid">
+          <div class="form-field" [class.full-width]="field.fullWidth" *ngFor="let field of formConfig">
+            <label [for]="field.key" class="field-label">
+              {{ field.label }}
+              <span class="required" *ngIf="field.required">*</span>
+            </label>
+            
+            <!-- Text Input -->
+            <input 
+              *ngIf="field.type === 'text'"
+              [id]="field.key"
+              type="text"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder || ''"
+              class="form-control w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+              [class.invalid]="isFieldInvalid(field.key)">
+            
+            <!-- Number Input -->
+            <p-inputNumber 
+              *ngIf="field.type === 'number'"
+              [id]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder || ''"
+              class="form-control w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+              [class.invalid]="isFieldInvalid(field.key)"
+              [showButtons]="false">
+            </p-inputNumber>
+            
+            <!-- Email Input -->
+            <input 
+              *ngIf="field.type === 'email'"
+              [id]="field.key"
+              type="email"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder || ''"
+              class="form-control w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+              [class.invalid]="isFieldInvalid(field.key)">
+            
+            <!-- Date Input -->
+            <p-calendar 
+              *ngIf="field.type === 'date'"
+              [id]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder || ''"
+              class="form-control w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+              [class.invalid]="isFieldInvalid(field.key)"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true">
+            </p-calendar>
+            
+            <!-- Select Input -->
+            <p-dropdown 
+              *ngIf="field.type === 'select'"
+              [id]="field.key"
+              [formControlName]="field.key"
+              [options]="field.options"
+              [placeholder]="field.placeholder || ''"
+              class="form-control w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+              [class.invalid]="isFieldInvalid(field.key)"
+              optionLabel="label"
+              optionValue="value">
+            </p-dropdown>
+            
+            <!-- Boolean Input -->
+            <p-checkbox 
+              *ngIf="field.type === 'boolean'"
+              [id]="field.key"
+              [formControlName]="field.key"
+              [binary]="true"
+              class="form-control">
+            </p-checkbox>
+            
+            <!-- Textarea Input -->
+            <textarea 
+              *ngIf="field.type === 'textarea'"
+              [id]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder || ''"
+              class="form-control textarea w-full p-2 border-2 border-gray-500 rounded-sm bg-white"
+              [class.invalid]="isFieldInvalid(field.key)"
+              rows="3">
+            </textarea>
+            
+            <div class="error-message" *ngIf="isFieldInvalid(field.key)">
+              {{ getFieldError(field.key) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="form-actions">
+      <button 
+        type="button" 
+        pButton 
+        icon="pi pi-times" 
+        label="Cancel" 
+        class="p-button-outlined p-button-secondary"
+        (click)="onHide()">
+      </button>
+      <button 
+        type="submit" 
+        pButton 
+        icon="pi pi-check" 
+        [label]="isEditMode ? 'Update Category' : 'Add Category'" 
+        class="p-button-primary"
+        (click)="handleSubmit()">
+      </button>
+    </div>
+  </ng-template>
+</p-dialog> 

@@ -1,0 +1,86 @@
+<div >
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="fa-solid fa-clock"></i>
+      <div>
+        <h2>Routine</h2>
+        <p>View & manage routine configurations and settings</p>
+      </div>
+    </div>
+    <div class="command-actions">
+      <button class="btn outlined" (click)="exportMenu.toggle($event)">
+        <i class="pi pi-file"></i>
+        Export <i class="pi pi-chevron-down"></i>
+      </button>
+      <button class="btn outlined">
+        <i class="pi pi-upload"></i>
+        Bulk Upload
+      </button>
+      <button class="btn primary" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i>
+        Add
+      </button>
+      <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+    </div>
+  </div>
+
+  <div class=" mt-3 text-blue-600 rounded-lg shadow-md p-6 mb-3 border border-gray-200 bg-yellow-50">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Unit Dropdown -->
+         <ng-container *ngFor="let card of cards">  
+           <div class="flex items-center gap-4">
+               <label class="text-sm font-bold  w-20 flex-shrink-0">{{card.label}}</label>
+               <p-dropdown 
+                   [options]="card.options" 
+                   [(ngModel)]="card.selectedOption"
+                   placeholder="--Select {{card.label}}--"
+                   optionLabel="name"
+                   [filter]="true"
+                   filterBy="name"
+                   optionValue="value"
+                   
+                   styleClass="flex-1">
+               </p-dropdown>
+           </div>
+
+         </ng-container>
+
+      
+    </div>
+   
+</div>
+
+
+  <app-paginated-table [data]="departments" [columns]="cols" [showEndActions]="true" [selectionEnabled]="true"
+    (viewEvent)="viewDeptDetails($event)" (editEvent)="editDetails($event, true)"
+    (deleteEvent)="deleteDeptDetails($event)"></app-paginated-table>
+</div>
+
+<!-- Add Form -->
+<app-add-form *ngIf="isFormOpen" [open]="isFormOpen" [formConfig]="formConfigForNewDetails" [formData]="newDetails"
+  [fromTitle]="title" (onOpenChange)="isFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+
+<!-- Edit Form -->
+<app-add-form *ngIf="isEditFormOpen" [open]="isEditFormOpen" [formConfig]="formConfigForNewDetails"
+  [formData]="selectedDetails" [fromTitle]="editTitle" [isEditMode]="true" (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"></app-add-form>
+
+<app-toast></app-toast>
+
+<p-dialog [(visible)]="deletedisplayModal" [modal]="true" [closable]="false" header="Confirm Deletion"
+  [style]="{ width: '400px' }">
+  <div class="p-3">
+    <p>Are you sure you want to delete <strong>{{ selectedDetails?.name }}</strong>?</p>
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="p-d-flex p-jc-end p-mt-3">
+      <button type="button" pButton icon="pi pi-times" label="Cancel" class="p-button-text p-button-sm"
+        (click)="closeDialog()" style="margin-right: 0.5rem"></button>
+      <button type="button" pButton icon="pi pi-check" label="Confirm" class="p-button-danger p-button-sm"
+        (click)="confirmDeletion()"></button>
+    </div>
+  </ng-template>
+
+</p-dialog>

@@ -1,0 +1,55 @@
+<div class="max-w-full mx-auto">
+  <!-- Tab Navigation -->
+  <app-tab-navigation
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="onTabChange($event)">
+  </app-tab-navigation>
+
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-file-alt"></i>
+      <div>
+        <h2>SEG Form Reports</h2>
+        <p>View and manage all SEG Form Reports in the system</p>
+      </div>
+    </div>
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="editForm({})">
+        <i class="pi pi-plus"></i> Add New Form
+      </button>
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <app-paginated-table
+    [columns]="cols"
+    [apiUrl]="currentApiUrl"
+    [totalCount]="totalCount"
+    [data]="forms"
+    [showEndActions]="true"
+    [showViewAction]="true"
+    [showEditAction]="activeTab !== 'approved'"
+    [showDeleteAction]="activeTab !== 'approved'"
+    (viewEvent)="viewForm($event)"
+    (editEvent)="editForm($event)"
+    (deleteEvent)="deleteForm($event)"
+    (dataLoaded)="onDataLoaded($event)">
+  </app-paginated-table>
+</div>
+
+<app-toast></app-toast>
+
+<!-- Custom Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteModal"
+  [message]="'Are you sure you want to delete this SEG Form Report? This action cannot be undone.'"
+  [itemName]="selectedForm.sd_sub_system || 'this form'"
+  (onConfirm)="confirmDelete()"
+  (onCancel)="cancelDelete()">
+</app-delete-confirmation-modal>

@@ -1,0 +1,71 @@
+<div class="chatbot-container">
+   <!-- Chat Header -->
+<div class="chat-header">
+    <div class="header-left">
+        <div class="avatar">
+            <i class="fas fa-robot"></i>
+        </div>
+        <div class="header-title">Chatbot</div>
+    </div>
+
+    <div class="chat-actions">
+        <button mat-icon-button class="minimize-btn" (click)="minimizeChatbot()" 
+                matTooltip="Minimize Chat (Keeps chat history)" matTooltipPosition="above">
+            <i class="pi pi-minus"></i> 
+        </button>
+        <button mat-icon-button class="close-btn" (click)="closeChatbot()" 
+                matTooltip="Close Chat (Clears chat history)" matTooltipPosition="above">
+            <i class="pi pi-times"></i>
+        </button>
+    </div>
+</div>
+
+
+
+<div class="chat-body" #chatContainer>
+    <div class="chat-container">
+        <ng-container *ngFor="let msg of chatMessages">
+            <div *ngIf="!msg.isSuggestion" 
+                 class="chat-message"
+                 [ngClass]="{ 'user-msg': msg.fromUser , 
+                              'bot-msg': !msg.fromUser && !msg.isSuggestionHeader, 
+                              'suggestion-header': msg.isSuggestionHeader }">
+                
+                <!-- Bot Icon (Only for non-suggestion messages) -->
+                <i *ngIf="!msg.fromUser && !msg.isSuggestionHeader" class="fas fa-robot bot-icon"></i>
+        
+                <!-- Regular Message -->
+                <span class="msg-text" 
+                      *ngIf="msg.text && !msg.isSuggestion && !msg.isSuggestionHeader" 
+                      [innerHTML]="formatMessage(msg.text)">
+                </span>
+        
+                <!-- "Did you mean?" header -->
+                <div *ngIf="msg.isSuggestionHeader" class="suggestion-header">
+                    <i class="pi pi-question-circle"></i> {{ msg.text }}
+                </div>
+    
+                <!-- User Icon -->
+                <i *ngIf="msg.fromUser" class="fas fa-user-circle user-icon"></i>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Suggested Questions (Separate from message box) -->
+    <div class="suggestion-btn-container" *ngIf="hasSuggestions">
+        <ng-container *ngFor="let msg of chatMessages">
+            <button class="suggestion-btn" 
+                    *ngIf="msg.isSuggestion" 
+                    (click)="selectSuggestion(msg.text)">
+                {{ msg.text }}
+            </button>
+        </ng-container>
+    </div>
+</div>
+    <div class="chat-footer">
+        <input type="text" pInputText [(ngModel)]="userMessage" class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 " placeholder="Type a message..." (keydown.enter)="sendMessage()" />
+        <button mat-icon-button class="send-btn" (click)="sendMessage()">
+            <i class="pi pi-send"></i>
+        </button>
+    </div>
+</div>

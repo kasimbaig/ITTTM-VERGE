@@ -1,0 +1,438 @@
+/* Ship Master Form Dialog Styles */
+:host ::ng-deep .ship-master-form-dialog {
+  .p-dialog {
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: none;
+  }
+
+  .p-dialog-header {
+    background: #0066cc;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 1.5rem;
+    border-bottom: 2px solid #004499;
+  }
+
+  .p-dialog-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .p-dialog-header-icon {
+    color: white;
+    font-size: 1.2rem;
+  }
+
+  .p-dialog-content {
+    background: linear-gradient(135deg, #f8faff 0%, #e8f2ff 100%);
+    border-radius: 0 0 12px 12px;
+    padding: 0;
+  }
+
+  .p-dialog-footer {
+    background: #f8faff;
+    border-top: 1px solid #d1e7ff;
+    padding: 1rem 1.5rem;
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+/* Form Container */
+.form-container {
+  height: 100%;
+  overflow-y: auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8faff 0%, #e8f2ff 100%);
+}
+
+.ship-form {
+  max-width: 100%;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 2.5rem;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(30, 60, 114, 0.1);
+  border: 1px solid #e1f0ff;
+}
+
+.section-title {
+  color: #1e3c72;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #3a6bb8;
+  position: relative;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #3a6bb8, #5a8bd8);
+  border-radius: 1px;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Form Fields */
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.field-label {
+  color: #2a5298;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.required {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Form Controls */
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1f0ff;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: white;
+  color: #2a5298;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(30, 60, 114, 0.05);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3a6bb8;
+  box-shadow: 0 0 0 3px rgba(58, 107, 184, 0.1);
+  background: #fafcff;
+}
+
+.form-control::placeholder {
+  color: #8ba3c7;
+}
+
+.form-control.invalid {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* PrimeNG Component Overrides */
+:host ::ng-deep .form-control {
+  &.p-inputtext,
+  &.p-inputnumber-input,
+  &.p-dropdown,
+  &.p-calendar {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e1f0ff;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: white;
+    color: #2a5298;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(30, 60, 114, 0.05);
+  }
+
+  &.p-inputtext:focus,
+  &.p-inputnumber-input:focus,
+  &.p-dropdown:focus,
+  &.p-calendar:focus {
+    outline: none;
+    border-color: #3a6bb8;
+    box-shadow: 0 0 0 3px rgba(58, 107, 184, 0.1);
+    background: #fafcff;
+  }
+
+  &.p-inputtext.invalid,
+  &.p-inputnumber-input.invalid,
+  &.p-dropdown.invalid,
+  &.p-calendar.invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+  }
+}
+
+/* Dropdown Styles */
+:host ::ng-deep .p-dropdown {
+  .p-dropdown-trigger {
+    color: #3a6bb8;
+  }
+
+  .p-dropdown-panel {
+    border: 2px solid #e1f0ff;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(30, 60, 114, 0.15);
+  }
+
+  .p-dropdown-item {
+    color: #2a5298;
+    padding: 0.75rem 1rem;
+  }
+
+  .p-dropdown-item:hover {
+    background: #f0f7ff;
+    color: #1e3c72;
+  }
+
+  .p-dropdown-item.p-highlight {
+    background: #3a6bb8;
+    color: white;
+  }
+}
+
+/* Calendar Styles */
+:host ::ng-deep .p-calendar {
+  .p-inputtext {
+    padding-right: 2.5rem;
+  }
+
+  .p-datepicker-trigger {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3a6bb8;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .p-datepicker {
+    border: 2px solid #e1f0ff;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(30, 60, 114, 0.15);
+  }
+
+  .p-datepicker-header {
+    background: #3a6bb8;
+    color: white;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .p-datepicker-calendar {
+    th {
+      color: #2a5298;
+      font-weight: 600;
+    }
+
+    td > span {
+      color: #2a5298;
+      border-radius: 6px;
+    }
+
+    td > span:hover {
+      background: #f0f7ff;
+    }
+
+    td > span.p-highlight {
+      background: #3a6bb8;
+      color: white;
+    }
+  }
+}
+
+/* Checkbox Styles */
+:host ::ng-deep .p-checkbox {
+  .p-checkbox-box {
+    border: 2px solid #e1f0ff;
+    border-radius: 4px;
+    background: white;
+  }
+
+  .p-checkbox-box.p-highlight {
+    background: #3a6bb8;
+    border-color: #3a6bb8;
+  }
+
+  .p-checkbox-icon {
+    color: white;
+  }
+}
+
+/* Textarea Styles */
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+/* Error Messages */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  align-items: center;
+}
+
+:host ::ng-deep .form-actions {
+  .p-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 120px;
+  }
+
+  .p-button-primary {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+  }
+
+  .p-button-primary:hover {
+    background: linear-gradient(135deg, #2a5298 0%, #3a6bb8 100%);
+    box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .p-button-outlined {
+    border: 2px solid #3a6bb8;
+    color: #3a6bb8;
+    background: transparent;
+  }
+
+  .p-button-outlined:hover {
+    background: #3a6bb8;
+    color: white;
+    border-color: #3a6bb8;
+  }
+
+  .p-button-secondary {
+    border: 2px solid #8ba3c7;
+    color: #8ba3c7;
+    background: transparent;
+  }
+
+  .p-button-secondary:hover {
+    background: #8ba3c7;
+    color: white;
+    border-color: #8ba3c7;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 1rem;
+  }
+
+  .form-section {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  :host ::ng-deep .ship-master-form-dialog {
+    .p-dialog {
+      width: 95vw !important;
+      height: 95vh !important;
+    }
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  :host ::ng-deep .form-actions .p-button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Scrollbar Styling */
+.form-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-container::-webkit-scrollbar-track {
+  background: #f1f5ff;
+  border-radius: 4px;
+}
+
+.form-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #3a6bb8, #5a8bd8);
+  border-radius: 4px;
+}
+
+.form-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2a5298, #3a6bb8);
+}
+
+/* Animation for form appearance */
+.form-section {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus states for accessibility */
+.form-control:focus-visible {
+  outline: 2px solid #3a6bb8;
+  outline-offset: 2px;
+}
+
+/* Loading state */
+.form-container.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Success state */
+.form-control.valid {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+} 

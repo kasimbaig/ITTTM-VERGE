@@ -1,0 +1,235 @@
+<div class="users-container">
+  <!-- Header -->
+  <div class="users-header">
+    <div class="header-left">
+      <button 
+        pButton 
+        icon="pi pi-arrow-left" 
+        label="Back to Setup" 
+        class="btn-secondary" 
+        (click)="goBack()"
+        aria-label="Go back to Setup page">
+      </button>
+      <h1 class="users-title">User Details</h1>
+    </div>
+    <div class="header-right">
+      <button 
+        pButton 
+        icon="pi pi-th-large" 
+        label="" 
+        class="btn-switch-mode-simple"
+        (click)="openSwitchModeDialog()"
+        aria-label="Switch to different setup mode"
+        title="Switch Mode">
+      </button>
+      <button 
+        pButton 
+        icon="pi pi-plus" 
+        label="Add" 
+        class="btn-primary" 
+        (click)="addNewUser()"
+        aria-label="Add new user"
+        title="Add New User">
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoadingUsers" role="status" aria-live="polite">
+      <div class="loading-content">
+        <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+        <span>Loading users...</span>
+      </div>
+    </div>
+
+    <!-- Table Content -->
+    <app-resuable-table
+      *ngIf="!isLoadingUsers"
+      [gridColumns]="gridColumns"
+      [filteredData]="users"
+      [isPaginator]="true"
+      [isShearchDisable]="'F'"
+      [isCheckBox]="false"
+      [isAction]="true"
+      [isView]="true"
+      [isEditable]="true"
+      [isDeletable]="true"
+      [isAdd]="false"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [lazy]="true"
+      (viewEvent)="viewUser($event)"
+      (editEvent)="editUser($event)"
+      (deleteEvent)="deleteUser($event)"
+      (pageChangeEvent)="onPageChange($event)"
+      (rowsPerPageChangeEvent)="onRowsPerPageChange($event)">
+    </app-resuable-table>
+
+    <!-- Mobile Card Layout for Very Small Screens -->
+    <div class="users-cards" *ngIf="!isLoadingUsers">
+      <div 
+        *ngFor="let user of users" 
+        class="user-card"
+        role="article"
+        [attr.aria-label]="'User: ' + user.first_name + ' ' + user.last_name">
+        
+        <div class="card-header">
+          <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
+          <div class="user-status" [ngClass]="user.is_active ? 'active' : 'inactive'">
+            {{ user.is_active ? 'Active' : 'Inactive' }}
+          </div>
+        </div>
+        
+        <div class="card-content">
+          <div class="user-info">
+            <div class="info-row">
+              <span class="label">Login Name:</span>
+              <span class="value">{{ user.loginname }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Email:</span>
+              <span class="value">{{ user.email }}</span>
+            </div>
+            <div class="info-row" *ngIf="user.rankCode">
+              <span class="label">Rank Code:</span>
+              <span class="value">{{ user.rankCode }}</span>
+            </div>
+            <div class="info-row" *ngIf="user.rankName">
+              <span class="label">Rank Name:</span>
+              <span class="value">{{ user.rankName }}</span>
+            </div>
+            <div class="info-row" *ngIf="user.hrcdf_designation">
+              <span class="label">Designation:</span>
+              <span class="value">{{ user.hrcdf_designation }}</span>
+            </div>
+            <div class="info-row" *ngIf="user.unit?.name">
+              <span class="label">Unit:</span>
+              <span class="value">{{ user.unit.name }}</span>
+            </div>
+          </div>
+          
+          <div class="card-actions">
+            <button 
+              class="btn-view"
+              (click)="viewUser(user)"
+              aria-label="View user details">
+              <i class="pi pi-eye"></i>
+              <span>View</span>
+            </button>
+            <button 
+              class="btn-edit"
+              (click)="editUser(user)"
+              aria-label="Edit user">
+              <i class="pi pi-pencil"></i>
+              <span>Edit</span>
+            </button>
+            <button 
+              class="btn-delete"
+              (click)="deleteUser(user)"
+              aria-label="Delete user">
+              <i class="pi pi-trash"></i>
+              <span>Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add User Form -->
+  <app-add-form
+    *ngIf="showAddForm"
+    [open]="showAddForm"
+    [formConfig]="userFormConfig"
+    [formData]="initialUserData"
+    [fromTitle]="'Add New User'"
+    [submitLabel]="'Add User'"
+    (onOpenChange)="closeAddForm()"
+    (onSelectChange)="onSelectChange($event)"
+    (onSubmit)="handleAddSubmit($event)">
+  </app-add-form>
+
+  <!-- Edit User Form -->
+  <app-add-form
+    *ngIf="showEditForm"
+    [open]="showEditForm"
+    [formConfig]="editCinfig"
+    [formData]="selectedUser"
+    [fromTitle]="'Edit User'"
+    [submitLabel]="'Update User'"
+    [isEditMode]="true"
+    (onSelectChange)="onSelectChange($event)"
+    (onOpenChange)="closeEditForm()"
+    (onSubmit)="handleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- View User Form -->
+  <app-add-form
+    *ngIf="showViewForm"
+    [open]="showViewForm"
+    [formConfig]="userFormConfig"
+    [formData]="selectedUser"
+    [fromTitle]="'View User Details'"
+    [submitLabel]="'Close'"
+    [isEditMode]="false"
+    (onOpenChange)="closeViewForm()"
+    (onSubmit)="handleViewSubmit($event)">
+  </app-add-form>
+
+  <!-- Delete Confirmation Modal -->
+  <!-- <app-delete-confirmation-modal
+    *ngIf="showDeleteModal"
+    [visible]="showDeleteModal"
+    [itemName]="selectedUser?.first_name + ' ' + selectedUser?.last_name"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteModal()">
+  </app-delete-confirmation-modal> -->
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog"
+    [closeOnEscape]="true"
+    [closable]="true">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="'Switch to ' + tile.title + ' - ' + tile.description"
+          (keydown.enter)="switchToMode(tile.route)"
+          (keydown.space)="switchToMode(tile.route)">
+          <div class="tile-icon" aria-hidden="true">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow" aria-hidden="true">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

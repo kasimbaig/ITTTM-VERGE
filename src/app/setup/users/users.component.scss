@@ -1,0 +1,1569 @@
+@use '../shared-setup.scss';
+
+.users-container {
+  @extend .setup-component-container;
+}
+
+.users-header {
+  @extend .setup-header-base;
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .users-title {
+      @extend .setup-title;
+    }
+  }
+}
+
+.users-controls {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  .search-container {
+    flex: 1;
+    max-width: 400px;
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+  }
+
+  .btn-add-user {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+
+    &:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.users-content {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  overflow-x: auto;
+  position: relative;
+
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px; // Ensure table has minimum width to show all columns
+    table-layout: fixed; // Better column width management
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: middle;
+      white-space: nowrap; // Prevent text wrapping
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #374151;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      position: sticky; // Keep headers visible while scrolling
+      top: 0;
+      z-index: 10;
+    }
+
+    td {
+      color: #1f2937;
+      font-size: 0.875rem;
+    }
+
+    tbody tr {
+      &:hover {
+        background: #f9fafb;
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+
+        &:hover {
+          background: #f3f4f6;
+        }
+
+        i {
+          font-size: 0.875rem;
+        }
+      }
+
+      .btn-view {
+        color: #3b82f6;
+        
+        &:hover {
+          background: #dbeafe;
+        }
+      }
+      
+      .btn-edit {
+        color: #f59e0b;
+        
+        &:hover {
+          background: #fef3c7;
+        }
+      }
+      
+      .btn-delete {
+        color: #ef4444;
+        
+        &:hover {
+          background: #fee2e2;
+        }
+      }
+    }
+  }
+}
+
+// Enhanced table scrolling and column management
+.users-content {
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+  
+  // Firefox scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+  
+  // Smooth scrolling behavior
+  scroll-behavior: smooth;
+  
+  // Ensure table maintains proper structure during scroll
+  .users-table {
+    // Column width management for better scrolling
+    th:nth-child(1), td:nth-child(1) { // ACTION
+      width: 80px;
+      min-width: 80px;
+      max-width: 80px;
+    }
+    
+    th:nth-child(2), td:nth-child(2) { // LOGIN NAME
+      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
+    }
+    
+    th:nth-child(3), td:nth-child(3) { // FIRST NAME
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+    }
+    
+    th:nth-child(4), td:nth-child(4) { // LAST NAME
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+    }
+    
+    th:nth-child(5), td:nth-child(5) { // EMAIL
+      width: 180px;
+      min-width: 180px;
+      max-width: 180px;
+    }
+    
+    th:nth-child(6), td:nth-child(6) { // RANK CODE
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+    }
+    
+    th:nth-child(7), td:nth-child(7) { // RANK NAME
+      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
+    }
+    
+    th:nth-child(8), td:nth-child(8) { // HRCDF DESIGNATION
+      width: 140px;
+      min-width: 140px;
+      max-width: 140px;
+    }
+    
+    th:nth-child(9), td:nth-child(9) { // UNIT
+      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
+    }
+    
+    th:nth-child(10), td:nth-child(10) { // ROLE
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+    }
+    
+    th:nth-child(11), td:nth-child(11) { // STATUS
+      width: 80px;
+      min-width: 80px;
+      max-width: 80px;
+    }
+    
+    th:nth-child(12), td:nth-child(12) { // LAST LOGIN
+      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
+    }
+  }
+}
+
+// Enhanced scroll indicator with better positioning
+.users-content {
+  &::after {
+    content: '← Scroll →';
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    pointer-events: none;
+    display: none;
+    z-index: 20;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (max-width: 1200px) {
+    &::after {
+      display: block;
+    }
+  }
+}
+
+// Add scroll shadow indicators for better UX
+.users-content {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), transparent);
+    pointer-events: none;
+    z-index: 15;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// Responsive table adjustments with maintained scrolling
+@media (max-width: 1200px) {
+  .users-content {
+    .users-table {
+      min-width: 1200px; // Maintain minimum width for all columns
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .users-content {
+    .users-table {
+      min-width: 1200px; // Keep all columns visible
+      
+      th, td {
+        padding: 0.875rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .users-content {
+    .users-table {
+      min-width: 1200px; // Ensure all columns remain accessible
+      
+      th, td {
+        padding: 0.75rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .users-content {
+    .users-table {
+      min-width: 1200px; // Keep table scrollable on small screens
+      
+      th, td {
+        padding: 0.625rem;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .users-content {
+    // Hide table on very small screens
+    .users-table {
+      display: none;
+    }
+
+    // Show card layout instead
+    .users-cards {
+      display: block;
+    }
+  }
+}
+
+// Mobile Card Layout - Hidden by default
+.users-cards {
+  display: none; // Hidden by default, shown only on small screens
+  
+  .user-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      
+      .user-name {
+        font-weight: 600;
+        color: #1f2937;
+        font-size: 1rem;
+      }
+      
+      .user-status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        
+        &.active {
+          background: #dcfce7;
+          color: #166534;
+        }
+        
+        &.inactive {
+          background: #fee2e2;
+          color: #991b1b;
+        }
+      }
+    }
+    
+    .card-content {
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          
+          .label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 0.875rem;
+          }
+          
+          .value {
+            color: #1f2937;
+            font-size: 0.875rem;
+            text-align: right;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+      
+      .card-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        
+        button {
+          flex: 1;
+          padding: 0.5rem;
+          border: none;
+          border-radius: 0.375rem;
+          font-size: 0.75rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.25rem;
+          min-height: 36px;
+          
+          i {
+            font-size: 0.875rem;
+          }
+        }
+        
+        .btn-view {
+          background: #dbeafe;
+          color: #1e40af;
+          
+          &:hover {
+            background: #bfdbfe;
+          }
+        }
+        
+        .btn-edit {
+          background: #fef3c7;
+          color: #92400e;
+          
+          &:hover {
+            background: #fde68a;
+          }
+        }
+        
+        .btn-delete {
+          background: #fee2e2;
+          color: #991b1b;
+          
+          &:hover {
+            background: #fecaca;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Loading State Styling
+.loading-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 3rem;
+  text-align: center;
+  margin-top: 2rem;
+
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #6b7280;
+
+    i {
+      font-size: 2rem;
+      color: #3b82f6;
+    }
+
+    span {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+  }
+}
+
+// Enhanced Responsive Design - Mobile First Approach
+@media (max-width: 1200px) {
+  .users-container {
+    padding: 1.5rem;
+  }
+
+  .users-header {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .users-controls {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .users-content {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .users-container {
+    padding: 1.25rem;
+  }
+
+  .users-header {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .users-controls {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+
+    .search-container {
+      max-width: none;
+    }
+
+    .btn-add-user {
+      align-self: center;
+    }
+  }
+
+  .users-content {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+
+    .users-table {
+      min-width: 700px;
+
+      th, td {
+        padding: 0.875rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .users-container {
+    padding: 1rem;
+  }
+  
+  .users-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    
+    .header-left {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+
+      .users-title {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+    }
+  }
+  
+  .users-controls {
+    margin-top: 1rem;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    
+    .search-container {
+      .search-input {
+        width: 100%;
+        font-size: 0.8rem;
+      }
+    }
+
+    .btn-add-user {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8rem;
+    }
+  }
+  
+  .users-content {
+    margin-top: 1rem;
+    padding: 1rem;
+
+    .users-table {
+      min-width: 600px;
+
+      th, td {
+        padding: 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+        
+        button {
+          width: 2rem;
+          height: 2rem;
+          padding: 0.375rem;
+
+          i {
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    margin-top: 1rem;
+    padding: 2rem;
+
+    .loading-content {
+      i {
+        font-size: 1.75rem;
+      }
+
+      span {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .users-container {
+    padding: 0.75rem;
+  }
+
+  .users-header {
+    padding: 0.875rem;
+    margin-bottom: 0.875rem;
+
+    .header-left {
+      gap: 0.875rem;
+
+      .users-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .users-controls {
+    margin-top: 0.875rem;
+    padding: 0.875rem;
+
+    .search-container .search-input {
+      font-size: 0.75rem;
+      padding: 0.625rem 0.875rem;
+    }
+
+    .btn-add-user {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .users-content {
+    margin-top: 0.875rem;
+    padding: 0.875rem;
+
+    .users-table {
+      min-width: 500px;
+
+      th, td {
+        padding: 0.625rem;
+        font-size: 0.7rem;
+      }
+
+      .action-buttons button {
+        width: 1.875rem;
+        height: 1.875rem;
+        padding: 0.25rem;
+
+        i {
+          font-size: 0.7rem;
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    margin-top: 0.875rem;
+    padding: 1.5rem;
+
+    .loading-content {
+      i {
+        font-size: 1.5rem;
+      }
+
+      span {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .users-container {
+    padding: 0.5rem;
+  }
+
+  .users-header {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+
+    .header-left {
+      gap: 0.75rem;
+
+      .users-title {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .users-controls {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+
+    .search-container .search-input {
+      font-size: 0.7rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .btn-add-user {
+      padding: 0.5rem 0.875rem;
+      font-size: 0.7rem;
+    }
+  }
+
+  .users-content {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+
+    // Hide table on very small screens
+    .users-table {
+      display: none;
+    }
+
+    // Show card layout instead
+    .users-cards {
+      display: block;
+    }
+  }
+
+  .loading-container {
+    margin-top: 0.75rem;
+    padding: 1.25rem;
+
+    .loading-content {
+      i {
+        font-size: 1.25rem;
+      }
+
+      span {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .users-container {
+    padding: 0.375rem;
+  }
+
+  .users-header {
+    padding: 0.625rem;
+    margin-bottom: 0.625rem;
+
+    .header-left {
+      gap: 0.625rem;
+
+      .users-title {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .users-controls {
+    margin-top: 0.625rem;
+    padding: 0.625rem;
+
+    .search-container .search-input {
+      font-size: 0.65rem;
+      padding: 0.375rem 0.625rem;
+    }
+
+    .btn-add-user {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.65rem;
+    }
+  }
+
+  .users-content {
+    margin-top: 0.625rem;
+    padding: 0.625rem;
+
+    .users-cards {
+      .user-card {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        
+        .card-header {
+          margin-bottom: 0.5rem;
+          
+          .user-name {
+            font-size: 0.875rem;
+          }
+          
+          .user-status {
+            padding: 0.125rem 0.375rem;
+            font-size: 0.625rem;
+          }
+        }
+        
+        .card-content {
+          .user-info {
+            gap: 0.375rem;
+            margin-bottom: 0.75rem;
+            
+            .info-row {
+              .label {
+                font-size: 0.75rem;
+              }
+              
+              .value {
+                font-size: 0.75rem;
+                max-width: 55%;
+              }
+            }
+          }
+          
+          .card-actions {
+            gap: 0.375rem;
+            
+            button {
+              padding: 0.375rem;
+              font-size: 0.625rem;
+              min-height: 32px;
+              
+              i {
+                font-size: 0.75rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    margin-top: 0.625rem;
+    padding: 1rem;
+
+    .loading-content {
+      i {
+        font-size: 1rem;
+      }
+
+      span {
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+// Extra small screens (320px and below)
+@media (max-width: 320px) {
+  .users-container {
+    padding: 0.25rem;
+  }
+
+  .users-header {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .header-left {
+      gap: 0.5rem;
+
+      .users-title {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .users-controls {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+
+    .search-container .search-input {
+      font-size: 0.6rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .btn-add-user {
+      padding: 0.25rem 0.625rem;
+      font-size: 0.6rem;
+    }
+  }
+
+  .users-content {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+
+    .users-cards {
+      .user-card {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        
+        .card-header {
+          margin-bottom: 0.375rem;
+          
+          .user-name {
+            font-size: 0.75rem;
+          }
+          
+          .user-status {
+            padding: 0.125rem 0.25rem;
+            font-size: 0.5rem;
+          }
+        }
+        
+        .card-content {
+          .user-info {
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+            
+            .info-row {
+              .label {
+                font-size: 0.625rem;
+              }
+              
+              .value {
+                font-size: 0.625rem;
+                max-width: 50%;
+              }
+            }
+          }
+          
+          .card-actions {
+            gap: 0.25rem;
+            
+            button {
+              padding: 0.25rem;
+              font-size: 0.5rem;
+              min-height: 28px;
+              
+              i {
+                font-size: 0.625rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+
+    .loading-content {
+      i {
+        font-size: 0.875rem;
+      }
+
+      span {
+        font-size: 0.65rem;
+      }
+    }
+  }
+}
+
+// Landscape orientation adjustments for mobile
+@media (max-width: 768px) and (orientation: landscape) {
+  .users-header {
+    flex-direction: row;
+    text-align: left;
+    gap: 1rem;
+
+    .header-left {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: center;
+    }
+  }
+
+  .users-controls {
+    flex-direction: row;
+    align-items: center;
+
+    .search-container {
+      max-width: 300px;
+    }
+  }
+}
+
+// Touch-friendly improvements for mobile
+@media (hover: none) and (pointer: coarse) {
+  .users-content .users-table tbody tr {
+    &:hover {
+      background: #f3f4f6;
+    }
+  }
+
+  .action-buttons button {
+    min-height: 44px; // iOS recommended minimum touch target
+    min-width: 44px;
+  }
+  
+  .btn-add-user {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .users-cards {
+    .user-card {
+      .card-actions {
+        button {
+          min-height: 44px;
+          min-width: 44px;
+        }
+      }
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .users-content {
+    border: 2px solid #000;
+  }
+
+  .users-table {
+    th {
+      background: #000;
+      color: #fff;
+    }
+
+    td {
+      border-bottom: 2px solid #000;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .users-table tbody tr,
+  .btn-add-user,
+  .action-buttons button {
+    transition: none;
+  }
+
+  .btn-add-user:hover {
+    transform: none;
+  }
+}
+
+// Dark mode support
+// @media (prefers-color-scheme: dark) {
+//   .users-container {
+//     background-color: #1f2937;
+//   }
+  
+//   .users-header {
+//     background: #374151;
+    
+//     .users-title {
+//       color: #f9fafb;
+//     }
+//   }
+  
+//   .users-controls {
+//     background: #4b5563;
+//     border-color: #6b7280;
+    
+//     .search-input {
+//       background: #374151;
+//       color: #f9fafb;
+//       border-color: #6b7280;
+      
+//       &::placeholder {
+//         color: #d1d5db;
+//       }
+//     }
+//   }
+  
+//   .users-content {
+//     background: #374151;
+    
+//     .users-table {
+//       th {
+//         background: #4b5563;
+//         color: #f9fafb;
+//       }
+      
+//       td {
+//         color: #f9fafb;
+//         border-bottom-color: #6b7280;
+//       }
+      
+//       tbody tr:hover {
+//         background: #4b5563;
+//       }
+//     }
+    
+//     .users-cards {
+//       .user-card {
+//         background: #4b5563;
+//         border-color: #6b7280;
+        
+//         .card-header .user-name {
+//           color: #f9fafb;
+//         }
+        
+//         .card-content {
+//           .user-info {
+//             .label {
+//               color: #d1d5db;
+//             }
+            
+//             .value {
+//               color: #f9fafb;
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+  
+//   .loading-container {
+//     background: #374151;
+    
+//     .loading-content {
+//       color: #d1d5db;
+      
+//       i {
+//         color: #60a5fa;
+//       }
+//     }
+//   }
+// }
+
+// Focus styles for accessibility
+.users-header:focus-within,
+.users-controls:focus-within,
+.users-content:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+// Improved loading states
+.users-header.loading,
+.users-controls.loading,
+.users-content.loading {
+  opacity: 0.7;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Print styles
+@media print {
+  .users-container {
+    background: white;
+    padding: 0;
+  }
+  
+  .users-header {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .users-content {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .btn-switch-mode-simple,
+  .btn-primary,
+  .btn-secondary {
+    display: none;
+  }
+  
+  .users-cards {
+    .user-card {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+  }
+}
+
+// Switch Mode Dialog Responsive Improvements
+@media (max-width: 768px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 95vw !important;
+      max-width: none !important;
+      margin: 1rem;
+    }
+    
+    .p-dialog-header {
+      padding: 16px 20px;
+      
+      .p-dialog-title {
+        font-size: 16px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 16px;
+    
+    .switch-mode-grid {
+      gap: 12px;
+      
+      .switch-mode-tile {
+        padding: 16px;
+        
+        .tile-icon {
+          width: 40px;
+          height: 40px;
+          
+          i {
+            font-size: 18px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 16px;
+          }
+          
+          .tile-description {
+            font-size: 13px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 98vw !important;
+      margin: 0.5rem;
+    }
+    
+    .p-dialog-header {
+      padding: 12px 16px;
+      
+      .p-dialog-title {
+        font-size: 14px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 12px;
+    
+    .switch-mode-grid {
+      gap: 8px;
+      
+      .switch-mode-tile {
+        padding: 12px;
+        
+        .tile-icon {
+          width: 36px;
+          height: 36px;
+          
+          i {
+            font-size: 16px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 14px;
+          }
+          
+          .tile-description {
+            font-size: 12px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 99vw !important;
+      margin: 0.25rem;
+    }
+    
+    .p-dialog-header {
+      padding: 8px 12px;
+      
+      .p-dialog-title {
+        font-size: 12px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 8px;
+    
+    .switch-mode-grid {
+      gap: 6px;
+      
+      .switch-mode-tile {
+        padding: 8px;
+        
+        .tile-icon {
+          width: 28px;
+          height: 28px;
+          
+          i {
+            font-size: 12px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 12px;
+          }
+          
+          .tile-description {
+            font-size: 10px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
+// Extra small screens (320px and below)
+@media (max-width: 320px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 99.5vw !important;
+      margin: 0.125rem;
+    }
+    
+    .p-dialog-header {
+      padding: 6px 10px;
+      
+      .p-dialog-title {
+        font-size: 11px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 6px;
+    
+    .switch-mode-grid {
+      gap: 4px;
+      
+      .switch-mode-tile {
+        padding: 6px;
+        
+        .tile-icon {
+          width: 24px;
+          height: 24px;
+          
+          i {
+            font-size: 10px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 10px;
+          }
+          
+          .tile-description {
+            font-size: 8px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Improved mobile navigation
+@media (max-width: 768px) {
+  .users-header {
+    .header-right {
+      .btn-switch-mode-simple {
+        order: -1; // Move switch mode button to the left on mobile
+      }
+    }
+  }
+}
+
+// Better touch targets for mobile
+@media (hover: none) and (pointer: coarse) {
+  .users-header {
+    .btn-secondary, .btn-primary, .btn-switch-mode-simple {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+  
+  .users-content {
+    .users-cards {
+      .user-card {
+        .card-actions {
+          button {
+            min-height: 44px;
+            min-width: 44px;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+

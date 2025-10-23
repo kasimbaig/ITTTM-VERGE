@@ -1,0 +1,155 @@
+<app-shared-layout>
+  <div class="home-content">
+    <!-- Animated Background Particles -->
+    <div class="particles-bg">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <div class="modern-grid-container">
+      <!-- Mission Statement Card -->
+      <div class="glass-card mission-card">
+        <div class="card-glow"></div>
+        <div class="icon-wrapper">
+          <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <h2 class="gradient-text">MISSION STATEMENT</h2>
+        <p>Provide Authoritative Decision Support towards Sustained Reliability & Combat Readiness of Indian Navy Platforms through Comprehensive Maintenance Management System.</p>
+        <div class="card-decoration"></div>
+      </div>
+
+      <!-- Search Bar Card -->
+      <div class="glass-card search-card">
+        <div class="card-glow"></div>
+        <div class="icon-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h3 class="gradient-text">Anwesh Search</h3>
+        <div class="modern-search-row">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-robot search-icon"></i>
+            <input type="text" placeholder="Ask Anwesh anything..." [(ngModel)]="searchQuery" name="searchQuery">
+          </div>
+          <button class="search-button" (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+        <div class="card-decoration"></div>
+      </div>
+
+      <!-- Login Card -->
+      <div class="glass-card login-card-modern">
+        <div class="card-glow"></div>
+        <div class="icon-wrapper">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h2 class="gradient-text">SECURE LOGIN</h2>
+        
+        <div class="input-field-modern">
+          <div class="input-icon-wrapper">
+            <mat-icon class="input-icon">person</mat-icon>
+          </div>
+          <input type="text" placeholder="User Login" [(ngModel)]="userLogin" name="userLogin">
+          <div class="input-underline"></div>
+        </div>
+        
+        <div class="input-field-modern">
+          <div class="input-icon-wrapper">
+            <mat-icon class="input-icon">lock</mat-icon>
+          </div>
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" name="password">
+          <mat-icon class="password-toggle" (click)="togglePasswordVisibility()">
+            {{ showPassword ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+          <div class="input-underline"></div>
+        </div>
+        
+        <div class="login-buttons-modern">
+          <button class="btn-modern btn-primary" (click)="onLogin()">
+            <span>Login</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <button class="btn-modern btn-outline" (click)="onNewUser()">
+            <span>New User</span>
+            <i class="fa-solid fa-user-plus"></i>
+          </button>
+        </div>
+        <div class="card-decoration"></div>
+      </div>
+    </div>
+
+    <!-- Video Links -->
+    <!-- <div class="video-rows">
+      <button class="video-link-button" (click)="openVideoGallery('installation')">
+        INSTALLATION VIDEOS
+      </button>
+      <button class="video-link-button" (click)="openVideoGallery('patch')">
+        STEPS FOR UPDATING PATCH
+      </button>
+      <button class="video-link-button" (click)="openVideoGallery('sfd')">
+        SFD, EMAPS & SRAR VIDEOS
+      </button>
+      <button class="video-link-button" (click)="openVideoGallery('dart')">
+        DART, DL, OPDEF & FUSS VIDEOS
+      </button>
+    </div> -->
+  </div>
+
+  <!-- Add Form Component for Registration -->
+  <app-add-form
+    [open]="showRegistrationForm"
+    [formConfig]="formConfig"
+    [formData]="formData"
+    [fromTitle]="'New User Registration'"
+    [submitLabel]="'Register User'"
+    [isSingleColumn]="false"
+    (onOpenChange)="onFormOpenChange($event)"
+    (onSubmit)="onRegistrationSubmit($event)"
+  ></app-add-form>
+
+  <!-- Video Gallery Dialog -->
+</app-shared-layout>
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" *ngIf="showVideoGallery" (click)="closeVideoGallery()">
+  <div class="bg-white rounded-lg shadow-2xl max-w-7xl w-full mx-4 max-h-[90vh] flex flex-col" (click)="$event.stopPropagation()">
+    <div class="bg-blue-600 -900 text-white p-6 rounded-t-lg relative text-center">
+      <h2 class="text-xl font-bold mb-2 text-shadow">VIDEO GALLERY</h2>
+      <h3 class="text-lg font-semibold opacity-90">{{ getSelectedCategoryTitle() }}</h3>
+      <button class="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 hover:scale-110" (click)="closeVideoGallery()">
+        <mat-icon class="text-lg">close</mat-icon>
+      </button>
+    </div>
+    
+    <div class="p-8 overflow-auto flex-1 bg-sky-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div 
+          *ngFor="let video of getSelectedCategoryVideos()" 
+          class="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1 overflow-hidden"
+          (click)="downloadVideo(video.id, video.title)"
+        >
+          <div class="relative bg-gradient-to-br from-blue-500 to-purple-600 h-32 flex items-center justify-center">
+            <div class="text-white">
+              <i class="fa fa-play-circle opacity-80 text-4xl"></i>
+            </div>
+            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+              <span>{{ video.duration || '5:30' }}</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h4 class="font-semibold text-gray-800 text-sm mb-2 line-clamp-2">{{ video.title }}</h4>
+            <p class="text-gray-600 text-xs mb-3 line-clamp-2">{{ video.description || 'Click to download and watch this video' }}</p>
+            <div class="flex justify-between items-center text-xs text-gray-500">
+              <span class="bg-gray-100 px-2 py-1 rounded">{{ video.size || '25 MB' }}</span>
+              <span class="bg-blue-600 -100 text-blue-600 px-2 py-1 rounded">{{ video.format || 'MP4' }}</span>
+            </div>
+          </div>
+          <div class="absolute top-2 right-2 bg-white bg-opacity-90 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <mat-icon class="text-blue-600 text-sm">download</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

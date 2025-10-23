@@ -1,0 +1,374 @@
+/* --- Base Container & Typography --- */
+.command-container {
+  background: var(--bg-secondary);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  min-height: 100vh;
+}
+
+/* --- Header Styles --- */
+.command-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
+}
+
+.command-title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.command-title-block i {
+  font-size: 1.5rem;
+  color: var(--primary-gradient-start);
+  text-shadow: 0 2px 4px var(--shadow-light);
+}
+
+.command-title-block h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+.command-title-block p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.command-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* --- Button Styles --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  color: var(--text-white);
+  box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-medium);
+}
+
+.btn.outlined {
+  background: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border-light);
+}
+
+.btn.outlined:hover {
+  background: var(--accent-light);
+  border-color: var(--accent-blue);
+  transform: translateY(-1px);
+}
+
+/* --- Dropdowns Container --- */
+.dropdowns-container {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  border: 1px solid var(--border-light);
+  padding: 1.5rem;
+}
+
+.dropdowns-sec {
+  min-width: 220px;
+  flex: 1;
+  max-width: 300px;
+}
+
+/* PrimeNG Dropdown Styling */
+:host ::ng-deep .p-dropdown {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+:host ::ng-deep .p-dropdown:hover {
+  border-color: var(--accent-blue);
+  box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+:host ::ng-deep .p-dropdown-label {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+}
+
+:host ::ng-deep .p-dropdown-label.p-placeholder {
+  color: var(--text-secondary);
+}
+
+:host ::ng-deep .p-dropdown-trigger {
+  color: var(--text-secondary);
+  padding: 0.75rem;
+}
+
+:host ::ng-deep .p-dropdown-panel {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px var(--shadow-medium);
+  z-index: 999999 !important;
+}
+
+:host ::ng-deep .p-dropdown-item {
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+}
+
+:host ::ng-deep .p-dropdown-item:hover {
+  background: var(--accent-light);
+}
+
+:host ::ng-deep .p-dropdown-item.p-highlight {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  color: var(--text-white);
+}
+
+/* --- Table Section --- */
+.command-table-section {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1400px) {
+  .command-container {
+    padding: 1rem;
+    gap: 1.25rem;
+  }
+  
+  .command-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .dropdowns-container {
+    gap: 1.25rem;
+    padding: 1.25rem;
+  }
+  
+  .dropdowns-sec {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .command-container {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .command-header {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .dropdowns-container {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .dropdowns-sec {
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 992px) {
+  .command-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .command-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .command-container {
+    padding: 1rem;
+  }
+  
+  .dropdowns-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .dropdowns-sec {
+    min-width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .command-title-block h2 {
+    font-size: 1.5rem;
+  }
+
+  .command-title-block i {
+    font-size: 1.5rem;
+  }
+
+  .command-container {
+    padding: 1rem;
+  }
+  
+  .dropdowns-container {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .dropdowns-sec {
+    min-width: 100%;
+  }
+}
+
+/* --- PrimeNG Dialog Overrides --- */
+:host ::ng-deep .p-dialog {
+  border-radius: 8px;
+  box-shadow: 0 4px 15px var(--shadow-medium);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  color: var(--text-white);
+  padding: 1rem 1.5rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 1rem 1.5rem;
+  background: var(--bg-primary);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+}
+
+:host ::ng-deep .p-button {
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  height: 36px;
+}
+
+:host ::ng-deep .p-button-text {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+}
+
+:host ::ng-deep .p-button-text:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--primary-gradient-start);
+}
+
+:host ::ng-deep .p-button-danger {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: var(--text-white);
+  border: none;
+  box-shadow: 0 1px 4px rgba(220, 38, 38, 0.15);
+}
+
+:host ::ng-deep .p-button-danger:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+}
+
+/* --- TieredMenu Overrides --- */
+:host ::ng-deep .p-tieredmenu {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  box-shadow: 0 3px 12px var(--shadow-medium);
+}
+
+:host ::ng-deep .p-tieredmenu .p-menuitem-link {
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .p-tieredmenu .p-menuitem-link:hover {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--accent-light) 100%);
+  color: var(--text-primary);
+}
+
+/* --- Animation for smooth transitions --- */
+* {
+  transition: all 0.3s ease;
+}
+  

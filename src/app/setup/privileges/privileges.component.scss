@@ -1,0 +1,252 @@
+@use '../shared-setup.scss';
+
+.privileges-container {
+  @extend .setup-component-container;
+}
+
+.privileges-header {
+  @extend .setup-header-base;
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .privileges-title {
+      @extend .setup-title;
+    }
+  }
+}
+
+.privileges-content {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  overflow-x: auto;
+
+  .privileges-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #374151;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      color: #1f2937;
+      font-size: 0.875rem;
+    }
+
+    tbody tr {
+      &:hover {
+        background: #f9fafb;
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+// Responsive Design - Mobile First Approach
+@media (max-width: 1200px) {
+  .privileges-container {
+    padding: 1.5rem;
+  }
+
+  .privileges-header {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .privileges-content {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .privileges-container {
+    padding: 1.25rem;
+  }
+
+  .privileges-header {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .privileges-content {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privileges-container {
+    padding: 1rem;
+  }
+
+  .privileges-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    .header-left {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+
+      .privileges-title {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+    }
+  }
+
+  .privileges-content {
+    margin-top: 1rem;
+    padding: 1rem;
+
+    .privileges-table {
+      min-width: 500px;
+
+      th, td {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .privileges-container {
+    padding: 0.75rem;
+  }
+
+  .privileges-header {
+    padding: 0.875rem;
+    margin-bottom: 0.875rem;
+
+    .header-left {
+      gap: 0.875rem;
+
+      .privileges-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .privileges-content {
+    margin-top: 0.875rem;
+    padding: 0.875rem;
+
+    .privileges-table {
+      min-width: 400px;
+
+      th, td {
+        padding: 0.625rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .privileges-container {
+    padding: 0.5rem;
+  }
+
+  .privileges-header {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+
+    .header-left {
+      gap: 0.75rem;
+
+      .privileges-title {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .privileges-content {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+
+    .privileges-table {
+      min-width: 350px;
+
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+// Landscape orientation adjustments for mobile
+@media (max-width: 768px) and (orientation: landscape) {
+  .privileges-header {
+    flex-direction: row;
+    text-align: left;
+    gap: 1rem;
+
+    .header-left {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: center;
+    }
+  }
+}
+
+// Touch-friendly improvements for mobile
+@media (hover: none) and (pointer: coarse) {
+  .privileges-content .privileges-table tbody tr {
+    &:hover {
+      background: #f3f4f6;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .privileges-content {
+    border: 2px solid #000;
+  }
+
+  .privileges-table {
+    th {
+      background: #000;
+      color: #fff;
+    }
+
+    td {
+      border-bottom: 2px solid #000;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .privileges-table tbody tr {
+    transition: none;
+  }
+}

@@ -1,0 +1,432 @@
+@use '../shared-setup.scss';
+
+.role-container {
+  @extend .setup-component-container;
+}
+
+.role-header {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .btn-back {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+        &:hover {
+          background: linear-gradient(135deg, #0056b3, #004085);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+
+        i {
+          font-size: 0.9rem;
+        }
+      }
+
+      .page-title {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+
+      .btn-switch-mode {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+        &:hover {
+          background: linear-gradient(135deg, #0056b3, #004085);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+
+        i {
+          font-size: 1rem;
+        }
+      }
+
+      .btn-add-primary {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+        &:hover {
+          background: linear-gradient(135deg, #0056b3, #004085);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+
+        i {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+.content-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .table-container {
+    overflow-x: auto;
+  }
+}
+
+// Responsive Design - Mobile First Approach
+@media (max-width: 1200px) {
+  .role-container {
+    padding: 16px;
+  }
+
+  .role-header {
+    padding: 16px;
+    margin-bottom: 16px;
+
+    .header-content {
+      .header-left {
+        gap: 16px;
+
+        .page-title {
+          font-size: 1.6rem;
+        }
+      }
+
+      .header-right {
+        gap: 10px;
+
+        .btn-switch-mode {
+          width: 38px;
+          height: 38px;
+          padding: 9px;
+        }
+
+        .btn-add-primary {
+          padding: 9px 18px;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
+  .content-section {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .role-container {
+    padding: 14px;
+  }
+
+  .role-header {
+    padding: 14px;
+    margin-bottom: 14px;
+
+    .header-content {
+      .header-left {
+        gap: 14px;
+
+        .btn-back {
+          padding: 8px 16px;
+          font-size: 0.85rem;
+        }
+
+        .page-title {
+          font-size: 1.5rem;
+        }
+      }
+
+      .header-right {
+        gap: 10px;
+
+        .btn-switch-mode {
+          width: 36px;
+          height: 36px;
+          padding: 8px;
+        }
+
+        .btn-add-primary {
+          padding: 8px 16px;
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+
+  .content-section {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .role-container {
+    padding: 12px;
+  }
+
+  .role-header {
+    padding: 12px;
+    margin-bottom: 12px;
+
+    .header-content {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+
+      .header-left {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+
+        .btn-back {
+          padding: 8px 14px;
+          font-size: 0.8rem;
+        }
+
+        .page-title {
+          font-size: 1.4rem;
+          text-align: center;
+        }
+      }
+
+      .header-right {
+        gap: 8px;
+        justify-content: center;
+
+        .btn-switch-mode {
+          width: 32px;
+          height: 32px;
+          padding: 6px;
+        }
+
+        .btn-add-primary {
+          padding: 8px 14px;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .content-section {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .role-container {
+    padding: 8px;
+  }
+
+  .role-header {
+    padding: 10px;
+    margin-bottom: 10px;
+
+    .header-content {
+      gap: 12px;
+
+      .header-left {
+        gap: 10px;
+
+        .btn-back {
+          padding: 6px 12px;
+          font-size: 0.75rem;
+        }
+
+        .page-title {
+          font-size: 1.2rem;
+        }
+      }
+
+      .header-right {
+        gap: 6px;
+
+        .btn-switch-mode {
+          width: 28px;
+          height: 28px;
+          padding: 4px;
+        }
+
+        .btn-add-primary {
+          padding: 6px 12px;
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+
+  .content-section {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .role-container {
+    padding: 6px;
+  }
+
+  .role-header {
+    padding: 8px;
+    margin-bottom: 8px;
+
+    .header-content {
+      gap: 10px;
+
+      .header-left {
+        gap: 8px;
+
+        .btn-back {
+          padding: 5px 10px;
+          font-size: 0.7rem;
+        }
+
+        .page-title {
+          font-size: 1.1rem;
+        }
+      }
+
+      .header-right {
+        gap: 5px;
+
+        .btn-switch-mode {
+          width: 26px;
+          height: 26px;
+          padding: 3px;
+        }
+
+        .btn-add-primary {
+          padding: 5px 10px;
+          font-size: 0.7rem;
+        }
+      }
+    }
+  }
+
+  .content-section {
+    padding: 8px;
+  }
+}
+
+// Landscape orientation adjustments for mobile
+@media (max-width: 768px) and (orientation: landscape) {
+  .role-header {
+    .header-content {
+      flex-direction: row;
+      text-align: left;
+      gap: 16px;
+
+      .header-left {
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .header-right {
+        gap: 10px;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+// Touch-friendly improvements for mobile
+@media (hover: none) and (pointer: coarse) {
+  .btn-switch-mode,
+  .btn-add-primary,
+  .btn-back {
+    min-height: 44px; // iOS recommended minimum touch target
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .role-header {
+    border: 2px solid #000;
+  }
+
+  .content-section {
+    border: 2px solid #000;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .btn-switch-mode,
+  .btn-add-primary,
+  .btn-back {
+    transition: none;
+  }
+
+  .btn-switch-mode:hover,
+  .btn-add-primary:hover,
+  .btn-back:hover {
+    transform: none;
+  }
+}

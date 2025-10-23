@@ -1,0 +1,73 @@
+<div class="command-container">
+  <!-- Tab Navigation -->
+  <app-tab-navigation
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="onTabChange($event)">
+  </app-tab-navigation>
+
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-file-text"></i>
+      <div>
+        <h2>Preliminary Form Records</h2>
+        <p>View and manage all preliminary form records</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <!-- <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button> -->
+
+      <button class="btn primary btn-sm" (click)="editForm({})">
+        <i class="pi pi-plus"></i> Add New Form
+      </button>
+
+      <!-- <button class="btn outlined btn-sm">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button> -->
+
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Display -->
+  <div *ngIf="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+    <div class="flex items-center">
+      <i class="pi pi-exclamation-triangle text-red-500 mr-2"></i>
+      <span class="text-red-700">{{ error }}</span>
+    </div>
+  </div>
+
+  <app-paginated-table
+    [columns]="cols"
+    [apiUrl]="currentApiUrl"
+    [totalCount]="totalCount"
+    [data]="forms"
+    [showEndActions]="true"
+    [showViewAction]="true"
+    [showEditAction]="activeTab !== 'approved'"
+    [showDeleteAction]="activeTab !== 'approved'"
+    (viewEvent)="viewForm($event)"
+    (editEvent)="editForm($event)"
+    (deleteEvent)="deleteForm($event)"
+    (dataLoaded)="onDataLoaded($event)"
+    (dataLoadError)="onDataLoadError($event)">
+  </app-paginated-table>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteDialog"
+  [message]="'Are you sure you want to delete this preliminary form record?'"
+  (onConfirm)="confirmDeletion()"
+  (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<app-toast></app-toast>

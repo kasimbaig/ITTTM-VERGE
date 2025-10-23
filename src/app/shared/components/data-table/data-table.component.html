@@ -1,0 +1,30 @@
+<!-- src/app/shared/components/data-table/data-table.component.html -->
+<div class="data-table-container">
+    <p-table [value]="data" [paginator]="paginator" [rows]="rows" [responsiveLayout]="'scroll'"
+      styleClass="p-datatable-sm custom-navy-table"
+      (onRowSelect)="onRowSelect($event)" [selectionMode]="rowClick.observers.length > 0 ? 'single' : undefined">
+      <ng-template pTemplate="header" *ngIf="showHeader">
+        <tr>
+          <th *ngFor="let col of columns">{{ col.header }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData>
+        <tr>
+          <td *ngFor="let col of columns">
+            <ng-container [ngSwitch]="col.type">
+              <span *ngSwitchCase="'date'">{{ rowData[col.field] | date:(col.format || 'shortDate') }}</span>
+              <span *ngSwitchCase="'number'">{{ rowData[col.field] | number }}</span>
+              <span *ngSwitchCase="'boolean'">{{ rowData[col.field] ? 'Yes' : 'No' }}</span>
+              <span *ngSwitchDefault>{{ rowData[col.field] }}</span>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="empty">
+        <tr>
+          <td [attr.colspan]="columns.length" class="text-center">{{ emptyMessage }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  

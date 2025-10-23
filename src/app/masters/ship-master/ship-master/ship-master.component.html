@@ -1,0 +1,90 @@
+<div class="max-w-screen-xl mx-auto" >
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-database"></i>
+      <div>
+        <h2>Ship Master</h2>
+        <p>View and manage all ships in the system</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+
+      <button class="btn primary btn-sm" (click)="openAddShip()">
+        <i class="pi pi-plus"></i> Add Ship
+      </button>
+
+      <button class="btn outlined btn-sm">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button>
+
+    
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event);">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+  <app-paginated-table *ngIf="toggleTable"
+    #paginatedTable
+    [columns]="cols" 
+    [apiUrl]="apiUrl"
+    [totalCount]="totalCount"
+    [data]="ships"
+    [showEndActions]="true" 
+    (viewEvent)="viewDetails($event, true)"
+    (editEvent)="editDetails($event, true)" 
+    (deleteEvent)="deleteShipDetails($event)"
+    (dataLoaded)="onDataLoaded($event)"
+     >
+  </app-paginated-table>
+
+
+
+</div>
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteDialog"
+  [message]="'Are you sure you want to delete ' + (selectedShip.name || 'this ship') + '?'"
+  (onConfirm)="confirmDeletion()"
+  (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<app-toast></app-toast>
+<app-view-details *ngIf="isViewDetailsOpen" [open]="isViewDetailsOpen" [viewDetails]="detailsForViewComponent"
+  [headers]="shipFormConfig" (onOpenChange)="isViewDetailsOpen = $event"
+  [title]="viewDetialsTitle"></app-view-details>
+
+<!-- Add Ship Form using reusable AddFormComponent -->
+<app-add-form 
+  *ngIf="isFormOpen && !isEditFormOpen" 
+  [open]="isFormOpen" 
+  [fromTitle]="title"
+  [submitLabel]="'Save'"
+  [isEditMode]="false"
+  [formData]="newShip" 
+  [formConfig]="shipFormConfig"
+  (onOpenChange)="isFormOpen = $event"
+  (onSubmit)="handleSubmit($event)"
+  (onSelectChange)="handleSelectChange($event)">
+</app-add-form>
+
+<!-- Edit Ship Form using reusable AddFormComponent -->
+<app-add-form 
+  *ngIf="isEditFormOpen" 
+  [open]="isEditFormOpen" 
+  [fromTitle]="editTitle"
+  [submitLabel]="'Update'"
+  [isEditMode]="true"
+  [formData]="selectedShip" 
+  [formConfig]="shipFormConfig"
+  (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"
+  (onSelectChange)="handleSelectChange($event)">
+</app-add-form>

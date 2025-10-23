@@ -1,0 +1,95 @@
+<!-- <div class="command-container"> -->
+  <!-- Header Section -->
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-database"></i>
+      <div>
+        <h2>Generic Specification</h2>
+        <p>View and manage all generic specifications in the system</p>
+      </div>
+    </div>
+    
+    <!-- Action Buttons (Right Side) - Only Export and ADD -->
+    <div class="command-actions">
+      <button class="btn outlined" (click)="exportMenu.toggle($event)">
+        <i class="pi pi-download"></i> Export
+      </button>
+      <button class="btn primary" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i> ADD
+      </button>
+      <p-tieredMenu #exportMenu [model]="exportOptions" popup></p-tieredMenu>
+    </div>
+  </div>
+
+  <!-- Control Bar / Filter Section -->
+  <!-- <div class="control-bar">
+    <div class="control-left">
+      <button class="btn btn-clear-filters" (click)="resetFilters()">
+        <i class="pi pi-filter"></i> Clear Filters
+      </button>
+    </div>
+    
+  </div> -->
+  <!-- <div class="control-right">
+    <div class="command-search-block">
+      <i class="pi pi-search search-icon"></i>
+      <input 
+        type="text" 
+        placeholder="Search across all records..." 
+        [(ngModel)]="searchText"
+        (input)="filterHeaders()"
+      />
+    </div>
+  </div> -->
+
+  <!-- Table Section -->
+  <div class="command-table-section">
+    <app-paginated-table 
+      [data]="genericSpecs" 
+      [columns]="tableColumns" 
+      [showEndActions]="true"
+      (viewEvent)="viewDetails($event, true)" 
+      (editEvent)="editDetails($event, true)"
+      (deleteEvent)="deleteDetails($event)">
+    </app-paginated-table>
+  </div>
+<!-- </div> -->
+
+<!-- Forms and Dialogs -->
+<app-add-form 
+  *ngIf="isFormOpen" 
+  [open]="isFormOpen" 
+  [formConfig]="formConfigForNewDetails" 
+  [formData]="newDetails"
+  [fromTitle]="title" 
+  (onOpenChange)="isFormOpen = $event" 
+  (onSubmit)="handleSubmit($event)"
+></app-add-form>
+
+<app-add-form 
+  *ngIf="isEditFormOpen" 
+  [open]="isEditFormOpen" 
+  [formConfig]="formConfigForNewDetails"
+  [formData]="selectedDetails" 
+  [fromTitle]="editTitle" 
+  [isEditMode]="true" 
+  (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"
+></app-add-form>
+
+<app-toast></app-toast>
+
+<app-confirm-dialog 
+  *ngIf="showConfirmDialog" 
+  [message]="'Do you really want to delete this Generic Specification?'"
+  (confirm)="onConfirmDelete($event)"
+></app-confirm-dialog>
+
+<app-view-details 
+  *ngIf="isViewDetailsOpen" 
+  [open]="isViewDetailsOpen" 
+  [viewDetails]="selectedDetails"
+  [headers]="formConfigForNewDetails" 
+  (onOpenChange)="isViewDetailsOpen = $event"
+  [title]="viewDetialsTitle"
+></app-view-details>

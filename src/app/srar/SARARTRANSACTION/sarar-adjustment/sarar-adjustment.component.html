@@ -1,0 +1,178 @@
+<div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">SRAR  <span class="text-orange-500">Adjustment Details</span></h2>
+        <div class="h-1 w-20 bg-blue-600 rounded"></div>
+    </div>
+
+    <!-- Dropdown Filters -->
+    <div class=" rounded-lg max-w-5xl p-6 mb-4 border border-amber-200 bg-slate-50 text-blue-500 mx-auto">
+        <form [formGroup]="sararAdjustmentForm">
+            <div class="grid grid-cols-12 gap-4">
+                <!-- Update Types Dropdown -->
+                <div class="col-span-12 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Update Types :</label>
+                    <p-dropdown 
+                        [options]="updateTypeOptions" 
+                        formControlName="update_type"
+                        placeholder="--Select Update Type--"
+                        optionLabel="name"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="value"
+                        styleClass="w-1/2 bg-white">
+                    </p-dropdown>
+                </div>
+                
+                <!-- Ship Dropdown -->
+                <div class="col-span-12 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Ship :</label>
+                    <p-dropdown 
+                        [options]="shipOptions" 
+                        formControlName="ship"
+                        placeholder="--Select Ship--"
+                        optionLabel="name"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="value"
+                        styleClass="w-1/2 bg-white">
+                    </p-dropdown>
+                </div>
+                
+                <!-- Month Dropdown -->
+                <div class="col-span-5 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Month :</label>
+                    <p-dropdown 
+                        [options]="monthOptions" 
+                        formControlName="month"
+                        placeholder="--Select Month--"
+                        optionLabel="name"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="value"
+                        styleClass="flex-1 bg-white">
+                    </p-dropdown>
+                </div>
+                
+                <!-- Year Dropdown -->
+                <div class="col-span-6 flex items-center gap-4">
+                    <label class="text-sm font-bold  flex-shrink-0">Year :</label>
+                    <p-dropdown 
+                        [options]="yearOptions" 
+                        formControlName="year"
+                        placeholder="--Select Year--"
+                        optionLabel="name"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="value"
+                        styleClass="bg-white">
+                    </p-dropdown>
+                </div>
+                
+             <div *ngIf="sararAdjustmentForm.get('update_type')?.value === 'equipment_running_hrs'" class="col-span-12 grid grid-cols-12 gap-4">
+                   <!-- Equipment Code Dropdown -->
+                   <div class="col-span-12 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Equipment Code :</label>
+                    <p-dropdown 
+                        [options]="equipmentCodeOptions" 
+                        formControlName="equipment_code"
+                        placeholder="--Select Equipment Code--"
+                        optionLabel="name"
+                        [filter]="true"
+                        filterBy="name"
+                        optionValue="value"
+                        (onChange)="onEquipmentCodeChange()"
+                        styleClass="w-1/2 bg-white ">
+                    </p-dropdown>
+                </div>
+                
+                <!-- Location on Board -->
+                <div class="col-span-6 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Location on Board :</label>
+                    <input 
+                        pInputText  
+                        type="text" 
+                        [disabled]="true"
+                        formControlName="location_on_board"
+                        placeholder="Enter Location on Board"
+                        class="flex-1 px-3 py-2 border-2 border-gray-500 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                </div>
+                
+                <!-- Location Code -->
+                <div class="col-span-6 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Location Code :</label>
+                    <input 
+                        pInputText  
+                        type="text" 
+                        [disabled]="true"
+                        formControlName="location_code"
+                        placeholder="Enter Location Code"
+                        class="flex-1 px-3 py-2 border-2 border-gray-500 rounded-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                </div>
+                
+                <!-- Equipment Serial Number -->
+                <div class="col-span-6 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Equipment Ser. No:</label>
+                    <input 
+                        pInputText  
+                        type="text" 
+                        [disabled]="true"
+                        formControlName="equipment_serial_no"
+                        placeholder="Enter Equipment Serial No"
+                        class="flex-1 px-3 py-2 border-2 border-gray-500 rounded-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                </div>
+                
+                <!-- Hours for Month -->
+                <div class="col-span-6 flex items-center gap-4">
+                    <label class="text-sm font-bold w-32 flex-shrink-0">Hours for Month :</label>
+                    <input 
+                        pInputText  
+                        type="number" 
+                        formControlName="hours_for_month"
+                        placeholder="Enter Hours for Month"
+                        class="flex-1 px-3 py-2 border-2 border-gray-500 rounded-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                </div>
+             </div>
+                
+               <div *ngIf="sararAdjustmentForm.get('update_type')?.value === 'ship_running_hrs'" class="col-span-12 grid grid-cols-12 gap-4">
+                 <!-- Hours Underway Since First Commissioning -->
+                 <div class="col-span-12 flex items-center gap-4">
+                    <label class="text-sm font-bold w-1/3 flex-shrink-0">Hours Underway Since First Commissioning :</label>
+                    <input 
+                        pInputText  
+                        type="number" 
+                        formControlName="hours_underway_since_first_commissioning"
+                        placeholder="Enter Hours Underway"
+                        class="w-1/2 px-3 py-2 border-2 border-gray-500 rounded-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                </div>
+                
+                <!-- Distance Run Since First Commissioning -->
+                <div class="col-span-12 flex items-center gap-4">
+                    <label class="text-sm font-bold w-1/3 flex-shrink-0">Distance Run Since First Commissioning :</label>
+                    <input 
+                        pInputText  
+                        type="number" 
+                        formControlName="distance_run_since_first_commissioning"
+                        placeholder="Enter Distance Run"
+                        class="w-1/2 px-3 py-2 border-2 border-gray-500 rounded-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400">
+                </div>
+               </div>
+                
+                <!-- Submit Button -->
+            </div>
+            <div class="flex items-center justify-start mt-4">
+                <button 
+                    type="button"
+                    (click)="onSubmit()"
+                    class="px-4 py-2 bg-green-50 text-green-400 rounded hover:bg-green-400 hover:text-white transition-colors duration-200 border-2 border-green-300 placeholder-gray-400 " >     
+                    <strong>  <i class="pi pi-check"></i>
+                    Submit</strong>
+                </button>
+            </div>
+        </form>
+       
+    </div>
+
+   
+
+</div>

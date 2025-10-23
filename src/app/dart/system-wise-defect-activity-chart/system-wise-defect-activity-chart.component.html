@@ -1,0 +1,68 @@
+<div class="">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">System-wise Defect Activity ({{ currentZoomLevelLabel }} View)</h3>
+
+      <!-- Filter controls -->
+      <div class="flex flex-wrap items-center gap-4 mb-6">
+        <!-- Zoom Level Selector -->
+        <div class="flex items-center gap-2">
+          <label for="zoomLevel" class="text-gray-700 font-medium">View By:</label>
+          <p-dropdown
+            id="zoomLevel"
+            [options]="zoomLevelOptions"
+            [(ngModel)]="zoomLevel"
+            (onChange)="onFilterChange()"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select View"
+            [style]="{'min-width': '150px'}"
+          ></p-dropdown>
+        </div>
+
+        <!-- Date Range Picker (conditionally displayed) -->
+        <div class="flex items-center gap-2" *ngIf="zoomLevel === 'dateRange'">
+          <label for="dateRange" class="text-gray-700 font-medium">Select Date Range:</label>
+          <p-calendar
+            id="dateRange"
+            [(ngModel)]="dateRange"
+            selectionMode="range"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            (onSelect)="onDateRangeChange($event)"
+            (onClearClick)="onDateRangeChange(null)"
+            [minDate]="minOverallDate"
+            [maxDate]="maxOverallDate"
+            [readonlyInput]="true"
+            placeholder="Start Date - End Date"
+          ></p-calendar>
+        </div>
+      </div>
+
+      <!-- Date Range Slider (always visible for overall data range) -->
+      <div class="px-4 pb-4">
+        <label for="dateSlider" class="text-gray-700 font-medium mb-2 block">Filter by Date (Slider):</label>
+        <p-slider
+          [(ngModel)]="dateSliderValues"
+          [range]="true"
+          [min]="minSliderValue"
+          [max]="maxSliderValue"
+          (onSlideEnd)="onDateSliderChange($event)"
+          class="w-full"
+        ></p-slider>
+        <div class="flex justify-between text-sm text-gray-500 mt-2">
+          <span>{{ minOverallDate | date:'MMM yyyy' }}</span>
+          <span>{{ maxOverallDate | date:'MMM yyyy' }}</span>
+        </div>
+        <div class="text-center text-sm text-gray-600 mt-2">
+            Selected Range: {{ dateRange[0] | date:'MMM dd, yyyy' }} - {{ dateRange[1] | date:'MMM dd, yyyy' }}
+        </div>
+      </div>
+
+      <!-- Chart Canvas -->
+      <div class="chart-container">
+        <canvas #chartCanvas></canvas>
+      </div>
+
+      <div class="text-sm text-gray-600 mt-4">
+        <p>This chart displays the count of defects by system and priority over the selected time period. Each colored segment represents a priority level. "No Defects" indicates periods where no defects were logged for that system.</p>
+      </div>
+    </div>

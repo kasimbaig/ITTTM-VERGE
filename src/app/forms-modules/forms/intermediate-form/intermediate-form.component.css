@@ -1,0 +1,28 @@
+/* Intermediate Form specific styles */
+/* .intermediate-form-container {
+  @apply min-h-screen bg-gray-50 py-8;
+} */
+
+/* Ensure proper grid layout for table rows */
+.intermediate-form-container table tbody tr {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+.intermediate-form-container table thead tr {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+/* Responsive adjustments
+@media (max-width: 768px) {
+  .intermediate-form-container {
+    @apply overflow-x-auto;
+  }
+  
+  .intermediate-form-container table {
+    @apply min-w-full;
+  }
+} */

@@ -1,0 +1,135 @@
+<div class="role-container">
+  <!-- Header -->
+  <div class="role-header">
+    <div class="header-content">
+      <div class="header-left">
+        <button class="btn-back" (click)="goBack()">
+          <i class="pi pi-arrow-left"></i>
+          Back to Setup
+        </button>
+        <h1 class="page-title">Role Management</h1>
+      </div>
+      <div class="header-right">
+        <button class="btn-switch-mode" (click)="openSwitchModeDialog()">
+          <i class="pi pi-th-large"></i>
+        </button>
+        <button class="btn-add-primary" (click)="addNewRole()">
+          <i class="pi pi-plus"></i>
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content-section">
+    <!-- Table -->
+    <div class="table-container">
+      <app-resuable-table
+        [gridColumns]="gridColumns"
+        [filteredData]="filteredRoles"
+        [isCheckBox]="false"
+        [isAction]="true"
+        [isView]="true"
+        [isEditable]="true"
+        [isDeletable]="true"
+        [isAdd]="false"
+        [isPaginator]="true"
+        [totalRecords]="totalRecords"
+        [rowsPerPage]="rowsPerPage"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [lazy]="true"
+        (viewEvent)="viewRole($event)"
+        (editEvent)="editRole($event)"
+        (deleteEvent)="deleteRole($event)"
+        (pageChangeEvent)="onPageChange($event)"
+        (rowsPerPageChangeEvent)="onRowsPerPageChange($event)">
+      </app-resuable-table>
+    </div>
+  </div>
+
+  <!-- Add Role Form -->
+  <app-add-form
+    *ngIf="showAddForm"
+    [open]="showAddForm"
+    [formConfig]="roleFormConfig"
+    [formData]="newRole"
+    [fromTitle]="'Add New Role'"
+    [submitLabel]="'Add Role'"
+    (onOpenChange)="closeAddForm()"
+    (onSubmit)="handleAddSubmit($event)">
+  </app-add-form>
+
+  <!-- Edit Role Form -->
+  <app-add-form
+    *ngIf="showEditForm"
+    [open]="showEditForm"
+    [formConfig]="roleFormConfig"
+    [formData]="selectedRole"
+    [fromTitle]="'Edit Role'"
+    [submitLabel]="'Update Role'"
+    [isEditMode]="true"
+    (onOpenChange)="closeEditForm()"
+    (onSubmit)="handleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- View Role Form -->
+  <app-add-form
+    *ngIf="showViewForm"
+    [open]="showViewForm"
+    [formConfig]="roleFormConfig"
+    [formData]="selectedRole"
+    [fromTitle]="'View Role Details'"
+    [submitLabel]="'Close'"
+    [isEditMode]="false"
+    (onOpenChange)="closeViewForm()"
+    (onSubmit)="handleViewSubmit($event)">
+  </app-add-form>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="showDeleteModal"
+    [visible]="showDeleteModal"
+    [itemName]="selectedRole?.name || ''"
+    (onConfirm)="confirmDelete()"
+    (onCancel)="closeDeleteModal()">
+  </app-delete-confirmation-modal>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)">
+          <div class="tile-icon">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

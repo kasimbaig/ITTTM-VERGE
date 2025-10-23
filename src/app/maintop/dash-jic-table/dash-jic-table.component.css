@@ -1,0 +1,64 @@
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #e2e8f0;
+  padding: 16px;
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  padding-bottom: 0.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.badge {
+  padding: 0.3em 0.6em;
+  border-radius: 0.5em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge.green {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #34d399;
+}
+
+.badge.blue {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+  border: 1px solid #60a5fa;
+}
+
+.badge.yellow {
+  background-color: #fef9c3;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive visibility mimic */
+@media (min-width: 768px) {
+  .md\:table-cell {
+    display: table-cell;
+  }
+}

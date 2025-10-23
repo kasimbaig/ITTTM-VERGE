@@ -1,0 +1,234 @@
+/* Full height layout */
+:host {
+  display: block;
+  height: 100vh;
+  width: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.min-h-0 {
+  min-height: 0;
+}
+
+/* Ensure proper height calculation */
+.max-h-\[calc\(100vh-200px\)\] {
+  max-height: calc(100vh - 200px);
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-blue-500::-webkit-scrollbar-thumb {
+  background-color: #3b82f6;
+}
+
+.scrollbar-track-blue-100::-webkit-scrollbar-track {
+  background-color: #dbeafe;
+}
+
+.scrollbar-thumb-rounded-full::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+}
+
+.scrollbar-track-rounded-full::-webkit-scrollbar-track {
+  border-radius: 9999px;
+}
+
+.hover\:scrollbar-thumb-blue-600:hover::-webkit-scrollbar-thumb {
+  background-color: #2563eb;
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Custom file input styles */
+input[type="file"]::-webkit-file-upload-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #2563eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .h-screen {
+    height: 100vh;
+  }
+  
+  .max-h-\[calc\(100vh-200px\)\] {
+    max-height: calc(100vh - 150px);
+  }
+}
+
+/* QR Code hover effects */
+.qr-code-hover:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Comment card hover effects */
+.comment-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.comment-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Button hover effects */
+.btn-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Form input focus effects */
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading state styles */
+.loading-overlay {
+  position: relative;
+  pointer-events: none;
+}
+
+.loading-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Custom toggle button styles */
+.toggle-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.toggle-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.toggle-button:hover::before {
+  left: 100%;
+}
+
+/* PDF download button special styling */
+.pdf-download-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.3);
+}
+
+.pdf-download-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  box-shadow: 0 6px 20px 0 rgba(16, 185, 129, 0.4);
+}
+
+/* Comment form animation */
+.comment-form-enter {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Avatar styles */
+.avatar-circle {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Digital signature badge */
+.digital-signature {
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border: 1px solid #d1d5db;
+}
+
+/* QR Code container */
+.qr-container {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 4px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.qr-container:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+  transform: scale(1.05);
+}
+
+/* Enhanced QR Code styling */
+.w-24 {
+  width: 6rem;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
+/* QR Code hover effects */
+.qr-code-hover:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}

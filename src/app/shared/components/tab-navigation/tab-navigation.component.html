@@ -1,0 +1,12 @@
+<div class="tab-navigation">
+  <div class="tab-container">
+    <button 
+      *ngFor="let tab of tabs" 
+      (click)="onTabClick(tab.id)"
+      [class.active]="activeTab === tab.id"
+      [class.inactive]="activeTab !== tab.id"
+      class="tab-button">
+      {{ tab.label }}
+    </button>
+  </div>
+</div>

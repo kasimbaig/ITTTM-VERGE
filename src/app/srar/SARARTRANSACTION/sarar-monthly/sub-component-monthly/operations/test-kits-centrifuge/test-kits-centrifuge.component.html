@@ -1,0 +1,179 @@
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-6 text-center">
+    <h3 class="text-lg font-semibold text-blue-600">Test Kits /Centrifuge</h3>
+  </div>
+
+  <!-- Notice Section -->
+  <div class="mb-4 p-3 bg-red-100 border border-red-200 rounded">
+    <div class="text-red-600 text-sm">
+      <div class="flex items-start gap-2 mb-2">
+        <i class="pi pi-info-circle mt-1"></i>
+        <span class="font-medium">Note:-</span>
+      </div>
+      <div class="ml-6 space-y-1">
+        <div>1. Fill details of test kits consumed during the month.</div>
+        <div>2. Fill details of centrifuge operation during the month.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end mb-3">
+    <div class="flex gap-2">
+      <button (click)="addTestKits()"
+        class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+      </button>
+      <button (click)="editTestKits()"
+        class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+      <button (click)="saveTestKits()"
+        class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+  <!-- ICCP Section -->
+  <div class="mb-6">
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+      8. Ops Status (OPS, NON-OPS & NOT HELD) of LUB Oil/Coolant Test Kits
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">Test Kits Description</th>
+            <th class="border border-gray-400 p-2 text-center">Ops/Non Ops</th>
+            <th class="border border-gray-400 p-2 text-center">Non Ops Since</th>
+            <th class="border border-gray-400 p-2 text-center">Last Trials Taken</th>
+            <th class="border border-gray-400 p-2 text-center">Next Trials Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of testKitsData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.test_kits_description" placeholder="Enter test kits description">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <select [disabled]="isEdit" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.ops_or_non_ops">
+                  <option value="">Select Status</option>
+                  <option value="1">OPS</option>
+                  <option value="2">NON OPS</option>
+                  <option value="3">NOT HELD</option>
+                </select>
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.non_ops_since" placeholder="Enter non ops since">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="date" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.last_trials_taken">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="date" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.next_trials_due">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="testKitsData.length === 0">
+            <td colspan="6" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No test kits data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Test Kits of Lub Oil And Fuel Centrifuge Section -->
+  
+  <div class="flex justify-between items-center mb-3 gap-2">
+    <!-- Equipment Filter -->
+    <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Equipment:</label>
+        <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+          [options]="srarEquipmentData"
+          optionLabel="equipment_name"
+          [filter]="true"
+          filterBy="equipment_name"
+          placeholder="Select Equipment"
+          class="w-48"
+          display="chip"
+          [(ngModel)]="selectedEquipment">
+        </p-multiSelect>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button (click)="addCentrifuge()"
+        class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+      </button>
+      <button (click)="editCentrifuge()"
+        class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+      <button (click)="saveCentrifuge()"
+        class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+  <div class="mb-6">
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+      9. OPS Status (OPS, NON-OPS & NOT HELD) of LUB Oil and Fuel Centrifuge
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">Eqpt Name</th>
+            <th class="border border-gray-400 p-2 text-center">Nomenclature</th>
+            <th class="border border-gray-400 p-2 text-center">Eqpt Code</th>
+            <th class="border border-gray-400 p-2 text-center">Loc on Board</th>
+            <th class="border border-gray-400 p-2 text-center">Ops/Non Ops</th>
+            <th class="border border-gray-400 p-2 text-center">Non Ops Since</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of centrifugeData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.equipment_name" placeholder="Equipment name">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.nomenclature" placeholder="Nomenclature">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.equipment_code" placeholder="Equipment code">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.location_name" placeholder="Location on board">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <select [disabled]="isEdit" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.ops_or_non_ops">
+                  <option value="">Select Status</option>
+                  <option value="1">OPS</option>
+                  <option value="2">NON OPS</option>
+                  <option value="3">NOT HELD</option>
+                </select>
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 text-xs" [(ngModel)]="item.non_ops_since" placeholder="Enter non ops since">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="centrifugeData.length === 0">
+            <td colspan="6" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No centrifuge data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

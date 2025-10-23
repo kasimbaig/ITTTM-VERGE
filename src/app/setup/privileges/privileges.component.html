@@ -1,0 +1,154 @@
+<div class="privileges-container">
+  <!-- Header -->
+  <div class="privileges-header">
+    <div class="header-left">
+      <button 
+        pButton 
+        icon="pi pi-arrow-left" 
+        label="Back to Setup" 
+        class="btn-secondary" 
+        (click)="goBack()">
+      </button>
+      <h2 class="privileges-title">Privileges</h2>
+    </div>
+    <div class="header-right">
+      <button 
+        pButton 
+        icon="pi pi-th-large" 
+        label="" 
+        class="btn-switch-mode-simple"
+        (click)="openSwitchModeDialog()">
+      </button>
+      
+      <button 
+        pButton 
+        icon="pi pi-plus" 
+        label="Add" 
+        class="btn-primary" 
+        (click)="addNewPrivilege()">
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- Table -->
+  <div class="table-container">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoadingPrivileges">
+      <div class="loading-content">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Loading privileges...</span>
+      </div>
+    </div>
+
+    <!-- Table Content -->
+    <app-resuable-table
+      *ngIf="!isLoadingPrivileges"
+      [gridColumns]="gridColumns"
+      [filteredData]="filteredPrivileges"
+      [isPaginator]="true"
+      [totalRecords]="totalRecords"
+      [rowsPerPage]="rowsPerPage"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [lazy]="true"
+      [isShearchDisable]="'T'"
+      [isCheckBox]="false"
+      [isAction]="true"
+      [isView]="true"
+      [isEditable]="true"
+      [isDeletable]="true"
+      [isAdd]="false"
+      (pageChangeEvent)="onPageChange($event)"
+      (rowsPerPageChangeEvent)="onRowsPerPageChange($event)"
+      (viewEvent)="viewPrivilege($event)"
+      (editEvent)="editPrivilege($event)"
+      (deleteEvent)="deletePrivilege($event)">
+    </app-resuable-table>
+  </div>
+
+  <!-- Add Privilege Form -->
+  <app-add-form
+    *ngIf="showAddForm"
+    [open]="showAddForm"
+    [formConfig]="privilegeFormConfig"
+    [formData]="newPrivilege"
+    [fromTitle]="'Add New Privilege'"
+    [submitLabel]="'Add Privilege'"
+    (onOpenChange)="closeAddForm()"
+    (onSubmit)="handleAddSubmit($event)">
+  </app-add-form>
+
+  <!-- Edit Privilege Form -->
+  <app-add-form
+    *ngIf="showEditForm"
+    [open]="showEditForm"
+    [formConfig]="privilegeFormConfig"
+    [formData]="selectedPrivilege"
+    [fromTitle]="'Edit Privilege'"
+    [submitLabel]="'Update Privilege'"
+    [isEditMode]="true"
+    (onOpenChange)="closeEditForm()"
+    (onSubmit)="handleEditSubmit($event)">
+  </app-add-form>
+
+  <!-- View Privilege Form -->
+  <app-add-form
+    *ngIf="showViewForm"
+    [open]="showViewForm"
+    [formConfig]="privilegeFormConfig"
+    [formData]="selectedPrivilege"
+    [fromTitle]="'View Privilege Details'"
+    [submitLabel]="'Close'"
+    [isEditMode]="false"
+    (onOpenChange)="closeViewForm()"
+    (onSubmit)="handleViewSubmit($event)">
+  </app-add-form>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+    *ngIf="showDeleteModal"
+    [visible]="showDeleteModal"
+    [itemName]="selectedPrivilege?.name || ''"
+    (onConfirm)="confirmDelete()"
+    (onCancel)="closeDeleteModal()">
+  </app-delete-confirmation-modal>
+
+  <!-- Toast Messages -->
+  <p-toast></p-toast>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)">
+          <div class="tile-icon">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

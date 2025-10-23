@@ -1,0 +1,50 @@
+<div class="chart-card">
+  <div class="chart-header">
+    <i class="pi pi-wrench"></i>
+    <span>Defect List / RA Projection</span>
+  </div>
+
+  <div class="chart-content">
+    <div *ngIf="loading$ | async" class="loading-overlay">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>Loading defects...</p>
+    </div>
+
+    <p-chart
+      *ngIf="chartData && !(loading$ | async)"
+      type="bar"
+      [data]="chartData"
+      [options]="chartOptions"
+      (onDataSelect)="onChartClick($event)">
+    </p-chart>
+
+    <div *ngIf="!chartData && !(loading$ | async)" class="no-data-message">
+      <p>No defect data available for the selected filters.</p>
+    </div>
+  </div>
+
+
+  <p-dialog
+    header="Defect Tracking"
+    [(visible)]="dialogVisible"
+    modal
+    [style]="{ width: '40vw' }">
+
+    <p-table [value]="details">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Ship</th>
+          <th>Status</th>
+          <th>Dept</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.ship }}</td>
+          <td>{{ row.status }}</td>
+          <td>{{ row.dept }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-dialog>
+</div>

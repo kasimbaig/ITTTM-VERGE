@@ -1,0 +1,69 @@
+<div class="bg-grey">
+  <div class="mast-header-dropdown">
+    <span class="logo-heading">
+      <i class="pi pi-database"></i>
+      Master > Ship
+    </span>
+    <span>
+      <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+
+      <button
+        type="button"
+        class="custom-dropdown export-btn"
+        (click)="exportMenu.toggle($event)"
+      >
+        <i class="pi pi-file"></i> Export <i class="pi pi-chevron-down"></i>
+      </button>
+
+      <!-- <button> + Add</button> -->
+    </span>
+  </div>
+</div>
+<div class="table-box">
+  <div class="table-wrapper">
+    <div class="header-dropdown">
+      <span class="header"> Master > Ship</span>
+      <span
+        >View and manage detailed equipment inventory across the naval
+        fleet</span
+      >
+    </div>
+    <div class="row1">
+      <span class="">
+        <i class="pi pi-search search-icon"></i>
+        <input
+          type="text"
+          pInputText
+          placeholder="Search..."
+          [(ngModel)]="searchText"
+          class="search-dept-input reports-input w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 "
+          (input)="filterDepartments()"
+        />
+      </span>
+      <button class="reset-btn" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i>ADD
+      </button>
+    </div>
+
+    <div class="border-box">
+      <app-paginated-table
+        [data]="departments"
+        [columns]="cols"
+        [showEndActions]="true"
+        (viewEvent)="viewDeptDetails($event)"
+        (editEvent)="editDeptDetails($event)"
+        (deleteEvent)="deleteDeptDetails($event)"
+      ></app-paginated-table>
+    </div>
+  </div>
+</div>
+
+<app-add-form
+  *ngIf="isFormOpen"
+  [open]="isFormOpen"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="newDepartment"
+  [fromTitle]="title"
+  (onOpenChange)="isFormOpen = $event"
+  (onSubmit)="handleSubmit($event)"
+></app-add-form>

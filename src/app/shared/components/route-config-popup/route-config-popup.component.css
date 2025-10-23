@@ -1,0 +1,90 @@
+/* Route Config Popup Component Styles */
+
+/* Modal overlay */
+.fixed.inset-0 {
+  backdrop-filter: blur(2px);
+}
+
+/* Modal content animations */
+.bg-white.rounded-lg.shadow-xl {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header styling */
+.text-white {
+  color: white !important;
+}
+
+/* Button hover effects */
+.cursor-pointer:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Radio button styling */
+input[type="radio"] {
+  accent-color: #04308f;
+}
+
+/* Select dropdown styling */
+select:focus {
+  border-color: #04308f !important;
+  box-shadow: 0 0 0 2px rgba(4, 48, 143, 0.2) !important;
+}
+
+/* Form field spacing */
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .max-w-lg {
+    max-width: 95%;
+  }
+  
+  .flex.gap-6 {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .flex.gap-6 label {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Loading states */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Custom scrollbar for modal content */
+.max-h-\[90vh\]::-webkit-scrollbar {
+  width: 6px;
+}
+
+.max-h-\[90vh\]::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.max-h-\[90vh\]::-webkit-scrollbar-thumb {
+  background: #04308f;
+  border-radius: 3px;
+}
+
+.max-h-\[90vh\]::-webkit-scrollbar-thumb:hover {
+  background: #032a7a;
+}

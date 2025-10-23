@@ -1,0 +1,16 @@
+<!-- src/app/shared/components/chart-card/chart-card.component.html -->
+<div class="chart-card-container">
+    <div class="card-header">
+      <h3 class="card-title">{{ title }}</h3>
+      <p *ngIf="description" class="card-description">{{ description }}</p>
+    </div>
+    <div class="card-body">
+      <ng-container *ngIf="isLoading; else chartContent">
+        <app-loading-spinner></app-loading-spinner>
+      </ng-container>
+      <ng-template #chartContent>
+        <ng-content></ng-content> <!-- This is where the actual chart (canvas) will be projected -->
+      </ng-template>
+    </div>
+  </div>
+  

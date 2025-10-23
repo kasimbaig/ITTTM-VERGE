@@ -1,0 +1,35 @@
+<!-- hitu-main-component.component.html -->
+<div class="hitu-main-container px-3 py-1 min-h-screen">
+    <!-- HITU Header -->
+    <div class="hitu-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <!-- HITU Forms Button with Dropdown Toggle -->
+        <div class="relative hitu-dropdown-container">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out hitu-button font-semibold"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'hitu', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'hitu'}"
+                (click)="navigateToHitu('hitu')">
+                <i class="fa-solid fa-tools me-3"></i>
+                <span>HITU Forms</span>
+                <i class="fa-solid ml-2 text-xs"
+                    [ngClass]="showHituDropdown ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </button>
+
+            <!-- HITU Forms Dropdown Menu -->
+            <div *ngIf="showHituDropdown"
+                class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none hitu-dropdown-menu h-96 overflow-y-auto overflow-x-hidden">
+                <button *ngFor="let item of hituMenuItems"
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center transition-colors duration-150 ease-in-out"
+                    (click)="navigateToHituSubItem(item.path)">
+                    <i [ngClass]="item.icon" class="mr-3 w-5 text-center text-blue-600"></i>
+                    {{ item.label }}
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Router Outlet for HITU Sub-components -->
+    <div class="max-w-screen-full mx-auto">
+        <router-outlet></router-outlet>
+    </div>
+</div>

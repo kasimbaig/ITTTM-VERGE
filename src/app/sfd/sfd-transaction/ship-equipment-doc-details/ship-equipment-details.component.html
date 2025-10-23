@@ -1,0 +1,86 @@
+<div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Ship <span class="text-orange-500">Equipment Document Details</span></h2>
+        <div class="h-1 w-20 bg-blue-600 rounded"></div>
+    </div>
+
+  
+    <!-- Reusable Table -->
+    <div  >
+        <app-resuable-table
+            [gridColumns]="tableColumns"
+            [filteredData]="tableData"
+            [isPaginator]="true"
+            [isShearchDisable]="'T'"
+            [isCheckBox]="false"
+            [isAction]="true"
+            [isView]="true"
+            [isEditable]="true"
+            [editButtonname]="'Go To'"
+            [isDeletable]="true"
+            (viewEvent)="onView($event)"
+            (editEvent)="onEdit($event)"
+            (deleteEvent)="onDelete($event)"
+            >
+        </app-resuable-table>
+    </div>
+   
+
+   
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="isDeleteConfirmationVisible"
+  [message]="'Are you sure you want to delete the Equipment Document Details record: ' + (selectedEquipmentDoc?.equipment_name || '') + '?'"
+  (onConfirm)="confirmDelete()"
+  (onCancel)="cancelDelete()"
+></app-delete-confirmation-modal>
+
+<!-- Dialog for View Equipment Document Details -->
+<p-dialog [header]="isEdit + ' Equipment Document Details'" [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{width: '40vw'}" [baseZIndex]="10000" [draggable]="false" [maximizable]="true" [resizable]="true">
+    <div class="p-6 bg-slate-100 shadow-md border border-gray-200 mx-auto">
+        <form [formGroup]="equipmentForm" class="space-y-4">
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Equipment Code -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Equipment Code</label>
+                    <input 
+                        type="text" 
+                        formControlName="equipment_code"
+                        class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4"
+                        readonly>
+                </div>
+                
+                <!-- Equipment Name -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Equipment Name</label>
+                    <input 
+                        type="text" 
+                        formControlName="equipment_name"
+                        class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4"
+                        readonly>
+                </div>
+                
+                <!-- Equipment Model -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Equipment Model</label>
+                    <input 
+                        type="text" 
+                        formControlName="equipment_model"
+                        class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4"
+                        readonly>
+                </div>
+            </div>
+        </form>
+        
+        <div class="flex justify-end gap-2 mt-6 pt-4 border-t border-gray-200">
+            <button (click)="closeDialog()"
+                type="button" 
+                class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-200">
+                Close
+            </button>
+        </div>
+    </div>
+</p-dialog>

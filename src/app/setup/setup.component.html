@@ -1,0 +1,92 @@
+<div class="setup-container">
+  <!-- Header Section -->
+  <div class="setup-component-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <i class="pi pi-cog"></i>
+      </div>
+      <h1 class="setup-component-title">SYSTEM ADMINISTRATION</h1>
+    </div>
+    <div class="header-right">
+      <button 
+        pButton 
+        icon="pi pi-th-large" 
+        label="" 
+        class="btn-switch-mode-simple"
+        (click)="openSwitchModeDialog()">
+      </button>
+      <p class="setup-subtitle">Manage users, projects, and system privileges.</p>
+    </div>
+  </div>
+
+  <!-- Tiles Grid -->
+  <div class="tiles-grid">
+    <div 
+      *ngFor="let tile of setupTiles" 
+      class="setup-tile"
+      [ngClass]="tile.borderColor"
+    >
+      <div class="tile-icon">
+        <i [ngClass]="tile.icon"></i>
+      </div>
+      <div class="tile-content">
+        <h3 class="tile-title">{{ tile.title }}</h3>
+        <p class="tile-description">{{ tile.description }}</p>
+      </div>
+      
+      <!-- Hover Action Buttons -->
+      <div class="tile-actions">
+        <button 
+          class="action-btn view-btn"
+          (click)="viewDetails(tile.route)"
+          title="View Details">
+          <i class="pi pi-eye"></i>
+          <span>View Details</span>
+        </button>
+        <button 
+          class="action-btn add-btn"
+          (click)="addNew(tile.route)"
+          title="Add New">
+          <i class="pi pi-plus"></i>
+          <span>Add New</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Switch Mode Dialog -->
+  <p-dialog 
+    header="Switch Mode" 
+    [(visible)]="showSwitchModeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '80vw', maxWidth: '900px'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [maximizable]="true" 
+    [resizable]="true"
+    styleClass="switch-mode-dialog">
+    
+    <div class="switch-mode-content">
+      <div class="switch-mode-grid">
+        <div 
+          *ngFor="let tile of setupTiles" 
+          class="switch-mode-tile"
+          [ngClass]="tile.borderColor"
+          (click)="switchToMode(tile.route)">
+          <div class="tile-icon">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="tile-content">
+            <h3 class="tile-title">{{ tile.title }}</h3>
+            <p class="tile-description">{{ tile.description }}</p>
+          </div>
+          <div class="tile-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+
+</div>

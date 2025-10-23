@@ -1,0 +1,80 @@
+.chart-card-container {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  min-height: 350px;
+  /* Ensure consistent height for cards */
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.dark-mode .chart-card-container {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--chart-title-color, #4c215c);
+  margin-bottom: 0.5rem;
+}
+
+.dark-mode .card-title {
+  color: var(--chart-title-color, #f0e9f9);
+}
+
+.card-description {
+  font-size: 0.85rem;
+  color: var(--kpi-label-color, #7a6e6e);
+}
+
+.dark-mode .card-description {
+  color: var(--kpi-label-color, #c9a7d6);
+}
+
+.card-body {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* For chart positioning */
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+/* Ensure global variables are defined if not in a separate file like styles.scss */
+/*
+:root {
+  --card-bg: #f8e4d9;
+  --card-border: #e1bfa8;
+  --chart-title-color: #4c215c;
+  --kpi-label-color: #7a6e6e;
+}
+
+.dark-mode {
+  --card-bg: #2b1d3a;
+  --card-border: #43365d;
+  --chart-title-color: #f0e9f9;
+  --kpi-label-color: #c9a7d6;
+}
+*/

@@ -1,0 +1,123 @@
+/* PrimeNG Dialog Theme Overrides */
+:host ::ng-deep .p-dialog-mask {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+:host ::ng-deep .p-dialog {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 800px;
+  margin: 0;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  background: #1e40af;
+  color: #ffffff;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon {
+  color: #ffffff !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 1.25rem !important;
+  padding: 0.5rem !important;
+  border-radius: 50% !important;
+  transition: all 0.2s ease !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: scale(1.05) !important;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  background: #ffffff;
+  color: #374151;
+  padding: 1.5rem;
+  max-height: calc(90vh - 120px);
+  overflow-y: auto;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+  padding: 1.5rem 2rem;
+  border-radius: 0 0 16px 16px;
+}
+
+/* Dialog Header Content */
+.dialog-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dialog-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-white);
+  text-shadow: 0 2px 5px var(--shadow-dark);
+  margin: 0;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  :host ::ng-deep .p-dialog {
+    width: 95vw;
+    max-height: 95vh;
+  }
+  
+  :host ::ng-deep .p-dialog .p-dialog-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .dialog-title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep .p-dialog {
+    width: 98vw;
+    max-height: 98vh;
+  }
+}

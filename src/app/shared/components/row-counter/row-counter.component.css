@@ -1,0 +1,57 @@
+/* Row Counter Component Styles */
+.row-counter-container {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.row-counter-container.compact {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.row-counter-container.compact .flex {
+  gap: 0.5rem;
+}
+
+.row-counter-container.compact span {
+  font-size: 0.875rem; /* text-sm equivalent */
+}
+
+/* Input number styling */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Focus ring for accessibility */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Ensure proper spacing and alignment */
+.row-counter-container .flex {
+  align-items: center;
+}
+
+.row-counter-container span {
+  white-space: nowrap;
+}
+
+/* Match heading font size and weight */
+.row-counter-container span {
+  font-weight: 500; /* font-medium equivalent */
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .row-counter-container .flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

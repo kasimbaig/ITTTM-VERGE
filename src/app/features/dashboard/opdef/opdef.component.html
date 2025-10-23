@@ -1,0 +1,19 @@
+<div class="chart-card">
+  <div class="chart-header">
+    <i class="pi pi-exclamation-triangle"></i>
+    <span>OPDEF Overview</span>
+  </div>
+
+  <p-chart type="bar" [data]="chartData" [options]="chartOptions" (onDataSelect)="onCommandClick($event)"></p-chart>
+
+  <p-dialog header="OPDEF Details" [(visible)]="dialogVisible" modal>
+    <p-table [value]="details">
+      <ng-template pTemplate="header">
+        <tr><th>Ship</th><th>Dept</th><th>Date</th><th>DART #</th><th>Description</th></tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr><td>{{row.ship}}</td><td>{{row.department}}</td><td>{{row.date}}</td><td>{{row.dartNo}}</td><td>{{row.desc}}</td></tr>
+      </ng-template>
+    </p-table>
+  </p-dialog>
+</div>

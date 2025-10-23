@@ -1,0 +1,50 @@
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 150px; /* Ensure spinner has space */
+}
+
+.loader {
+  border: 4px solid var(--card-border); /* Light grey border */
+  border-top: 4px solid #b35d3e; /* Peach color for spinner part */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+.dark-mode .loader {
+  border: 4px solid var(--card-border);
+  border-top: 4px solid #e6b89c; /* Lighter peach for dark mode */
+}
+
+.loading-text {
+  margin-top: 15px;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.dark-mode .loading-text {
+  color: var(--text-color);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Assuming global color variables are accessible */
+/*
+:root {
+  --text-color: #3b2f2f;
+  --card-border: #e1bfa8;
+}
+.dark-mode {
+  --text-color: #f0e9f9;
+  --card-border: #43365d;
+}
+*/

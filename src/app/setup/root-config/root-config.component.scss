@@ -1,0 +1,1226 @@
+@use '../shared-setup.scss';
+
+.root-config-container {
+  padding: 20px;
+  // background-color: #f8f9fa;
+  // min-height: 100vh;
+
+  .root-config-header {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .btn-back {
+          background: linear-gradient(135deg, #007bff, #0056b3);
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+
+          i {
+            font-size: 0.9rem;
+          }
+        }
+
+        .root-config-title {
+          margin: 0;
+          color: #2c3e50;
+          font-size: 1.8rem;
+          font-weight: 700;
+          letter-spacing: -0.5px;
+        }
+      }
+
+      .header-right {
+        display: flex;
+        gap: 12px;
+
+        .btn-switch-mode {
+          background: linear-gradient(135deg, #007bff, #0056b3);
+          color: white;
+          border: none;
+          padding: 10px;
+          border-radius: 6px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+
+          i {
+            font-size: 1rem;
+          }
+        }
+
+        .btn-add-primary {
+          background: linear-gradient(135deg, #007bff, #0056b3);
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+          &:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+
+          i {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+
+  .root-config-content {
+    max-width: 1400px;
+    margin: 0 auto;
+
+    .content-section {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 20px;
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        h3 {
+          color: #2c3e50;
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin: 0 0 10px 0;
+        }
+
+        p {
+          color: #6c757d;
+          font-size: 1rem;
+          line-height: 1.6;
+          margin: 0;
+        }
+
+        .btn-add {
+          background: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+
+          &:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+
+          i {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+
+  // Switch Mode Dialog Styles
+  .switch-mode-dialog {
+    ::ng-deep .p-dialog-header {
+      background: #2c3e50;
+      color: white;
+      border-radius: 8px 8px 0 0;
+    }
+
+    ::ng-deep .p-dialog-title {
+      color: white;
+      font-weight: 600;
+    }
+
+    ::ng-deep .p-dialog-content {
+      padding: 0;
+    }
+  }
+
+  .switch-mode-content {
+    padding: 20px;
+
+    .switch-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 100%;
+
+      .switch-mode-tile {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+          border-color: #007bff;
+        }
+
+        &:active {
+          transform: translateY(-2px);
+        }
+
+        .tile-icon {
+          text-align: center;
+          margin-bottom: 20px;
+
+          i {
+            font-size: 3rem;
+            color: #007bff;
+          }
+        }
+
+        .tile-content {
+          text-align: center;
+          margin-bottom: 20px;
+
+          .tile-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+          }
+
+          .tile-description {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+          }
+        }
+
+        .tile-arrow {
+          text-align: center;
+
+          i {
+            font-size: 1.2rem;
+            color: #007bff;
+            transition: transform 0.3s ease;
+          }
+        }
+
+        &:hover .tile-arrow i {
+          transform: translateX(5px);
+        }
+
+        // Border color variations
+        &.border-blue-500 {
+          border-color: #3b82f6;
+          .tile-icon i { color: #3b82f6; }
+          .tile-arrow i { color: #3b82f6; }
+        }
+
+        &.border-orange-500 {
+          border-color: #f97316;
+          .tile-icon i { color: #f97316; }
+          .tile-arrow i { color: #f97316; }
+        }
+
+        &.border-yellow-500 {
+          border-color: #eab308;
+          .tile-icon i { color: #eab308; }
+          .tile-arrow i { color: #eab308; }
+        }
+
+        &.border-green-500 {
+          border-color: #22c55e;
+          .tile-icon i { color: #22c55e; }
+          .tile-arrow i { color: #22c55e; }
+        }
+
+        &.border-purple-500 {
+          border-color: #a855f7;
+          .tile-icon i { color: #a855f7; }
+          .tile-arrow i { color: #a855f7; }
+        }
+
+        &.border-red-500 {
+          border-color: #ef4444;
+          .tile-icon i { color: #ef4444; }
+          .tile-arrow i { color: #ef4444; }
+        }
+      }
+    }
+  }
+
+  // Responsive Design - Mobile First Approach
+  @media (max-width: 1200px) {
+    padding: 16px;
+
+    .root-config-header {
+      padding: 16px;
+      margin-bottom: 16px;
+
+      .header-content {
+        .header-left {
+          gap: 16px;
+
+          .root-config-title {
+            font-size: 1.6rem;
+          }
+        }
+      }
+    }
+
+    .root-config-content {
+      .content-section {
+        padding: 24px;
+      }
+    }
+  }
+
+  @media (max-width: 992px) {
+    padding: 14px;
+
+    .root-config-header {
+      padding: 14px;
+      margin-bottom: 14px;
+
+      .header-content {
+        .header-left {
+          gap: 14px;
+
+          .btn-back {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+
+          .root-config-title {
+            font-size: 1.5rem;
+          }
+        }
+
+        .header-right {
+          gap: 10px;
+
+          .btn-switch-mode {
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+          }
+
+          .btn-add-primary {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .root-config-content {
+      .content-section {
+        padding: 20px;
+
+        .table-header {
+          h3 {
+            font-size: 1.3rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+
+          .btn-add {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+
+    .root-config-header {
+      padding: 12px;
+      margin-bottom: 12px;
+
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+
+        .header-left {
+          flex-direction: column;
+          gap: 12px;
+          align-items: center;
+
+          .btn-back {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+
+          .root-config-title {
+            font-size: 1.4rem;
+            text-align: center;
+          }
+        }
+
+        .header-right {
+          gap: 8px;
+          justify-content: center;
+
+          .btn-switch-mode {
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+          }
+
+          .btn-add-primary {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+
+    .root-config-content {
+      .content-section {
+        padding: 16px;
+
+        .table-header {
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+
+          h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+          }
+
+          p {
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+          }
+
+          .btn-add {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .switch-mode-content {
+      padding: 16px;
+
+      .switch-mode-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+
+        .switch-mode-tile {
+          padding: 20px;
+
+          .tile-icon i {
+            font-size: 2.5rem;
+          }
+
+          .tile-content {
+            .tile-title {
+              font-size: 1.2rem;
+            }
+
+            .tile-description {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 8px;
+
+    .root-config-header {
+      padding: 10px;
+      margin-bottom: 10px;
+
+      .header-content {
+        gap: 12px;
+
+        .header-left {
+          gap: 10px;
+
+          .btn-back {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+          }
+
+          .root-config-title {
+            font-size: 1.2rem;
+          }
+        }
+
+        .header-right {
+          gap: 6px;
+
+          .btn-switch-mode {
+            width: 28px;
+            height: 28px;
+            padding: 4px;
+          }
+
+          .btn-add-primary {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+
+    .root-config-content {
+      .content-section {
+        padding: 12px;
+
+        .table-header {
+          gap: 10px;
+
+          h3 {
+            font-size: 1.1rem;
+          }
+
+          p {
+            font-size: 0.8rem;
+          }
+
+          .btn-add {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+
+    .switch-mode-content {
+      padding: 12px;
+
+      .switch-mode-grid {
+        gap: 12px;
+
+        .switch-mode-tile {
+          padding: 16px;
+
+          .tile-icon i {
+            font-size: 2rem;
+          }
+
+          .tile-content {
+            .tile-title {
+              font-size: 1.1rem;
+            }
+
+            .tile-description {
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px;
+
+    .root-config-header {
+      padding: 8px;
+      margin-bottom: 8px;
+
+      .header-content {
+        gap: 10px;
+
+        .header-left {
+          gap: 8px;
+
+          .btn-back {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+          }
+
+          .root-config-title {
+            font-size: 1.1rem;
+          }
+        }
+
+        .header-right {
+          gap: 5px;
+
+          .btn-switch-mode {
+            width: 26px;
+            height: 26px;
+            padding: 3px;
+          }
+
+          .btn-add-primary {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+
+    .root-config-content {
+      .content-section {
+        padding: 10px;
+
+        .table-header {
+          gap: 8px;
+
+          h3 {
+            font-size: 1rem;
+          }
+
+          p {
+            font-size: 0.75rem;
+          }
+
+          .btn-add {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+
+    .switch-mode-content {
+      padding: 10px;
+
+      .switch-mode-grid {
+        gap: 10px;
+
+        .switch-mode-tile {
+          padding: 14px;
+
+          .tile-icon i {
+            font-size: 1.8rem;
+          }
+
+          .tile-content {
+            .tile-title {
+              font-size: 1rem;
+            }
+
+            .tile-description {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Landscape orientation adjustments for mobile
+  @media (max-width: 768px) and (orientation: landscape) {
+    .root-config-header {
+      .header-content {
+        flex-direction: row;
+        text-align: left;
+        gap: 16px;
+
+        .header-left {
+          flex-direction: row;
+          gap: 16px;
+          align-items: center;
+        }
+
+        .header-right {
+          gap: 10px;
+          justify-content: flex-end;
+        }
+      }
+    }
+
+    .switch-mode-content {
+      .switch-mode-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+    }
+  }
+
+  // High DPI displays
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .switch-mode-tile {
+      .tile-icon i {
+        font-weight: 300; // Thinner icons for high DPI
+      }
+    }
+  }
+
+  // Print styles
+  @media print {
+    background: white;
+    padding: 0;
+
+    .root-config-header {
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+
+    .root-config-content {
+      .content-section {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+    }
+
+    .switch-mode-tile {
+      box-shadow: none;
+      border: 1px solid #ccc;
+      break-inside: avoid;
+    }
+  }
+}
+
+// Responsive Design for Small Screens
+@media (max-width: 1200px) {
+  .root-config-container {
+    padding: 16px;
+    
+    .root-config-header {
+      .header-content {
+        max-width: 100%;
+        
+        .header-left {
+          gap: 16px;
+          
+          .root-config-title {
+            font-size: 1.6rem;
+          }
+        }
+      }
+    }
+    
+    .root-config-content {
+      max-width: 100%;
+      
+      .content-section {
+        padding: 24px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .root-config-container {
+    padding: 14px;
+    
+    .root-config-header {
+      padding: 16px;
+      
+      .header-content {
+        .header-left {
+          gap: 14px;
+          
+          .root-config-title {
+            font-size: 1.5rem;
+          }
+          
+          .btn-back {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+        
+        .header-right {
+          gap: 10px;
+          
+          .btn-switch-mode {
+            width: 36px;
+            height: 36px;
+          }
+          
+          .btn-add-primary {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+    
+    .root-config-content {
+      .content-section {
+        padding: 20px;
+        
+        .table-header {
+          h3 {
+            font-size: 1.3rem;
+          }
+          
+          .btn-add {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .root-config-container {
+    padding: 12px;
+    
+    .root-config-header {
+      padding: 14px;
+      margin-bottom: 16px;
+      
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        
+        .header-left {
+          flex-direction: column;
+          gap: 12px;
+          align-items: center;
+          
+          .root-config-title {
+            font-size: 1.4rem;
+            text-align: center;
+          }
+          
+          .btn-back {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+        
+        .header-right {
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+          
+          .btn-switch-mode {
+            width: 40px;
+            height: 40px;
+          }
+          
+          .btn-add-primary {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+    
+    .root-config-content {
+      .content-section {
+        padding: 16px;
+        margin-bottom: 16px;
+        
+        .table-header {
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+          
+          h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+          }
+          
+          .btn-add {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .root-config-container {
+    padding: 10px;
+    
+    .root-config-header {
+      padding: 12px;
+      margin-bottom: 12px;
+      
+      .header-content {
+        gap: 12px;
+        
+        .header-left {
+          gap: 10px;
+          
+          .root-config-title {
+            font-size: 1.3rem;
+          }
+          
+          .btn-back {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+        }
+        
+        .header-right {
+          gap: 8px;
+          
+          .btn-switch-mode {
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+            
+            i {
+              font-size: 0.9rem;
+            }
+          }
+          
+          .btn-add-primary {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .root-config-content {
+      .content-section {
+        padding: 12px;
+        margin-bottom: 12px;
+        
+        .table-header {
+          gap: 10px;
+          
+          h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+          }
+          
+          .btn-add {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .root-config-container {
+    padding: 8px;
+    
+    .root-config-header {
+      padding: 10px;
+      margin-bottom: 10px;
+      
+      .header-content {
+        gap: 10px;
+        
+        .header-left {
+          gap: 8px;
+          
+          .root-config-title {
+            font-size: 1.2rem;
+          }
+          
+          .btn-back {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+        
+        .header-right {
+          gap: 6px;
+          
+          .btn-switch-mode {
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+          
+          .btn-add-primary {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .root-config-content {
+      .content-section {
+        padding: 10px;
+        margin-bottom: 10px;
+        
+        .table-header {
+          gap: 8px;
+          
+          h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+          }
+          
+          .btn-add {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .root-config-container {
+    padding: 6px;
+    
+    .root-config-header {
+      padding: 8px;
+      margin-bottom: 8px;
+      
+      .header-content {
+        gap: 8px;
+        
+        .header-left {
+          gap: 6px;
+          
+          .root-config-title {
+            font-size: 1.1rem;
+          }
+          
+          .btn-back {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+        }
+        
+        .header-right {
+          gap: 5px;
+          
+          .btn-switch-mode {
+            width: 28px;
+            height: 28px;
+            padding: 5px;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+          
+          .btn-add-primary {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .root-config-content {
+      .content-section {
+        padding: 8px;
+        margin-bottom: 8px;
+        
+        .table-header {
+          gap: 6px;
+          
+          h3 {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+          }
+          
+          .btn-add {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Switch Mode Dialog Responsive
+@media (max-width: 768px) {
+  .switch-mode-dialog {
+    .p-dialog {
+      width: 95vw !important;
+      max-width: none !important;
+    }
+    
+    .switch-mode-content {
+      .switch-mode-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        
+        .switch-mode-tile {
+          padding: 16px;
+          
+          .tile-icon {
+            width: 50px;
+            height: 50px;
+            
+            i {
+              font-size: 1.25rem;
+            }
+          }
+          
+          .tile-content {
+            .tile-title {
+              font-size: 1.1rem;
+            }
+            
+            .tile-description {
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .switch-mode-dialog {
+    .switch-mode-content {
+      .switch-mode-grid {
+        gap: 10px;
+        
+        .switch-mode-tile {
+          padding: 14px;
+          
+          .tile-icon {
+            width: 45px;
+            height: 45px;
+            
+            i {
+              font-size: 1.1rem;
+            }
+          }
+          
+          .tile-content {
+            .tile-title {
+              font-size: 1rem;
+            }
+            
+            .tile-description {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

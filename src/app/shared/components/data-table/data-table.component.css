@@ -1,0 +1,65 @@
+.data-table-container {
+  /* Inherits most styles from custom-navy-table in global or dashboard scss */
+  border-radius: 0.75rem;
+  overflow: hidden; /* Ensures rounded corners apply to table */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Lighter shadow for tables */
+}
+
+.custom-navy-table .p-datatable-thead > tr > th {
+  background-color: var(--table-header-bg, #1e40af) !important;
+  color: var(--table-header-text, #ffffff);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  padding: 0.8rem 1rem;
+}
+th{
+  background-color: var(--table-header-bg, #1e40af) !important;
+  color: var(--table-header-text, #ffffff) !important;
+}
+.dark-mode .custom-navy-table .p-datatable-thead > tr > th {
+  background-color: var(--table-header-bg-dark, #3b2a47) !important;
+  color: var(--table-header-text-dark, #f0e9f9);
+}
+
+.custom-navy-table .p-datatable-tbody > tr > td {
+  color: var(--table-body-text, #1e40af) !important;
+  background-color: var(--table-bg, #fffaf5);
+  border-bottom: 1px solid var(--table-border, #d2a788) !important;
+  transition: background 0.3s, transform 0.3s;
+  padding: 0.7rem 1rem;
+}
+
+.dark-mode .custom-navy-table .p-datatable-tbody > tr > td {
+  color: var(--table-body-text-dark, #f0e9f9) !important;
+  background-color: var(--table-bg-dark, #3b2a47);
+  border-bottom-color: var(--table-border-dark, #43365d) !important;
+}
+
+.custom-navy-table .p-datatable-tbody > tr:hover > td {
+  background-color: var(--hover-bg);
+  transform: none; /* Prevent scale on table rows if not desired */
+}
+
+/* For clickable rows */
+.p-datatable-single-selection .p-datatable-tbody > tr {
+  cursor: pointer;
+}
+
+/* Add custom variables if needed specific to table */
+/*
+:root {
+  --table-header-bg: #1e40af;
+  --table-header-text: #ffffff;
+  --table-body-text: #1e40af;
+  --table-bg: #fffaf5;
+  --table-border: #d2a788;
+}
+.dark-mode {
+  --table-header-bg-dark: #3b2a47;
+  --table-header-text-dark: #f0e9f9;
+  --table-body-text-dark: #f0e9f9;
+  --table-bg-dark: #3b2a47;
+  --table-border-dark: #43365d;
+}
+*/

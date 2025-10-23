@@ -1,0 +1,142 @@
+<div class="p-4">
+    <!-- Header Section -->
+    <div class="mb-2 text-center">
+        <h3 class="text-lg font-semibold text-green-700">Equipment Routine - <span class=" text-orange-500">Details</span> </h3>
+    </div>
+
+    <div class="bg-blue-600 -50 border-l-4 border-blue-500 text-blue-700 px-4 py-3 rounded-r mb-3 shadow-sm">
+        <div class="flex items-start">
+            <i class="pi pi-info-circle text-red-500 mt-1 mr-3 text-lg"></i>
+            <div>
+                <div class="font-semibold text-red-800 mb-1">Notice:</div>
+                <div class="text-sm leading-relaxed">It is mandatory to fill next routine due (Calendar and Running Hours based) for all equipment prior submitting SRAR Returns. The details are to be filled in 'Equipment Routine Due' tab. This information is being collected for roll out of Planned Maintenance (PM) module.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center mb-3 gap-2">
+        <!-- Equipment and Location Filters -->
+        <div class="flex gap-4 items-center">
+            <div class="flex items-center gap-2">
+                <label class="text-sm font-medium text-gray-700">Equipment:</label>
+                <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+                    [options]="srarEquipmentData"
+                    optionLabel="equipment_name"
+                    [filter]="true"
+                    filterBy="equipment_name"
+                    placeholder="Select Equipment"
+                    class="w-48"
+                    display="chip"
+                    [(ngModel)]="selectedEquipment">
+                </p-multiSelect>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex gap-2">
+            <button (click)="addEquipmentRoutine()"
+                class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+            </button>
+            <button (click)="editEquipmentRoutine()"
+                class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+            </button>
+            <button (click)="saveEquipmentRoutine()"
+                class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mb-6">
+        <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+            Equipment Routine Due ON
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-400 ">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border border-gray-400 p-2 text-center" >Eqpt Name</th>
+                        <th class="border border-gray-400 p-2 text-center" >Nomenclature</th>
+                        <th class="border border-gray-400 p-2 text-center" >Eqpt Code</th>
+                        <th class="border border-gray-400 p-2 text-center" >Loc On Board</th>
+                        <th class="border border-gray-400 p-2 text-center" >Ser No</th>
+                        <th class="border border-gray-400 p-2 text-center" >Hrs From Installation</th>
+                        <th class="border border-gray-400 p-2 text-center" >Frequency</th>
+                        <th class="border border-gray-400 p-2 text-center" >Running H/R Routine Due</th>
+                        <th class="border border-gray-400 p-2 text-center" >Date of Next Routine Due</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let item of equipmentRoutineData; let i = index">
+                        <tr class="bg-white">
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="text" 
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.equipment_name" placeholder="Equipment Name">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="text" 
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.nomenclature" placeholder="Nomenclature">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="text" 
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.equipment_code" placeholder="Equipment Code">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="text" 
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.location" placeholder="Location">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="text" 
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.serial_no" placeholder="Serial Number">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.hrs_from_installations" placeholder="0.00">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <select [disabled]="isEdit" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.frequency">
+                                    <option value="">Select Frequency</option>
+                                    <option value="1">Daily</option>
+                                    <option value="2">Weekly</option>
+                                    <option value="3">Monthly</option>
+                                    <option value="4">Quarterly</option>
+                                    <option value="5">Semi-Annually</option>
+                                    <option value="6">Annually</option>
+                                    <option value="7">As Required</option>
+                                </select>
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.running_hr_routine_due" placeholder="0.00">
+                            </td>
+                            <td class="border border-gray-400 p-2 text-center">
+                                <input [disabled]="isEdit" pInputText type="date"
+                                    class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                                    [(ngModel)]="item.date_of_nxt_routine">
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <tr *ngIf="equipmentRoutineData.length === 0">
+                        <td colspan="9" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+                            No equipment routine data available
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+      
+      

@@ -1,0 +1,1929 @@
+<div style="min-height: 100vh; background-color: #f9fafb; padding: 2rem 0;">
+  <div class="w-full px-4">
+    
+    <!-- Header with Back Button -->
+    <div class="bg-white shadow-sm border border-gray-200 mb-6">
+      <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-semibold text-white">
+            {{ mode === 'view' ? 'View SEG Form Report' : (mode === 'edit' ? 'Edit SEG Form Report' : 'Add SEG Form Report') }}
+          </h2>
+          
+          <!-- Back to Table button (for same component) -->
+          <button
+            *ngIf="!formOnlyMode"
+            type="button"
+            (click)="toggleView()"
+            style="padding: 1rem 1.5rem; background-color: transparent; color: white; font-weight: 500; border: 1px solid white; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 0 0 2px transparent;">
+            <i class="pi pi-arrow-left mr-2"></i> Back to Table
+          </button>
+          
+          <!-- Back to List button (for Commentor Sheet) -->
+          <button
+            *ngIf="formOnlyMode && (mode === 'edit' || mode === 'view')"
+            type="button"
+            (click)="goBackToList()"
+            style="padding: 1rem 1.5rem; background-color: transparent; color: white; font-weight: 500; border: 1px solid white; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 0 0 2px transparent;">
+            <i class="pi pi-arrow-left mr-2"></i> Back to List
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-step Progress Indicator -->
+    <div class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <h3 class="text-lg font-semibold text-gray-800">Multi-Step Form Progress</h3>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-600">Step {{ currentStep }} of {{ totalSteps }}:</span>
+            <span class="text-sm font-medium text-blue-600">{{ getStepTitle() }}</span>
+            <span class="text-sm text-gray-500">({{ currentMode }} mode)</span>
+          </div>
+        </div>
+
+        <!-- Step Progress Dots -->
+        <div class="flex items-center space-x-2">
+          <div *ngFor="let step of [1, 2, 3]"
+            class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200"
+            [class]="step <= currentStep ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600'">
+            {{ step }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route Configuration Section - Only show in edit mode -->
+    <div *ngIf="!isAddMode && (reportData?.id || record?.id)" class="bg-white shadow-sm border border-gray-200 mb-6">
+      <div class="p-6">
+        <app-route-config 
+          [useApi]="true"
+          [transactionId]="reportData?.id || record?.id"
+          [submodule]="6"
+          [vesselId]="selectedShipId ? selectedShipId : undefined"
+          [formTitle]="'SEG Form Route Config'"
+          [hideButtons]="isViewMode"
+          (routeConfigSaved)="onRouteConfigSaved($event)"
+          (nextStepClicked)="onNextStep($event)"
+          (timelineToggled)="onTimelineToggle($event)">
+        </app-route-config>
+      </div>
+    </div>
+
+    <form [formGroup]="segForm" (ngSubmit)="onSubmitReport()" class="w-full space-y-4">
+
+                <!-- REQUEST FOR DI/ DR -->
+                <div class="w-full p-6 bg-white rounded-lg shadow-lg border border-gray-200" *ngIf="showDiDrForm">
+                    <h1
+                        class="text-2xl font-bold text-center text-blue-800 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                        REQUEST FOR DI/ DR</h1>
+
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md">
+                        <ol class="space-y-6">
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                    1. System Details
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Ship:</label>
+                                        <select formControlName="ship" (change)="onShipChange($event)"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            [disabled]="isLoadingShips">
+                                            <option value="">Select Ship</option>
+                                            <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="isLoadingShips" class="text-xs text-gray-500 mt-1">Loading ships...
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">System:</label>
+                                        <select formControlName="sd_system" (change)="onSystemChange($event)"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            [disabled]="isLoadingSystems">
+                                            <option value="">Select System</option>
+                                            <option *ngFor="let system of systems" [value]="system.id">{{ system.name }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="isLoadingSystems" class="text-xs text-gray-500 mt-1">Loading
+                                            systems...</div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Sub System:</label>
+                                        <input type="text" formControlName="sd_sub_system"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Sub Sub System:</label>
+                                        <input type="text" formControlName="sd_sub_sub_system"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                    2. Processing Element Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm  font-medium text-gray-700 mb-1">Serial No:</label>
+                                        <input type="text" formControlName="ped_sr_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Make/OEM of
+                                                Module:</label>
+                                            <input type="text" formControlName="ped_make_or_oem_module"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">OEM Part No of
+                                                Motherboard/SBC:</label>
+                                            <input type="text" formControlName="ped_oem_part_no_motherboard_or_sbd"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Patt No:</label>
+                                            <input type="text" formControlName="ped_patt_no"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    3. Memory Media Details (To be filled, as it is changeable)
+                                </p>
+                                <div class="space-y-4">
+                                    <!-- First Row: Media Type, Size, Interface -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Media Type:</label>
+                                            <input type="text" formControlName="mmd_media_type"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Size:</label>
+                                            <div class="flex">
+                                                <input type="text" formControlName="mmd_size"
+                                                    class="px-3 py-2 border border-black rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                                <span
+                                                    class="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-600">KB/MB/GB/TB</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Interface:</label>
+                                            <select formControlName="mmd_interface"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                                <option value="">Select Interface</option>
+                                                <option value="2.5">2.5"</option>
+                                                <option value="3.5">3.5"</option>
+                                                <option value="IDE">IDE</option>
+                                                <option value="SATA">SATA</option>
+                                                <option value="SCSI">SCSI</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Second Row: SCSI, OS -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">SCSI:</label>
+                                            <input type="text" formControlName="mmd_scsi"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">OS:</label>
+                                            <input type="text" formControlName="mmd_os"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Defect Summary to ESS Repair/Restoration Details -->
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md mt-6">
+                        <ol class="space-y-6">
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                                    4. Defect Summary
+                                </p>
+                                <p class="text-sm text-gray-600 mb-4">(Include CMMS RA details having DART No., the data
+                                    should be fed back to INSMA for defect summary)</p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-2">Upload File:</label>
+                                        <div
+                                            class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                            <input type="file" class="hidden" id="defect-file"
+                                                accept=".jpg,.jpeg,.png,.pdf" (change)="onDefectFileChange($event)" />
+                                            <label for="defect-file" class="cursor-pointer flex flex-col items-center">
+                                                <svg class="w-8 h-8 text-gray-400 mb-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                    </path>
+                                                </svg>
+                                                <span class="text-sm text-gray-600">Click to upload file (.jpg, .png,
+                                                    .pdf)</span>
+                                            </label>
+                                        </div>
+
+                                        <!-- File Preview Section -->
+                                        <div *ngIf="defectFileName"
+                                            class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center">
+                                                    <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span class="text-sm font-medium text-green-800">{{ defectFileName
+                                                        }}</span>
+                                                </div>
+                                                <button type="button" (click)="removeDefectFile()"
+                                                    class="text-red-600 hover:text-red-800 text-sm">
+                                                    Remove
+                                                </button>
+                                            </div>
+
+                                            <!-- Image Preview -->
+                                            <div *ngIf="defectFilePreview" class="mt-3">
+                                                <img [src]="defectFilePreview" [alt]="defectFileName"
+                                                    class="max-w-full h-32 object-contain rounded border">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                    Submission Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Submitted By:</label>
+                                        <input type="text" formControlName="didr_ds_submitted_by"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Status:</label>
+                                        <select formControlName="didr_ds_status"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Approved">Approved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                    Verification Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Verified By: (By
+                                            CO/HOD)</label>
+                                        <input type="text" formControlName="didr_ds_verified_by"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                        <p class="text-sm font-medium text-green-800 mb-2">
+                                            <span class="font-semibold">Status (visible to SS):</span> Request Approved.
+                                            Request No
+                                        </p>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="text" formControlName="didr_ds_request_no"
+                                                placeholder="Request Number"
+                                                class="px-3 py-1 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                        </div>
+                                        <p class="text-sm text-green-700 mt-2">Pending Acceptance</p>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    ESS Repair/Restoration Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">5. Job Ref No:</span>
+                                        </label>
+                                        <input type="text" formControlName="didr_ess_repair_or_restoration_job_ref_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">Job Assigned To:</span>
+                                        </label>
+                                        <input type="text"
+                                            formControlName="didr_ess_repair_or_restoration_job_assign_to"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">6. Remarks:</span>
+                                        </label>
+                                        <textarea rows="3" formControlName="didr_ess_repair_or_restoration_remarks"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                                    </div>
+                                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">
+                                                <span class="font-bold underline">Status (visible to SS):</span>
+                                            </label>
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-gray-700">Job ref no:</span>
+                                                <input type="text"
+                                                    formControlName="didr_ess_repair_or_restoration_status"
+                                                    class="px-2 py-1 border border-black rounded text-gray-700 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- SEG Remarks -->
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md mt-6">
+                        <ol class="space-y-6">
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                                    7. Remarks from SEG
+                                </p>
+                                <p class="text-sm text-gray-600 mb-4">(for SS) (file upload option .pdf, jpg, png),
+                                    should be uploaded into KMS</p>
+                                <div
+                                    class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                    <input type="file" class="hidden" formControlName="didr_remarks_from_seg_file"
+                                        id="seg-file" accept=".pdf,.jpg,.jpeg,.png"
+                                        (change)="onSegFileChange($event)" />
+                                    <label for="seg-file" class="cursor-pointer flex flex-col items-center">
+                                        <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                            </path>
+                                        </svg>
+                                        <span class="text-sm text-gray-600">Click to upload file (.pdf, .jpg,
+                                            .png)</span>
+                                    </label>
+                                </div>
+
+                                <!-- File Preview Section -->
+                                <div *ngIf="segFileName"
+                                    class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="text-sm font-medium text-green-800">{{ segFileName }}</span>
+                                        </div>
+                                        <button type="button" (click)="removeSegFile()"
+                                            class="text-red-600 hover:text-red-800 text-sm">
+                                            Remove
+                                        </button>
+                                    </div>
+
+                                    <!-- Image Preview -->
+                                    <div *ngIf="segFilePreview" class="mt-3">
+                                        <img [src]="segFilePreview" [alt]="segFileName"
+                                            class="max-w-full h-32 object-contain rounded border">
+                                    </div>
+                                </div>
+
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-3 mt-4">
+                                    <p class="text-sm font-medium text-green-800">
+                                        <span class="font-semibold">Status (visible to SS):</span> Job ref no
+                                        <input type="text" formControlName="didr_remarks_from_seg_status"
+                                            class="px-2 py-1 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ml-3" />
+                                        closed
+                                    </p>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                    8. Handed over to (if applicable)
+                                </p>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Handed over to:</label>
+                                    <input type="text" formControlName="didr_handed_over_to"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    9. Ship's Feedback
+                                </p>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Ship's Feedback:</label>
+                                    <input type="text" formControlName="didr_ship_feedback"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Action Buttons - Below Legends Section -->
+                    <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200 rounded-lg mt-6">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-4 justify-center">
+                                <button *ngIf="!isViewMode" type="button"
+                                    class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                    (click)="onCancel()">
+                                    Cancel
+                                </button>
+                                <button type="button" (click)="onClear()"
+                                    class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                                    Clear Form
+                                </button>
+                                <button type="button" (click)="onSaveDraft()"
+                                    class="px-6 py-2 bg-orange-500 text-white font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                                    {{ isEditMode ? 'Update Draft' : 'Save Draft' }}
+                                </button>
+                                <!-- <button 
+                    type="button"
+                    (click)="onSubmitReport()"
+                    class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                    {{ isEditMode ? 'Update' : 'Submit Report' }}
+                </button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- REQUEST FOR ES REPAIR/ RESTORATION -->
+                <div class="w-full p-6 bg-white rounded-lg shadow-lg border border-gray-200 mt-6"
+                    *ngIf="showESRepairForm">
+                    <h1
+                        class="text-2xl font-bold text-center text-blue-800 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                        REQUEST FOR ES REPAIR/ RESTORATION</h1>
+
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md">
+                        <ol class="space-y-6">
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                    10. System Details (auto fill from extraction form, if it exist)
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Ship:</label>
+                                        <select formControlName="ship" (change)="onShipChange($event)"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            [disabled]="isLoadingShips">
+                                            <option value="">Select Ship</option>
+                                            <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="isLoadingShips" class="text-xs text-gray-500 mt-1">Loading ships...
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">System:</label>
+                                        <select formControlName="sd_system" (change)="onSystemChange($event)"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            [disabled]="isLoadingSystems">
+                                            <option value="">Select System</option>
+                                            <option *ngFor="let system of systems" [value]="system.id">{{ system.name }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="isLoadingSystems" class="text-xs text-gray-500 mt-1">Loading
+                                            systems...</div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Sub System:</label>
+                                        <input type="text" formControlName="sd_sub_system"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Device:</label>
+                                        <input type="text" formControlName="sd_sub_sub_system"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                    11. Processing Element Details (auto fill from extraction form, if it exist)
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Make/OEM of
+                                            Module:</label>
+                                        <input type="text" formControlName="ped_make_or_oem_module"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">OEM Part No of
+                                            Motherboard/SBC:</label>
+                                        <input type="text" formControlName="ped_oem_part_no_motherboard_or_sbd"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Patt No:</label>
+                                        <input type="text" formControlName="ped_patt_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Serial No:</label>
+                                        <input type="text" formControlName="ped_sr_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    12. Memory Media Details (To be filled, as it is changeable)
+                                </p>
+                                <div class="space-y-4">
+                                    <!-- First Row: Media Type, Size, Interface -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Media Type:</label>
+                                            <input type="text" formControlName="mmd_media_type"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Size:</label>
+                                            <div class="flex">
+                                                <input type="text" formControlName="mmd_size"
+                                                    class="px-3 py-2 border border-black rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                                <span
+                                                    class="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-600">KB/MB/GB/TB</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Interface:</label>
+                                            <select formControlName="mmd_interface"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                                <option value="">Select Interface</option>
+                                                <option value="2.5">2.5"</option>
+                                                <option value="3.5">3.5"</option>
+                                                <option value="IDE">IDE</option>
+                                                <option value="SATA">SATA</option>
+                                                <option value="SCSI">SCSI</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Second Row: SCSI, OS -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">SCSI:</label>
+                                            <input type="text" formControlName="mmd_scsi"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">OS:</label>
+                                            <input type="text" formControlName="mmd_os"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Defect Summary to ESS Repair/Restoration Details -->
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md mt-6">
+                        <ol class="space-y-6">
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                                    13. Defect Summary
+                                </p>
+                                <p class="text-sm text-gray-600 mb-4">(Include CMMS RA details having DART No., the data
+                                    should be fed back to INSMA for defect summary)</p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-2">Upload File:</label>
+                                        <div
+                                            class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                            <input type="file" class="hidden" id="defect-file"
+                                                accept=".jpg,.jpeg,.png,.pdf" (change)="onDefectFileChange($event)" />
+                                            <label for="defect-file" class="cursor-pointer flex flex-col items-center">
+                                                <svg class="w-8 h-8 text-gray-400 mb-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                    </path>
+                                                </svg>
+                                                <span class="text-sm text-gray-600">Click to upload file (.jpg, .png,
+                                                    .pdf)</span>
+                                            </label>
+                                        </div>
+
+                                        <!-- File Preview Section -->
+                                        <div *ngIf="defectFileName"
+                                            class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center">
+                                                    <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    <span class="text-sm font-medium text-green-800">{{ defectFileName
+                                                        }}</span>
+                                                </div>
+                                                <button type="button" (click)="removeDefectFile()"
+                                                    class="text-red-600 hover:text-red-800 text-sm">
+                                                    Remove
+                                                </button>
+                                            </div>
+
+                                            <!-- Image Preview -->
+                                            <div *ngIf="defectFilePreview" class="mt-3">
+                                                <img [src]="defectFilePreview" [alt]="defectFileName"
+                                                    class="max-w-full h-32 object-contain rounded border">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                    Submission Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Submitted By:</label>
+                                        <input type="text" formControlName="esr_ro_submitted_by"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Status:</label>
+                                        <select formControlName="esr_ro_status"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Approved">Approved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                    14. Verification Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Verified By: (By
+                                            CO/HOD)</label>
+                                        <input type="text" formControlName="esr_ro_verified_by"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                        <p class="text-sm font-medium text-green-800 mb-2">
+                                            <span class="font-semibold">Status (visible to SS):</span> Request Approved.
+                                            Request No
+                                        </p>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="text" formControlName="esr_ro_request_no"
+                                                placeholder="Request Number"
+                                                class="px-3 py-1 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                        </div>
+                                        <p class="text-sm text-green-700 mt-2">Pending Acceptance</p>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    ESS Repair/Restoration Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">15. Job Ref No:</span>
+                                        </label>
+                                        <input type="text" formControlName="esr_ess_repair_or_restoration_job_ref_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">Job Assigned To:</span>
+                                        </label>
+                                        <input type="text" formControlName="esr_ess_repair_or_restoration_job_assign_to"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">16. Remarks:</span>
+                                        </label>
+                                        <textarea rows="3" formControlName="esr_ess_repair_or_restoration_remarks"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                                    </div>
+                                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">
+                                                <span class="font-bold underline">Status (visible to SS):</span>
+                                            </label>
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-gray-700">Job ref no:</span>
+                                                <input type="text"
+                                                    formControlName="esr_ess_repair_or_restoration_status"
+                                                    class="px-2 py-1 border border-black rounded text-gray-700 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Disk Info Captured Section -->
+                    <div
+                        class="bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                                17. Disk Info Captured
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-sm font-medium text-gray-700">Disk Info Captured:</span>
+                                    <div class="flex space-x-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" formControlName="esr_disk_info_captured" value="Yes"
+                                                class="mr-2 text-blue-600 focus:ring-blue-500" />
+                                            <span class="text-sm text-gray-700">YES</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" formControlName="esr_disk_info_captured" value="No"
+                                                class="mr-2 text-blue-600 focus:ring-blue-500" />
+                                            <span class="text-sm text-gray-700">NO</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <!-- Show MMD Health Prediction when YES is selected -->
+                                    <div class="flex flex-col" *ngIf="isDiskInfoCaptured()">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">MMD Health
+                                            Prediction:</label>
+                                        <div class="flex items-center space-x-4">
+                                            <select formControlName="esr_mmd_health_prediction"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                                <option value="">Select Status</option>
+                                                <option value="Good">Good</option>
+                                                <option value="Safe">Safe</option>
+                                                <option value="Fail">Fail</option>
+                                                <option value="Likely to Fail">Likely to Fail</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Show Remarks when NO is selected -->
+                                    <div class="flex flex-col" *ngIf="!isDiskInfoCaptured()">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Remarks:</label>
+                                        <div class="flex items-center space-x-4">
+                                            <input type="text" formControlName="esr_mmd_health_prediction"
+                                                placeholder="Enter remarks"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 w-full" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disk Cloning/Imaging Section -->
+                    <div
+                        class="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                Disk Cloning/Imaging
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Tool Used:</label>
+                                        <select formControlName="esr_dc_tool_used"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                            <option value="">Select Tool (Drop Down from Tools master)</option>
+                                            <option value="CloneTool">CloneTool</option>
+                                            <option value="DiskImager">DiskImager</option>
+                                            <option value="Acronis">Acronis</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Clone Disk Name:</label>
+                                        <input type="text" formControlName="esr_dc_clone_disk_name"
+                                            placeholder="Enter clone disk name"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        <span class="font-semibold">Example:</span> NOMENCLATURE –
+                                        SHIPNAME_SYSTEM_SUBSYSTEM_SUB_SUBSYTES_TYPEofMMD_TYPEofINTERFACE_MMDSIZE_OS_CT_AppVersion_DATE
+                                    </p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File (md5sum stored
+                                        in a file):</label>
+                                    <div
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                        <input type="file" formControlName="esr_dc_hash_value_file" class="hidden"
+                                            id="hash-value-file" accept=".txt,.md5,.hash"
+                                            (change)="onHashValueFileChange($event)" />
+                                        <label for="hash-value-file" class="cursor-pointer flex flex-col items-center">
+                                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                </path>
+                                            </svg>
+                                            <span class="text-sm text-gray-600">Click to upload hash value file (.txt,
+                                                .md5, .hash)</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- File Preview Section -->
+                                    <div *ngIf="hashValueFileName"
+                                        class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium text-green-800">{{ hashValueFileName
+                                                    }}</span>
+                                            </div>
+                                            <button type="button" (click)="removeHashValueFile()"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Image Preview -->
+                                        <div *ngIf="hashValueFilePreview" class="mt-3">
+                                            <img [src]="hashValueFilePreview" [alt]="hashValueFileName"
+                                                class="max-w-full h-32 object-contain rounded border">
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Example: NOMENCLATURE – SHIPNAME_SYSTEM_SUBSYSTEM_MMDSIZE_TYPEofMMD_hash.txt
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disk Mounting Section -->
+                    <div
+                        class="bg-gradient-to-br from-gray-50 to-slate-50 border-2 border-gray-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-gray-500 rounded-full mr-3"></span>
+                                Disk Mounting
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Verification of Partition
+                                        Structure (fdisk):</label>
+                                    <select formControlName="esr_dm_verification_of_partion_structre"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Status</option>
+                                        <option value="Verified">Verified</option>
+                                        <option value="Not verified">Not verified</option>
+                                        <option value="NA">NA</option>
+                                    </select>
+                                    <p class="text-xs text-gray-500 mt-1">(Dropdown with 3 options)</p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Verification of File
+                                        System:</label>
+                                    <select formControlName="esr_dm_verification_of_file_system"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Status</option>
+                                        <option value="Verified">Verified</option>
+                                        <option value="Not verified">Not verified</option>
+                                        <option value="NA">NA</option>
+                                    </select>
+                                    <p class="text-xs text-gray-500 mt-1">(Dropdown with 3 options)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boot Trials Section -->
+                    <div
+                        class="bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                                20. Boot Trials
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Boot Trial Remarks:</label>
+                                    <textarea rows="3" formControlName="esr_boot_trial_remarks"
+                                        placeholder="Enter boot trial remarks"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Repository Details Section -->
+                    <div
+                        class="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-teal-500 rounded-full mr-3"></span>
+                                Repository Details
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Nomenclature of Root
+                                        Folder:</label>
+                                    <input type="text" formControlName="esr_rd_nomenclature_of_root_folder"
+                                        placeholder="Enter root folder name"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Example: SHIPNAME_SYSTEM_SUBSYSTEM_MMDSIZE_TYPEofMMD
+                                    </p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Stored In:</label>
+                                    <select formControlName="esr_rd_stored_in"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Storage (Drop down from Storage master)</option>
+                                        <option value="/backup/location">Free NAS</option>
+                                        <option value="/qnap/storage">QNAP NAS</option>
+                                        <option value="/other/storage">Other</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-2">Disk Info File:</label>
+                                    <div
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                        <input type="file" class="hidden" id="disk-info-file" accept=".txt,.info,.log"
+                                            formControlName="esr_rd_disk_info_file"
+                                            (change)="onDiskInfoFileChange($event)" />
+                                        <label for="disk-info-file" class="cursor-pointer flex flex-col items-center">
+                                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                </path>
+                                            </svg>
+                                            <span class="text-sm text-gray-600">Click to upload disk info file (.txt,
+                                                .info, .log)</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- File Preview Section -->
+                                    <div *ngIf="diskInfoFileName"
+                                        class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium text-green-800">{{ diskInfoFileName
+                                                    }}</span>
+                                            </div>
+                                            <button type="button" (click)="removeDiskInfoFile()"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Image Preview -->
+                                        <div *ngIf="diskInfoFilePreview" class="mt-3">
+                                            <img [src]="diskInfoFilePreview" [alt]="diskInfoFileName"
+                                                class="max-w-full h-32 object-contain rounded border">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File:</label>
+                                    <div
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                        <input type="file" class="hidden"
+                                            formControlName="esr_rd_hash_value_stored_in_file"
+                                            id="hash-value-stored-file" accept=".txt,.md5,.hash"
+                                            (change)="onHashValueStoredFileChange($event)" />
+                                        <label for="hash-value-stored-file"
+                                            class="cursor-pointer flex flex-col items-center">
+                                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                </path>
+                                            </svg>
+                                            <span class="text-sm text-gray-600">Click to upload hash value file (.txt,
+                                                .md5, .hash)</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- File Preview Section -->
+                                    <div *ngIf="hashValueStoredFileName"
+                                        class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium text-green-800">{{
+                                                    hashValueStoredFileName }}</span>
+                                            </div>
+                                            <button type="button" (click)="removeHashValueStoredFile()"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Image Preview -->
+                                        <div *ngIf="hashValueStoredFilePreview" class="mt-3">
+                                            <img [src]="hashValueStoredFilePreview" [alt]="hashValueStoredFileName"
+                                                class="max-w-full h-32 object-contain rounded border">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Cloned Disk or Image:</label>
+                                    <input type="text" formControlName="esr_rd_cloned_disk_or_image"
+                                        placeholder="Enter cloned disk or image name"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h4 class="text-sm font-semibold text-blue-800 mb-2">The Root Folder should include
+                                        the following:</h4>
+                                    <ul class="space-y-1 text-sm text-blue-700">
+                                        <li class="flex items-center">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                            DISK INFO FILE
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                            CLONED DISC/IMAGE (USING DD)
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                            HASH VALUE STORED IN A FILE
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image/Clone Restored From Section -->
+                    <div
+                        class="bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-amber-500 rounded-full mr-3"></span>
+                                22. Image/Clone Restored From
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Image or Clone Restored
+                                        From:</label>
+                                    <input type="text" formControlName="esr_image_or_clone_restored_from"
+                                        placeholder="Enter image or clone name"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Remarks by SEG Section -->
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
+                                23. Remarks by SEG
+                            </h3>
+                            <div class="flex flex-col">
+                                <label class="text-sm font-medium text-gray-700 mb-1">SEG Remarks:</label>
+                                <textarea rows="4" formControlName="esr_remarks_by_seg"
+                                    placeholder="Enter remarks from SEG"
+                                    class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Handover Details -->
+                    <div
+                        class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                24. Handed over to
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Handed over to:</label>
+                                    <input type="text" formControlName="esr_handed_over_to"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ship Feedback -->
+                    <div
+                        class="bg-gradient-to-br from-purple-50 to-violet-50 border-2 border-purple-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                25. Feedback of SS
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Feedback:</label>
+                                    <input type="text" formControlName="esr_feedback_of_ss"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons for ES Repair/Restoration Section -->
+                    <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200 rounded-lg mt-6">
+                        <div class="p-6">
+                            <div class="flex flex-wrap gap-3 justify-center">
+                                <button *ngIf="!isViewMode" type="button"
+                                    class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                    (click)="onCancel()">
+                                    Cancel
+                                </button>
+                                <button type="button" (click)="onClear()"
+                                    class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                                    Clear Form
+                                </button>
+                                <button type="button"
+                                    class="px-6 py-2 bg-orange-500 text-white font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                    (click)="onSaveDraft()">
+                                    {{ isEditMode ? 'Update Draft' : 'Save Draft' }}
+                                </button>
+                                <!-- <button 
+                    type="button"
+                    class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                    (click)="onSubmitReport()">
+                    {{ isEditMode ? 'Update' : 'Submit Report' }}
+                </button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- REQUEST FOR ES EXTRACTION FOR BACKUP -->
+                <div class="w-full p-6 bg-white rounded-lg shadow-lg border border-gray-200 mt-6"
+                    *ngIf="showESExtractionForm">
+                    <h1
+                        class="text-2xl font-bold text-center text-blue-800 mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                        REQUEST FOR ES EXTRACTION FOR BACKUP</h1>
+                    <p
+                        class="text-sm text-orange-600 font-medium mb-6 bg-orange-50 p-3 rounded-lg border-l-4 border-orange-400">
+                        (**Note: - To be filled by SS)</p>
+
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md">
+                        <ol class="space-y-6">
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                    26. System Details
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Ship:</label>
+                                        <select formControlName="ship" (change)="onShipChange($event)"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            [disabled]="isLoadingShips">
+                                            <option value="">Select Ship</option>
+                                            <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="isLoadingShips" class="text-xs text-gray-500 mt-1">Loading ships...
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">System:</label>
+                                        <select formControlName="sd_system" (change)="onSystemChange($event)"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            [disabled]="isLoadingSystems">
+                                            <option value="">Select System</option>
+                                            <option *ngFor="let system of systems" [value]="system.id">{{ system.name }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="isLoadingSystems" class="text-xs text-gray-500 mt-1">Loading
+                                            systems...</div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Sub System:</label>
+                                        <input type="text" formControlName="sd_sub_system"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Sub-Sub-System:</label>
+                                        <input type="text" formControlName="sd_sub_sub_system"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                    27. Processing Element Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Serial No:</label>
+                                        <input type="text" formControlName="ped_sr_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Make/OEM of
+                                                Module:</label>
+                                            <input type="text" formControlName="ped_make_or_oem_module"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">OEM Part No of
+                                                Motherboard/SBC:</label>
+                                            <input type="text" formControlName="ped_oem_part_no_motherboard_or_sbd"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Patt No:</label>
+                                            <input type="text" formControlName="ped_patt_no"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    Memory Media & Application Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Media Type:</label>
+                                            <input type="text" formControlName="mmd_media_type"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Interface:</label>
+                                            <select formControlName="mmd_interface"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                                <option value="">Select Interface</option>
+                                                <option value="2.5">2.5"</option>
+                                                <option value="3.5">3.5"</option>
+                                                <option value="IDE">IDE</option>
+                                                <option value="SATA">SATA</option>
+                                                <option value="SCSI">SCSI</option>
+                                            </select>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">SCSI:</label>
+                                            <input type="text" formControlName="mmd_scsi"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Size:</label>
+                                            <div class="flex">
+                                                <input type="text" formControlName="mmd_size"
+                                                    class="px-3 py-2 border border-black rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                                <span
+                                                    class="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-600">KB/MB/GB/TB</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">OS:</label>
+                                            <input type="text" formControlName="mmd_os"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Application
+                                                Name:</label>
+                                            <input type="text" formControlName="mmd_ap_application_name"
+                                                placeholder="Enter application name"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">Application
+                                                Version:</label>
+                                            <input type="text" formControlName="mmd_ap_application_version"
+                                                placeholder="Enter application version"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Defect Summary to ESS Repair/Restoration Details -->
+                    <div
+                        class="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 shadow-md mt-6">
+                        <ol class="space-y-6">
+
+                            <li class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                                <p class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                    ESS Repair/Restoration Details
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">28. Job Ref No:</span>
+                                        </label>
+                                        <input type="text" formControlName="esb_ess_extraction_job_ref_no"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">Job Assigned To:</span>
+                                        </label>
+                                        <input type="text" formControlName="esb_ess_extraction_job_assign_to"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">
+                                            <span class="font-bold">29. Remarks:</span>
+                                        </label>
+                                        <textarea rows="3" formControlName="esb_ess_extraction_remarks"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                                    </div>
+                                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                                        <div class="flex flex-col">
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-gray-700">Job ref no:</span>
+                                                <input type="text" formControlName="esb_ess_extraction_status"
+                                                    class="px-2 py-1 border border-black rounded text-gray-700 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex-1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Disk Info Captured Section -->
+                    <div
+                        class="bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3"></span>
+                                30. Disk Info Captured
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex space-x-2">
+                                        <label class="flex items-center">
+                                            <input type="radio" formControlName="esb_disk_info_captured" value="Yes"
+                                                class="mr-2 text-blue-600 focus:ring-blue-500" />
+                                            <span class="text-sm text-gray-700">YES</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="radio" formControlName="esb_disk_info_captured" value="No"
+                                                class="mr-2 text-blue-600 focus:ring-blue-500" />
+                                            <span class="text-sm text-gray-700">NO</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <!-- Show MMD Health Prediction when YES is selected -->
+                                    <div class="flex flex-col" *ngIf="isDiskInfoCaptured()">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">MMD Health
+                                            Prediction:</label>
+                                        <div class="flex items-center space-x-4">
+                                            <select formControlName="esb_mmd_health_prediction"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                                <option value="">Select Status</option>
+                                                <option value="Good">Good</option>
+                                                <option value="Safe">Safe</option>
+                                                <option value="Fail">Fail</option>
+                                                <option value="Likely to Fail">Likely to Fail</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Show Remarks when NO is selected -->
+                                    <div class="flex flex-col" *ngIf="!isDiskInfoCaptured()">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Remarks:</label>
+                                        <div class="flex items-center space-x-4">
+                                            <input type="text" formControlName="esb_mmd_health_prediction"
+                                                placeholder="Enter remarks"
+                                                class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 w-full" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disk Cloning/Imaging Section -->
+                    <div
+                        class="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                                31. Disk Cloning/Imaging
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Tool Used:</label>
+                                        <select formControlName="esb_dc_tool_used"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                            <option value="">Select Tool (Drop Down from Tools master)</option>
+                                            <option value="CloneTool">CloneTool</option>
+                                            <option value="DiskImager">DiskImager</option>
+                                            <option value="Acronis">Acronis</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium text-gray-700 mb-1">Clone Disk Name:</label>
+                                        <input type="text" formControlName="esb_dc_clone_disk_name"
+                                            placeholder="Enter clone disk name"
+                                            class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        <span class="font-semibold">Example:</span> NOMENCLATURE –
+                                        SHIPNAME_SYSTEM_SUBSYSTEM_SUB_SUBSYTES_TYPEofMMD_TYPEofINTERFACE_MMDSIZE_OS_CT_AppVersion_DATE
+                                    </p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File (md5sum stored
+                                        in a file):</label>
+                                    <div
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                        <input type="file" formControlName="esb_dc_hash_value_file" class="hidden"
+                                            id="esb-hash-value-file" accept=".txt,.md5,.hash"
+                                            (change)="onEsbHashValueFileChange($event)" />
+                                        <label for="esb-hash-value-file"
+                                            class="cursor-pointer flex flex-col items-center">
+                                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                </path>
+                                            </svg>
+                                            <span class="text-sm text-gray-600">Click to upload hash value file (.txt,
+                                                .md5, .hash)</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- File Preview Section -->
+                                    <div *ngIf="esbHashValueFileName"
+                                        class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium text-green-800">{{ esbHashValueFileName
+                                                    }}</span>
+                                            </div>
+                                            <button type="button" (click)="removeEsbHashValueFile()"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Image Preview -->
+                                        <div *ngIf="esbHashValueFilePreview" class="mt-3">
+                                            <img [src]="esbHashValueFilePreview" [alt]="esbHashValueFileName"
+                                                class="max-w-full h-32 object-contain rounded border">
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Example: NOMENCLATURE – SHIPNAME_SYSTEM_SUBSYSTEM_MMDSIZE_TYPEofMMD_hash.txt
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disk Mounting Section -->
+                    <div
+                        class="bg-gradient-to-br from-gray-50 to-slate-50 border-2 border-gray-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-gray-500 rounded-full mr-3"></span>
+                                32. Disk Mounting
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Verification of Partition
+                                        Structure (fdisk):</label>
+                                    <select formControlName="esb_dm_verification_of_partion_structre"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Status</option>
+                                        <option value="Verified">Verified</option>
+                                        <option value="Not verified">Not verified</option>
+                                        <option value="NA">NA</option>
+                                    </select>
+                                    <p class="text-xs text-gray-500 mt-1">(Dropdown with 3 options)</p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Verification of File
+                                        System:</label>
+                                    <select formControlName="esb_dm_verification_of_file_system"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Status</option>
+                                        <option value="Verified">Verified</option>
+                                        <option value="Not verified">Not verified</option>
+                                        <option value="NA">NA</option>
+                                    </select>
+                                    <p class="text-xs text-gray-500 mt-1">(Dropdown with 3 options)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Boot Trials Section -->
+                    <!-- <div class="bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200 rounded-lg p-6 shadow-md mt-6">
+            <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                    Boot Trials Remarks
+                </h3>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <p class="text-sm text-gray-600 text-center">Boot Trials section - Details to be added</p>
+                </div>
+            </div>
+        </div> -->
+
+                    <!-- Repository Details Section -->
+                    <div
+                        class="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-teal-500 rounded-full mr-3"></span>
+                                34. Repository Details (for Vzg Only)
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Nomenclature of Root
+                                        Folder:</label>
+                                    <input type="text" formControlName="esb_rd_nomenclature_of_root_folder"
+                                        placeholder="Enter root folder name"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Example: SHIPNAME_SYSTEM_SUBSYSTEM_MMDSIZE_TYPEofMMD
+                                    </p>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Stored In:</label>
+                                    <select formControlName="esb_rd_stored_in"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Storage (Drop down from Storage master)</option>
+                                        <option value="/backup/location">Free NAS</option>
+                                        <option value="/qnap/storage">QNAP NAS</option>
+                                        <option value="/other/storage">Other</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-2">Disk Info File:</label>
+                                    <div
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                        <input type="file" formControlName="esb_rd_disk_info_file" class="hidden"
+                                            id="esb-disk-info-file" accept=".txt,.info,.log"
+                                            (change)="onEsbDiskInfoFileChange($event)" />
+                                        <label for="esb-disk-info-file"
+                                            class="cursor-pointer flex flex-col items-center">
+                                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                </path>
+                                            </svg>
+                                            <span class="text-sm text-gray-600">Click to upload disk info file (.txt,
+                                                .info, .log)</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- File Preview Section -->
+                                    <div *ngIf="esbDiskInfoFileName"
+                                        class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium text-green-800">{{ esbDiskInfoFileName
+                                                    }}</span>
+                                            </div>
+                                            <button type="button" (click)="removeEsbDiskInfoFile()"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Image Preview -->
+                                        <div *ngIf="esbDiskInfoFilePreview" class="mt-3">
+                                            <img [src]="esbDiskInfoFilePreview" [alt]="esbDiskInfoFileName"
+                                                class="max-w-full h-32 object-contain rounded border">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File:</label>
+                                    <div
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
+                                        <input type="file" class="hidden"
+                                            formControlName="esb_rd_hash_value_stored_in_file"
+                                            id="esb-hash-value-stored-file" accept=".txt,.md5,.hash"
+                                            (change)="onEsbHashValueStoredFileChange($event)" />
+                                        <label for="esb-hash-value-stored-file"
+                                            class="cursor-pointer flex flex-col items-center">
+                                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                </path>
+                                            </svg>
+                                            <span class="text-sm text-gray-600">Click to upload hash value file (.txt,
+                                                .md5, .hash)</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- File Preview Section -->
+                                    <div *ngIf="esbHashValueStoredFileName"
+                                        class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <span class="text-sm font-medium text-green-800">{{
+                                                    esbHashValueStoredFileName }}</span>
+                                            </div>
+                                            <button type="button" (click)="removeEsbHashValueStoredFile()"
+                                                class="text-red-600 hover:text-red-800 text-sm">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Image Preview -->
+                                        <div *ngIf="esbHashValueStoredFilePreview" class="mt-3">
+                                            <img [src]="esbHashValueStoredFilePreview"
+                                                [alt]="esbHashValueStoredFileName"
+                                                class="max-w-full h-32 object-contain rounded border">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="text-sm font-medium text-gray-700 mb-1">Cloned Disk or Image:</label>
+                                    <input type="text" formControlName="esb_rd_cloned_disk_or_image"
+                                        placeholder="Enter cloned disk or image name"
+                                        class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                                </div>
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h4 class="text-sm font-semibold text-blue-800 mb-2">The Root Folder should include
+                                        the following:</h4>
+                                    <ul class="space-y-1 text-sm text-blue-700">
+                                        <li class="flex items-center">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                            DISK INFO FILE
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                            CLONED DISC/IMAGE (USING DD)
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                                            HASH VALUE STORED IN A FILE
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status of Job Section -->
+                    <div
+                        class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                35. Status of Job
+                            </h3>
+                            <div class="flex flex-col">
+                                <label class="text-sm font-medium text-gray-700 mb-1">Job Status:</label>
+                                <select formControlName="esb_status_of_job"
+                                    class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                    <option value="In-Progress">In Progress (default)</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">(Dropdown with following options)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Handover Details -->
+                    <div
+                        class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-6 shadow-md mt-6">
+                        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                36. Handed over to
+                            </h3>
+                            <div class="flex flex-col">
+                                <label class="text-sm font-medium text-gray-700 mb-1">Handed over to:</label>
+                                <input type="text" formControlName="esb_handed_over_to"
+                                    class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Legends -->
+                    <div
+                        class="w-full p-6 bg-gradient-to-br from-gray-50 to-slate-50 border-2 border-gray-200 rounded-lg shadow-md mt-6">
+
+                        <!-- Action Buttons - Only show in edit mode -->
+                        <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+                            <div class="p-6">
+                                <div class="flex flex-wrap gap-4 justify-center">
+                                    <button *ngIf="!isViewMode" type="button"
+                                        class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                        (click)="onCancel()">
+                                        Cancel
+                                    </button>
+                                    <button *ngIf="!isViewMode && currentMode === 'edit'" type="button"
+                                        (click)="onClear()"
+                                        class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                                        Clear Form
+                                    </button>
+
+                                    <!-- Step-specific action buttons for edit mode -->
+                                    <!-- Step 1 (DI/DR) Buttons - Only Save Draft -->
+                                    <ng-container *ngIf="currentStep === 1 && currentMode === 'edit'">
+                                        <button type="button"
+                                            class="px-6 py-2 bg-orange-500 text-white font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                            (click)="onSaveDraft()">
+                                            {{ isEditMode ? 'Update Draft' : 'Save Draft' }}
+                                        </button>
+                                    </ng-container>
+
+                                    <!-- Step 2 (ES Repair) Buttons - Only Save Draft -->
+                                    <ng-container *ngIf="currentStep === 2 && currentMode === 'edit'">
+                                        <button type="button"
+                                            class="px-6 py-2 bg-orange-500 text-white font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                            (click)="onSaveDraft()">
+                                            {{ isEditMode ? 'Update Draft' : 'Save Draft' }}
+                                        </button>
+                                    </ng-container>
+
+                                    <!-- Step 3 (ES Extraction) Buttons - Both Save Draft and Submit -->
+                                    <ng-container *ngIf="currentStep === 3 && currentMode === 'edit'">
+                                        <button type="button"
+                                            class="px-6 py-2 bg-orange-500 text-white font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                            (click)="onSaveDraft()">
+                                            {{ isEditMode ? 'Update Draft' : 'Save Draft' }}
+                                        </button>
+                                        <button type="button"
+                                            class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded-md"
+                                            (click)="onSubmitReport()">
+                                            {{ isEditMode ? 'Update' : 'Submit Report' }}
+                                        </button>
+                                    </ng-container>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons - Always visible for navigation between steps -->
+                <div class="bg-white shadow-sm border border-gray-200 mt-4">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between w-full">
+                            <!-- Left side: Previous button -->
+                            <div>
+                                <button *ngIf="currentStep > 1" type="button" (click)="previousStep()"
+                                    class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                                    ← Previous
+                                </button>
+                            </div>
+
+                            <!-- Center: Step indicator -->
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-600">Step {{ currentStep }} of {{ totalSteps }}</span>
+                            </div>
+
+                            <!-- Right side: Next button -->
+                            <div>
+                                <button *ngIf="currentStep < totalSteps" type="button" (click)="nextStep()"
+                                    class="px-6 py-2 bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
+                                    Next →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+    </form>
+    
+    <!-- Route Config Popup -->
+    <app-route-config-popup
+        *ngIf="showRouteConfigPopup"
+        [isVisible]="showRouteConfigPopup"
+        [title]="'SEG Form Route Config'"
+        [subtitle]="'Smart Configuration'"
+        [submodule]="6"
+        [shipId]="selectedShipId ? selectedShipId : undefined"
+        [transactionId]="reportData?.id || record?.id"
+        [useApi]="true"
+        (close)="onCloseRouteConfigPopup()"
+        (configureRoute)="onConfigureRoute()"
+        (saveDirectly)="onSaveDirectly()"
+        (routeConfigSaved)="onRouteConfigSaved($event)"
+        (refreshTimeline)="onRefreshTimeline()">
+    </app-route-config-popup>
+
+    <!-- Route Config Modal Placeholder -->
+    <div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
+            <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
+            <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
+            <button 
+                (click)="showRouteConfigModal = false"
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Close
+            </button>
+        </div>
+    </div>
+  </div>
+</div>

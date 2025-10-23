@@ -1,0 +1,165 @@
+.dashboard {
+  min-height: 100vh;
+  background-color: #f9fafb; // Tailwind's gray-50
+  padding-bottom: 2rem;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.main-content {
+  padding-top: 2rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.charts-row,
+.chart-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  justify-content: space-between;
+}
+
+.chart-item {
+  flex: 1 1 48%;
+  min-width: 300px;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+  .chart-item {
+    flex: 1 1 100%;
+  }
+}
+
+.dropdowns-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dropdowns-sec {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #6b7280;
+  padding-left: 2px;
+  text-transform: capitalize;
+}
+
+.reset-btn {
+  align-self: flex-end;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  i {
+    margin-right: 6px;
+  }
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+footer {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+
+  .chart-card {
+    flex: 1 1 calc(50% - 0.75rem);
+    max-width: calc(50% - 0.75rem);
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    box-sizing: border-box;
+
+    ::ng-deep .p-card {
+      margin: 0;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+    }
+
+    ::ng-deep .p-card-body {
+      padding: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+

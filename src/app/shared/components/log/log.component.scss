@@ -1,0 +1,197 @@
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh; // Use dynamic viewport height for mobile browser issues
+  overflow-x: hidden;
+  background: radial-gradient(circle at top, #001f3f, #000c1f);
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+
+  .login-header {
+    flex-shrink: 0;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .navy-emblem {
+        height: 45px;
+        max-width: 100%;
+      }
+
+      .app-title {
+        font-size: 2rem;
+        color: #00bcd4;
+        font-weight: 600;
+      }
+    }
+  }
+  .emblem-center {
+    width: 40px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .login-main {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    overflow-y: hidden;     // ✅ Allow vertical scroll if needed
+    overflow-x: hidden;   // ✅ Prevent horizontal scroll
+
+    .login-card {
+      background: rgba(0, 24, 47, 0.9);
+      border-radius: 10px;
+      padding: 1.5rem;
+      max-width: 100%;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.2);
+
+      .card-header {
+        text-align: center;
+
+        .emblem-center {
+          width: 50px;
+          margin-bottom: 1rem;
+        }
+
+        .card-title {
+          font-size: 1.7rem;
+          font-weight: bold;
+        }
+
+        .subtitle {
+          font-size: 0.9rem;
+          color: #80d8ff;
+          margin-top: 0.25rem;
+
+          .sanskrit {
+            font-style: italic;
+          }
+        }
+      }
+
+      .login-form {
+        margin-top: 1.5rem;
+
+        .form-group {
+          margin-bottom: 1rem;
+
+          label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+          }
+
+          .input-icon {
+            position: relative;
+
+            i.icon {
+              position: absolute;
+              left: 10px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: #00bcd4;
+
+              &.mail::before {
+                content: "✉️";
+              }
+
+              &.lock::before {
+                content: "🔒";
+              }
+            }
+
+            input {
+              width: 100%;
+              padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+              border: 1px solid #007bff;
+              border-radius: 5px;
+              background-color: rgba(255, 255, 255, 0.1);
+              color: #fff;
+              box-sizing: border-box;
+
+              &:focus {
+                outline: none;
+                border-color: #00bcd4;
+              }
+            }
+          }
+        }
+
+        .btn-submit {
+          width: 100%;
+          padding: 0.75rem;
+          background-color: #00bcd4;
+          border: none;
+          border-radius: 5px;
+          color: #000;
+          font-weight: bold;
+          transition: background 0.3s ease;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #0097a7;
+          }
+        }
+      }
+    }
+  }
+
+  .login-footer {
+    flex-shrink: 0;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #90caf9;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-card {
+    padding: 1rem !important;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+  }
+}
+@media (max-height: 600px) {
+  .login-card {
+    transform: scale(0.9);
+  }
+}
+
+// Animation (safe)
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+.password-wrapper {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 2.5rem;
+  }
+}

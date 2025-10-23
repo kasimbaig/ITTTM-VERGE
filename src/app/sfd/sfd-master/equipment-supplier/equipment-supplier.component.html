@@ -1,0 +1,61 @@
+<!-- <div class="command-container"> -->
+  <!-- Header Section -->
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-shield"></i>
+      <div>
+        <h2>Equipment Policies</h2>
+        <p>View and manage all equipment policies in the system</p>
+      </div>
+    </div>
+    
+    <!-- Action Buttons moved to header -->
+    <div class="command-actions">
+      <!-- <div class="control-bar"> -->
+       
+          <div class="dropdown-filter">
+            <p-dropdown 
+              [options]="getDropdownOptions()" 
+              [(ngModel)]="selectedFilterOption"
+              placeholder="Select Filter"
+              (onChange)="onFilterChange($event)">
+            </p-dropdown>
+          </div>
+        
+        
+       
+      <!-- </div> -->
+      <button class="btn outlined" (click)="exportMenu.toggle($event)">
+        <i class="pi pi-file"></i> Export
+      </button>
+      <button class="btn primary" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i> ADD
+      </button>
+      <p-tieredMenu #exportMenu [model]="exportOptions" popup></p-tieredMenu>
+    </div>
+  </div>
+
+  <!-- Control Bar Section -->
+
+
+  <!-- Table Section -->
+  <div class="table-section">
+    <div class="table-wrapper">
+      <app-paginated-table [data]="equipmentPolicies" [columns]="cols" [showEndActions]="true"
+        (viewEvent)="viewDetails($event, true)" (editEvent)="editDetails($event, true)"
+        (deleteEvent)="deleteDetails($event)"></app-paginated-table>
+    </div>
+  </div>
+<!-- </div> -->
+
+<app-add-form *ngIf="isFormOpen" [open]="isFormOpen" [formConfig]="formConfigForNewDetails" [formData]="newDetails"
+  [fromTitle]="title" (onOpenChange)="isFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+<app-add-form *ngIf="isEditFormOpen" [open]="isEditFormOpen" [formConfig]="formConfigForNewDetails"
+  [formData]="selectedDetails" [fromTitle]="editTitle" [isEditMode]="true" (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"></app-add-form>
+<app-toast></app-toast>
+<app-confirm-dialog *ngIf="showConfirmDialog" [message]="'Do you really want to delete this Equipment Policies?'"
+  (confirm)="onConfirmDelete($event)"></app-confirm-dialog>
+<app-view-details *ngIf="isViewDetailsOpen" [open]="isViewDetailsOpen" [viewDetails]="selectedDetails"
+  [headers]="formConfigForNewDetails" (onOpenChange)="isViewDetailsOpen = $event"
+  [title]="viewDetialsTitle"></app-view-details>

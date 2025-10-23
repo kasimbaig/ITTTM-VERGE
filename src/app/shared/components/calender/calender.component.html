@@ -1,0 +1,167 @@
+<div class="timeline-scheduler">
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="date-navigation">
+          <button class="nav-btn" (click)="previousDay()">
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <span class="current-date">{{ formatCurrentDate() }}</span>
+          <button class="nav-btn" (click)="nextDay()">
+            <i class="pi pi-chevron-right"></i>
+          </button>
+          <button class="today-btn" (click)="goToToday()">Today</button>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="header-controls">
+          <p-dropdown 
+            [options]="viewOptions" 
+            [(ngModel)]="selectedView" 
+            placeholder="Select View"
+            styleClass="control-dropdown">
+          </p-dropdown>
+          
+          <p-dropdown 
+            [options]="statusOptions" 
+            [(ngModel)]="selectedStatus" 
+            placeholder="Filter Status"
+            styleClass="control-dropdown">
+          </p-dropdown>
+          
+          <button class="add-btn">
+            <i class="pi pi-plus"></i>
+            Add Task
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Container -->
+    <div class="timeline-container">
+      <!-- Time Header -->
+      <div class="time-header">
+        <div class="resource-column-header">Resources</div>
+        <div class="time-slots">
+          <div class="time-slot" *ngFor="let timeSlot of timeSlots">
+            {{ formatTime(timeSlot) }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline Body -->
+      <div class="timeline-body">
+        <!-- Hierarchical Resource Groups -->
+        <ng-container *ngFor="let group of resourceGroups">
+          <!-- Group Header -->
+          <div class="resource-group-header" (click)="toggleGroup(group.id)">
+            <div class="group-toggle">
+              <i class="pi" [ngClass]="group.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+            </div>
+            <div class="group-info">
+              <div class="group-name">{{ group.name }}</div>
+              <div class="group-count">({{ group.resources.length }} resources)</div>
+            </div>
+            <div class="group-timeline-track">
+              <!-- Group level timeline background -->
+              <div class="time-grid">
+                <div class="time-cell" *ngFor="let timeSlot of timeSlots"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group Resources (Expandable) -->
+          <ng-container *ngIf="group.expanded">
+            <div 
+              class="resource-row" 
+              *ngFor="let resource of group.resources"
+              (drop)="onResourceDrop($event, resource.id)"
+              (dragover)="onResourceDragOver($event)">
+              
+              <!-- Resource Info -->
+              <div class="resource-info">
+                <div class="resource-indent"></div>
+                <div class="resource-avatar">
+                  <img [src]="resource.avatar" [alt]="resource.name">
+                </div>
+                <div class="resource-details">
+                  <div class="resource-name">{{ resource.name }}</div>
+                  <div class="resource-role">{{ resource.role }}</div>
+                </div>
+              </div>
+
+              <!-- Timeline Track -->
+              <div class="timeline-track">
+                <div class="time-grid">
+                  <div class="time-cell" *ngFor="let timeSlot of timeSlots"></div>
+                </div>
+                
+                <!-- Tasks -->
+                <div class="tasks-container">
+                  <div 
+                    class="task-item"
+                    *ngFor="let task of getTasksForResource(resource.id)"
+                    [style.left]="getTaskPosition(task).left"
+                    [style.width]="getTaskPosition(task).width"
+                    [style.background-color]="task.color"
+                    (click)="openTaskDialog(task)"
+                    draggable="true"
+                    (dragstart)="onTaskDragStart(task)"
+                    (dragend)="onTaskDragEnd()">
+                    
+                    <div class="task-content">
+                      <div class="task-title">{{ task.title }}</div>
+                      <div class="task-time">
+                        {{ formatTime(task.startTime) }} - {{ formatTime(task.endTime) }}
+                      </div>
+                    </div>
+                    
+                    <div class="task-status" [ngClass]="'status-' + task.status"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Edit Dialog -->
+<p-dialog 
+  header="Edit Task" 
+  [(visible)]="displayTaskDialog" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="task-dialog"
+  (onHide)="closeTaskDialog()">
+  
+  <div class="dialog-content" *ngIf="selectedTask">
+    <div class="task-info">
+      <h3>{{ selectedTask.title }}</h3>
+      <p><strong>Resource:</strong> {{ getResourceName(selectedTask.resourceId) }}</p>
+      <p><strong>Time:</strong> {{ formatTime(selectedTask.startTime) }} - {{ formatTime(selectedTask.endTime) }}</p>
+      <p><strong>Status:</strong> {{ selectedTask.status | titlecase }}</p>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <button 
+      type="button" 
+      class="dialog-btn secondary" 
+      (click)="closeTaskDialog()">
+      Cancel
+    </button>
+    <button 
+      type="button" 
+      class="dialog-btn primary">
+      Save Changes
+    </button>
+  </ng-template>
+</p-dialog>

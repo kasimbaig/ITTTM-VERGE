@@ -1,0 +1,293 @@
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-2 text-center">
+    <h3 class="text-lg font-semibold text-green-700">Ensure filling of DGUF data in all columns</h3>
+    <div class="text-xl font-bold text-red-600 mt-1">DGUF Input table has been updated.</div>
+    <div class="text-blue-700 mt-2 text-base font-medium">
+      SS To fill DGUF at sea &amp; at harbour as per formula indicated below.
+    </div>
+  </div>
+
+  <!-- Note Section -->
+  <div class="mb-2 text-left bg-red-100 p-3 border border-red-600 rounded-md">
+    <span class=" text-red-600 font-semibold">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      Note: <span class="text-sm">Break-up of individual DG RH must be equal with RH at sea & achorage and Rh at Harbour</span>
+    </span>
+  </div>
+
+  <div class="flex justify-between items-center mb-3 gap-2">
+    <!-- Equipment Filter -->
+    <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Equipment:</label>
+        <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+          [options]="srarEquipmentData"
+          optionLabel="equipment_name"
+          [filter]="true"
+          filterBy="equipment_name"
+          placeholder="Select Equipment"
+          class="w-48"
+          display="chip"
+          [(ngModel)]="selectedEquipment">
+        </p-multiSelect>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button (click)="addDguf()"
+        class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+      </button>
+      <button (click)="editDguf()"
+        class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+      <button (click)="saveDguf()"
+        class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="mb-6">
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold ">
+      1. DGUF (Diesel Generator Utilisation Factor)
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400 ">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">Ser No</th>
+            <th class="border border-gray-400 p-2 text-center">Eqpt Code</th>
+            <th class="border border-gray-400 p-2 text-center">Eqpt Name</th>
+            <th class="border border-gray-400 p-2 text-center">Loc On Board</th>
+            <th class="border border-gray-400 p-2 text-center">DA No.</th>
+            <th class="border border-gray-400 p-2 text-center">R/H at Sea &amp; at Anchorage (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">R/H in Harbour (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">Total R/H in the Month (hh:mm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of dgufData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.serial_no" placeholder="Serial number">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.equipment_code" placeholder="Equipment code">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-auto border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.equipment_name" placeholder="Equipment name">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.location_name" placeholder="Location on board">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.da_number" placeholder="DA number">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.rh_at_sea_and_anchorage" (ngModelChange)="calculateTotalRH(item)" placeholder="R/H at sea & anchorage">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.rh_at_port" (ngModelChange)="calculateTotalRH(item)" placeholder="R/H in harbour">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="true" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 bg-gray-100" [(ngModel)]="item.total_rh_in_month" placeholder="Total R/H in month">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="dgufData.length === 0">
+            <td colspan="8" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No DGUF data available
+            </td>
+          </tr>
+          
+          <!-- Total Row -->
+          <tr *ngIf="dgufData.length > 0" class="bg-blue-100 text-center text-lg font-bold" aria-disabled="true">
+            <td class="border border-gray-400 p-2 text-center" colspan="5"><strong class="text-lg">Total</strong></td>
+            <td class="border border-gray-400 p-2 text-center">
+             {{calculateTotalRHSeaHarbour('rh_at_sea_and_anchorage')}}
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              {{calculateTotalRHSeaHarbour('rh_at_port')}}
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+               {{calculateTotalRHSeaHarbour('total_rh_in_month')}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Fuel Consumption Section -->
+  <div class="mb-6">
+    <div class="flex justify-end mb-3">
+      <div class="flex gap-2">
+        <button (click)="addSeaHarbour()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+        </button>
+        <button (click)="editSeaHarbour()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+        </button>
+        <button (click)="saveSeaHarbour()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+        </button>
+      </div>
+    </div>
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+     2. DGUF - Sea & Harbour running hours data input
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400 ">
+        <thead>
+          <tr class="bg-gray-600 text-white">
+            <th class="border border-gray-400 p-2 text-center">(A) Total RH at Sea (hh:mm) (A)=(B)+(C) + (C1)</th>
+            <th class="border border-gray-400 p-2 text-center">(B) Hours Underway(hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">(C)Anchorage (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">(C1) Drifting (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">(D) Number Of Hours in Harbour (hh:mm) (D)>(E)</th>
+            <th class="border border-gray-400 p-2 text-center">(E) Hours shore supply available when alongside (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">Number Of Cold moves in harbour</th>
+            <th class="border border-gray-400 p-2 text-center">Comments wrt non availability of shore supply in harbour necessitating exploitation of DGs with Berthing position and date </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of seaHarbourData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.total_rh_at_sea" placeholder="Total RH at sea">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.hours_underway" placeholder="Hours underway">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.anchorage" placeholder="Anchorage">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.drifting" placeholder="Drifting">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.no_of_hours_in_harbour" placeholder="No of hours in harbour">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.hours_shore_supply_avl_when_alongs" placeholder="Hours shore supply available">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.no_of_cold_moves_in_harbour" placeholder="No of cold moves">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.cmts_wrt_to_non_avl_shore_supply" placeholder="Comments">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="seaHarbourData.length === 0">
+            <td colspan="8" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No Sea & Harbour data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="mb-6">
+    <div class="bg-red-100 text-red-600 p-3 font-semibold  rounded-md border border-red-600">
+     <i class="fa-solid fa-circle-exclamation"></i> Note:-
+    
+    <div class="text-left text-red-600 ml-4 text-sm">
+      <div>1. Total RHs at Sea (A) = Hours Underway at Sea (B) + Anchorage (C) + Drifting (C1)</div>
+      <div>2. Number of Hours in Harbour (D) > Hours shore supply available when alongside (E) <br>
+          (The "Hours shore supply available when alongside" can't be more than "Number of Hours in Harbour".)
+
+      </div>
+      <div>3. Cold move to be counted under Hrs in Harbour (D)</div>
+    </div>
+  </div>
+</div>
+  <!-- Fuel Consumption Section -->
+  <div class="mb-6">
+    <div class="flex justify-end mb-3">
+      <div class="flex gap-2">
+        <button (click)="addDgufLimits()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+        </button>
+        <button (click)="editDgufLimits()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+        </button>
+        <button (click)="saveDgufLimits()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+        </button>
+      </div>
+    </div>
+   
+    
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400 ">
+        <thead>
+          <tr class="bg-gray-600 text-white">
+            <th class="border border-gray-400 p-2 text-center">Limiting Value for (SEA)</th>
+            <th class="border border-gray-400 p-2 text-center">Actual DGUF (SEA)</th>
+            <th class="border border-gray-400 p-2 text-center">Reason For Exceeding DGUF (SEA) <span class="text-red-500">*</span></th>
+            <th class="border border-gray-400 p-2 text-center">Limiting Value for (HARBOUR)</th>
+            <th class="border border-gray-400 p-2 text-center">Actual DGUF (HARBOUR)</th>
+            <th class="border border-gray-400 p-2 text-center">Reason For Exceeding DGUF (HARBOUR) <span class="text-red-500">*</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of dgufLimitsData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.limiting_value_sea" placeholder="Limiting value sea">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.actual_dguf_sea" placeholder="Actual DGUF sea">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.exceed_reason_sea" placeholder="Exceed reason sea">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.limiting_value_harbour" placeholder="Limiting value harbour">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.actual_dguf_harbour" placeholder="Actual DGUF harbour">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.exceed_reason_harbour" placeholder="Exceed reason harbour">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="dgufLimitsData.length === 0">
+            <td colspan="6" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No DGUF Limits data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="mb-6 bg-blue-600 -100 p-3 rounded-md border border-blue-600    ">
+    <div class=" text-blue-600 p-2 font-semibold text-lg">
+        <i class="fa-brands fa-fonticons"></i> Formula:-
+    </div>
+    <div class="text-left text-blue-600 ml-4 text-sm font-semibold">
+      <div>1. Actual DGUF (SEA) = Total RHs of all DGs (at Sea & at Anchorage) / Total HRs at sea (Hours Underway at sea + at Anchorage + at Drifting)</div>
+      <div>2. Actual DGUF (Hbr) = Total RHs of all DGs at Harbour / Number of Hours in Harbour</div>
+    </div>
+    
+  </div>
+
+</div>
+

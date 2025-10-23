@@ -1,0 +1,165 @@
+<div class="p-4">
+    <!-- Header Section -->
+    <div class="mb-2 text-center">
+        <h3 class="text-lg font-semibold text-green-700">Consumption of Lubricants <span class="text-orange-500">Entry Page</span></h3>
+    </div>
+
+
+    <div class="flex justify-end mb-3 gap-2 ">
+
+        <div class="flex gap-2">
+            <button (click)="addLubricant()"
+                class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+            </button>
+            <button (click)="editLubricant()"
+                class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+            </button>
+            <button (click)="saveLubricant()"
+                class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+            </button>
+
+        </div>
+    </div>
+
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200">
+        <!-- <div class="bg-blue-600 -100 text-blue-700 border-1 border-blue-300 px-4 py-2 rounded-t-lg">
+            <h4 class="font-semibold text-md">Lubricant Consumption Details</h4>
+        </div> -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-md border-collapse border border-gray-400">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Lubricant Name</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Quantity</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Unit</th>
+                        <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="hover:bg-gray-50" *ngFor="let item of lubricantData; let i = index">
+                        <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                            <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.name" placeholder="Lubricant Name">
+                        </td>
+                        <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                            <input [disabled]="isEdit" pInputText type="number" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.quantity" placeholder="Quantity">
+                        </td>
+                        <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                            <input [disabled]="isEdit" pInputText type="text" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.unit" placeholder="Unit">
+                        </td>
+                        <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                            <button 
+                                class="bg-red-50 border-red-500 border hover:bg-red-500 hover:text-white text-red-500 px-2 py-1 rounded text-sm"
+                                (click)="deleteLubricant(i)">
+                                <i class="pi pi-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="lubricantData.length === 0">
+                        <td colspan="4" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+                            No lubricant consumption data available
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Dialog for Add/Edit Lubricant -->
+    <p-dialog 
+        header="Add Lubricant Consumption" 
+        [(visible)]="displayDialog" 
+        [modal]="true" 
+        [style]="{width: '450px'}"
+        [closable]="true"
+        [draggable]="false"
+        [resizable]="false">
+        <div class="bg-blue-600 -100 p-4">
+
+            <form [formGroup]="lubricantForm" (ngSubmit)="saveLubricant()">
+                <div class="space-y-4">
+                    <!-- Lubricant Name Dropdown -->
+                    <div class="field">
+                        <label for="lubricant" class="block text-sm font-medium text-gray-700 mb-2">
+                            Lubricant Name <span class="text-red-500">*</span>
+                        </label>
+                        <p-dropdown 
+                            id="lubricant"
+                            formControlName="lubricant"
+                            [options]="lubricantOptions" 
+                            placeholder="Select Lubricant" 
+                            optionLabel="label"
+                            optionValue="value"
+                            [filter]="true"
+                            [filterBy]="'label'"
+                            [filterPlaceholder]="'Search lubricant'"
+                            [filterMatchMode]="'contains'"
+                            (onChange)="onLubricantSelect($event)"
+                            class="w-full">
+                        </p-dropdown>
+                        <small class="text-red-500" *ngIf="lubricantForm.get('lubricant')?.invalid && lubricantForm.get('lubricant')?.touched">
+                            Lubricant is required
+                        </small>
+                    </div>
+    
+                    <!-- Quantity -->
+                    <div class="field">
+                        <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">
+                            Quantity <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            pInputText 
+                            id="quantity"
+                            formControlName="quantity"
+                            type="number"
+                            placeholder="Enter quantity"
+                            class="w-full border border-gray-300 rounded px-3 py-2">
+                        <small class="text-red-500" *ngIf="lubricantForm.get('quantity')?.invalid && lubricantForm.get('quantity')?.touched">
+                            Quantity is required and must be greater than 0
+                        </small>
+                    </div>
+    
+                    <!-- Unit -->
+                    <div class="field">
+                        <label for="unit" class="block text-sm font-medium text-gray-700 mb-2">
+                            Unit <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                        pInputText 
+                        id="unit"
+                        formControlName="unit"
+                        type="text"
+                        placeholder="Enter Unit"
+                        class="w-full border border-gray-300 rounded px-3 py-2">
+                        
+                        <small class="text-red-500" *ngIf="lubricantForm.get('unit')?.invalid && lubricantForm.get('unit')?.touched">
+                            Unit is required
+                        </small>
+                    </div>
+                </div>
+    
+                <!-- Dialog Footer -->
+                <div class="flex justify-end gap-2 mt-6">
+                    <button 
+                        type="button"
+                        class="bg-gray-50 border-gray-500 border-2 hover:bg-gray-500 hover:text-white text-gray-500 px-4 py-2 rounded font-semibold"
+                        (click)="cancelDialog()">
+                        <i class="pi pi-times"></i> <span class="ml-2">Cancel</span>
+                    </button>
+                    <button 
+                        type="button"
+                        (click)="saveLubricantForm()"
+                        [disabled]="lubricantForm.invalid"
+                        class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="pi pi-check"></i> <span class="ml-2">{{ isEditMode ? 'Update' : 'Add' }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </p-dialog>
+
+</div>

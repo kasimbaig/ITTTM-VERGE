@@ -1,0 +1,27 @@
+/* .dynamic-table-container {
+  @apply space-y-4;
+} */
+
+/* Ensure proper grid layout for table rows */
+.dynamic-table-container table tbody tr {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+.dynamic-table-container table thead tr {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+/* Responsive adjustments */
+/* @media (max-width: 768px) {
+  .dynamic-table-container {
+    @apply overflow-x-auto;
+  }
+  
+  .dynamic-table-container table {
+    @apply min-w-full;
+  }
+} */

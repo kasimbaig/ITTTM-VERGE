@@ -1,0 +1,158 @@
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-4 text-center">
+    <h3 class="text-lg font-semibold text-gray-700">Diesel Engine &amp; SDC</h3>
+  </div>
+
+  <!-- Instruction Section -->
+  <div class="mb-4 text-center">
+    <span class="text-green-600 text-xl font-semibold">
+      Ensure filling of DER data in all columns below in para 9,10,11 &amp; 12
+    </span>
+  </div>
+
+  <!-- Note Section -->
+  <div class="mb-4 p-3 bg-red-100 border border-red-200 rounded">
+    <div class="text-red-600 text-sm">
+      <div class="flex items-start gap-2 mb-2">
+        <i class="pi pi-info-circle mt-1"></i>
+        <span class="font-medium">Note:</span>
+      </div>
+      <div class="ml-6 space-y-1">
+        <div>1. DERs of other DGs/ERAs running hours not as compulsory as this, so not compulsory filled.</div>
+        <div>2. DERs of SDC should be done as much as actual consumption, fuel consumption reserve wise. Should not leave blank.</div>
+        <div>3. For SDC and DGs check & should not be left blank.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mb-3 gap-2">
+    <!-- Equipment Filter -->
+    <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Equipment:</label>
+        <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+          [options]="srarEquipmentData"
+          optionLabel="equipment_name"
+          [filter]="true"
+          filterBy="equipment_name"
+          placeholder="Select Equipment"
+          class="w-48"
+          display="chip"
+          [(ngModel)]="selectedEquipment">
+        </p-multiSelect>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button (click)="addInjectorFip()"
+        class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+      </button>
+      <button (click)="editInjectorFip()"
+        class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+      <button (click)="saveInjectorFip()"
+        class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+        <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="mb-6">
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+      10. Injector / FIP Collection / Replacement Main Engines (Diesel Alternators)
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400 ">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">Eqpt Name</th>
+            <th class="border border-gray-400 p-2 text-center">Nomenclature</th>
+            <th class="border border-gray-400 p-2 text-center">Eqpt Code</th>
+            <th class="border border-gray-400 p-2 text-center">Loc On Board</th>
+            <th class="border border-gray-400 p-2 text-center">Ser No</th>
+            <th class="border border-gray-400 p-2 text-center">R/H in Months(hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">R/H Since Installation (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">Hrs Run Below 33% Rates Loads</th>
+            <th class="border border-gray-400 p-2 text-center">Hrs Run Between 33% to Below 50% Rated Load (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">Hrs Run Between 50% to Below 70% Rated Load (hh:mm)</th> 
+            <th class="border border-gray-400 p-2 text-center">Hrs Run Between 70% to Below 100% Rated Load (hh:mm)</th>
+            <th class="border border-gray-400 p-2 text-center">Lub Oil Cons in Months</th>
+            <th class="border border-gray-400 p-2 text-center">Date Of Inj/FIP Calibration</th>
+            <th class="border border-gray-400 p-2 text-center">Occasion</th>
+            <th class="border border-gray-400 p-2 text-center">R/H At Which Replaced</th>
+            <th class="border border-gray-400 p-2 text-center">Fuel Consumption in Months (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of injectorFipData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.equipment_name" placeholder="Equipment name">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.nomenclature" placeholder="Nomenclature">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.equipment_code" placeholder="Equipment code">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.location_name" placeholder="Location on board">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.serial_no" placeholder="Serial number">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.running_hours_months" placeholder="R/H in months">
+              </td>  
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.running_hours_since_installation" placeholder="R/H since installation">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.hrs_run_below_33_percent" placeholder="Hrs below 33%">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.hrs_run_33_to_50_percent" placeholder="Hrs 33-50%">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.hrs_run_50_to_70_percent" placeholder="Hrs 50-70%">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.hrs_run_70_to_100_percent" placeholder="Hrs 70-100%">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.lub_oil_consumption_months" placeholder="Lub oil consumption">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.date_of_inj_fip_calibration">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.occasion" placeholder="Occasion">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.running_hours_at_replaced" placeholder="R/H at replaced">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.fuel_consumption_months" placeholder="Fuel consumption">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1 min-w-48" [(ngModel)]="item.remarks" placeholder="Remarks">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="injectorFipData.length === 0">
+            <td colspan="17" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No injector/FIP data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

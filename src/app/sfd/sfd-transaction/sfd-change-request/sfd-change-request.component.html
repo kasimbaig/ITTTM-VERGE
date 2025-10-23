@@ -1,0 +1,432 @@
+<div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">SFD <span class="text-orange-500">(Add/Removal/Change) Request</span></h2>
+        <div class="h-1 w-20 bg-blue-600 rounded"></div>
+    </div>
+
+    <!-- Dropdown Filters -->
+    <div class=" rounded-lg shadow-md p-6 mb-6 border border-gray-200 bg-slate-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Unit Dropdown -->
+            <div class="flex items-center gap-4">
+                <label class="text-sm font-bold text-gray-700 w-20 flex-shrink-0">Unit Type</label>
+                <p-dropdown 
+                    [options]="unitTypeOptions" 
+                    [(ngModel)]="selectedUnitType"
+                    placeholder="--Select Unit Type--"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name"
+                    (onChange)="onUnitTypeChange()"
+                    styleClass="flex-1">
+                </p-dropdown>
+            </div>
+
+            <!-- Ship Name Dropdown -->
+            <div class="flex items-center gap-4">
+                <label class="text-sm font-bold text-gray-700 w-20 flex-shrink-0">Ship Name</label>
+                <p-dropdown 
+                    [options]="shipOptions" 
+                    [(ngModel)]="selectedShip"
+                    placeholder="--Select Ship--"
+                    optionLabel="name"  
+                    [filter]="true"
+                    filterBy="name"
+                    (onChange)="onShipChange($event.value.id)"
+                    styleClass="flex-1">
+                </p-dropdown>
+            </div>
+            <div class="flex justify-between gap-2 mt-4 pb-3 border-gray-200 px-5">
+                <span *ngIf="selectedItems.length > 0 && user_role=='INIT'"
+                    type="button" 
+                    class="px-6 py-2 bg-blue-600 -500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 flex items-center gap-2"
+                    (click)="showCommentDialog =true">
+                    <i class="pi pi-play"></i>
+                    Initiate
+                </span>
+                <span *ngIf="selectedItems.length > 0 && user_role=='REC'"
+                    type="button" 
+                    class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-200 flex items-center gap-2"
+                    (click)="showCommentDialog =true">
+                    <i class="pi pi-thumbs-up"></i>
+                    Recommend
+                </span>
+                <span *ngIf="selectedItems.length > 0 && user_role=='APP'"
+                    type="button" 
+                    class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 flex items-center gap-2"
+                    (click)="showCommentDialog =true">
+                    <i class="pi pi-check-circle"></i>
+                    Approve
+                </span>
+            </div>
+
+          
+        </div>
+       
+    </div>
+
+    <!-- Reusable Table -->
+    <div >
+        <app-resuable-table 
+            [gridColumns]="tableColumns"
+            [filteredData]="tableData"
+            [isCheckBox]="true"
+            [isPaginator]="true"
+            [isShearchDisable]="'T'"
+            (selectionEvent)="onSelection($event)"
+            [isAction]="true"
+            [isAdd]="equipmentOptions.length > 0"
+            (addEvent)="openAddDialog()"
+            [isView]="true"
+            [isDeletable]="true"
+            
+           
+            (viewEvent)="onView($event)"
+            (editEvent)="onEdit($event)"
+            (deleteEvent)="onDelete($event)">
+        </app-resuable-table>
+    </div>
+    
+    
+
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="isDeleteConfirmationVisible"
+  [message]="'Are you sure you want to delete the SFD Change Request record: ' + (selectedChangeRequest?.equipment_name || '') + '?'"
+  (onConfirm)="confirmDelete()"
+  (onCancel)="cancelDelete()"
+></app-delete-confirmation-modal>
+
+<!-- Dialog for SFD Reference Form -->
+<p-dialog  [header]="isEdit ? 'Edit SFD Change Request' : 'Add SFD Change Request'"   [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{width: '80vw'}" [baseZIndex]="10000" [draggable]="false" [maximizable]="true" [resizable]="true">
+
+    <div class="p-6 bg-slate-100 shadow-md border border-gray-200  mx-auto">
+        <form [formGroup]="sfdReferenceForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" [ngClass]="{'lg:grid-cols-3': isMaximized, 'lg:grid-cols-2': !isMaximized}">
+                <!-- First Row: Equipment Code/Name -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Equipment Code/Name<span class="text-red-500">*</span></label> 
+                    <p-dropdown 
+                        [options]="equipmentOptions" 
+                        formControlName="equipment"
+                        placeholder="--Please Select--"
+                        optionLabel="equipment_name"
+                        optionValue="id"
+                        [filter]="true"
+                        filterBy="name"
+                        (onChange)="onEquipmentChange($event)"
+                        styleClass="w-full col-span-4">
+                    </p-dropdown>
+                </div>
+
+                <!-- Second Row: Model -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Model<span class="text-red-500">*</span></label>
+                    <input 
+                        type="text" 
+                        formControlName="model"
+                        class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter model">
+                </div>
+
+                <!-- Third Row: Nomenclature -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Nomenclature<span class="text-red-500">*</span></label>
+                    <input 
+                        type="text" 
+                        formControlName="nomenclature"
+                        class="w-full p-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter nomenclature">
+                </div>
+
+                <!-- Fourth Row: Equipment Serial No. -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Equipment Serial No.<span class="text-red-500">*</span></label>
+                    <input 
+                        type="text" 
+                        formControlName="equipment_serial_no"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter serial number">
+                </div>
+
+                <!-- Fifth Row: OEM Part No. -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">OEM Part No.</label>
+                    <input 
+                        type="text" 
+                        formControlName="oem_part_number"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter OEM part number">
+                </div>
+
+                <!-- Sixth Row: Supplier -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Supplier</label> 
+                    <p-dropdown 
+                        [options]="supplierOptions" 
+                        formControlName="supplier"
+                        placeholder="--Please Select--"
+                        optionLabel="name"
+                        optionValue="id"
+                        [filter]="true"
+                        filterBy="name"
+                        styleClass="w-full col-span-4">
+                    </p-dropdown>
+                </div>
+
+                <!-- Seventh Row: Manufacturer -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Manufacturer</label> 
+                    <p-dropdown 
+                        [options]="manufacturerOptions" 
+                        formControlName="manufacturer"
+                        placeholder="--Please Select--"
+                        optionLabel="name"
+                        optionValue="id"
+                        [filter]="true"
+                        filterBy="name"
+                        styleClass="w-full col-span-4">
+                    </p-dropdown>
+                </div>
+
+                <!-- Eighth Row: Location Code -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Location Code</label> 
+                    <input 
+                        type="text" 
+                        formControlName="location_code"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter location code">
+                </div>
+
+                <!-- Ninth Row: Location On Board -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Location On Board<span class="text-red-500">*</span></label> 
+                    <input 
+                        type="text" 
+                        formControlName="location_onboard"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter location on board">
+                </div>
+
+                <!-- Tenth Row: Installation Date -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Installation Date</label>
+                    <div class="col-span-4">
+                        <input 
+                            type="date" 
+                            formControlName="installation_date"
+                            class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                    </div>
+                </div>
+
+                <!-- Eleventh Row: Removal Date -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Removal Date</label>
+                    <div class="col-span-4">
+                        <input 
+                            type="date" 
+                            formControlName="removal_date"
+                            class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+                    </div>
+                </div>
+
+                <!-- Twelfth Row: No Of Fits -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">No Of Fits</label> 
+                    <input 
+                        type="number" 
+                        formControlName="no_of_fits"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="0">
+                </div>
+
+                <!-- Thirteenth Row: Service Life -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Service Life</label> 
+                    <input 
+                        type="number" 
+                        formControlName="service_life"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="0">
+                </div>
+
+                <!-- Fourteenth Row: Department -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Department<span class="text-red-500">*</span></label>
+                    <p-dropdown 
+                        [options]="departmentOptions" 
+                        formControlName="department"
+                        placeholder="--Please Select--"
+                        optionLabel="name"
+                        optionValue="id"
+                        [filter]="true"
+                        filterBy="name"
+                        styleClass="w-full col-span-4">
+                    </p-dropdown>
+                </div>
+
+                <!-- Fifteenth Row: Parent Equipment -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Parent Equipment</label>
+                    <p-dropdown 
+                        [options]="parentEquipmentOptions" 
+                        formControlName="parent_equipment"
+                        placeholder="--Please Select--"
+                        optionLabel="name"
+                        optionValue="id"
+                        [filter]="true"
+                        filterBy="name"
+                        styleClass="w-full col-span-4">
+                    </p-dropdown>
+                </div>
+
+                <!-- Sixteenth Row: Authority For Installation -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Authority For Installation</label>
+                    <input 
+                        type="text" 
+                        formControlName="authority_of_installation"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white placeholder-gray-200"
+                        placeholder="Enter authority">
+                </div>
+
+                <!-- Seventeenth Row: Installation Remarks -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Installation Remarks</label>
+                    <textarea 
+                        formControlName="removal_remarks"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter installation remarks"
+                        rows="2">
+                    </textarea>
+                </div>
+
+                <!-- Eighteenth Row: RH In Installation -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">RH In Installation</label> 
+                    <input 
+                        type="number" 
+                        formControlName="rh_in_installation"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="0">
+                </div>
+
+                <!-- Nineteenth Row: Sub Department -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Sub Department</label>
+                    <input 
+                        type="text" 
+                        formControlName="sub_department"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter sub department">
+                </div>
+
+                <!-- Twentieth Row: Equipment Specifications -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Equipment Specifications<span class="text-red-500">*</span></label>
+                    <textarea 
+                        formControlName="equipment_specifications"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter equipment specifications (model/shaft/motor)"
+                        rows="3">
+                    </textarea>
+                </div>
+
+                <!-- Twenty-first Row: INSMA Remarks -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">INSMA Remarks<span class="text-red-500">*</span></label>
+                    <textarea 
+                        formControlName="insma_remarks"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white"
+                        placeholder="Enter INSMA remarks"
+                        rows="3">
+                    </textarea>
+                </div>
+
+                <!-- Twenty-second Row: Request Reason -->
+                <div class="grid grid-cols-6 gap-4 items-center">
+                    <label class="text-sm font-medium text-gray-700 col-span-2">Request Reason<span class="text-red-500">*</span></label>
+                    <textarea 
+                        formControlName="request_reason"
+                        class="w-full p-2 border-2 border-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 col-span-4 bg-white placeholder-gray-400"
+                        placeholder="Enter request reason"
+                        rows="3">
+                    </textarea>
+                </div>
+            </div>
+        </form>
+        
+        <div class="flex justify-end gap-2 mt-6 pt-4 border-t border-gray-200">
+            <button 
+                type="button" 
+                class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-200">
+                Cancel
+            </button>
+            <button 
+                type="button" 
+                class="px-6 py-2 bg-blue-600 -500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
+                (click)="saveReference()">
+                Save
+            </button>
+            <!-- <button 
+                *ngIf="isEdit"
+                type="button" 
+                class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200"
+                (click)="approveReference()"
+                [disabled]="sfdReferenceForm.invalid">
+                Approve
+            </button>
+            <button 
+                *ngIf="isEdit"
+                type="button" 
+                class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200"
+                (click)="rejectReference()"
+                >
+                Reject
+            </button> -->
+        </div>
+    </div>
+
+</p-dialog>
+
+<!-- Simple Dialog with Textarea -->
+<p-dialog 
+    header="Add Justification" 
+    [(visible)]="showCommentDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{width: '50vw'}" 
+    [baseZIndex]="10000" 
+    [draggable]="false" 
+    [resizable]="true">
+    
+    <div class="p-4 pb-2">
+        <textarea 
+            [(ngModel)]="commentText"
+            class="w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+            placeholder="Enter your comment here..."
+            rows="5">
+        </textarea>
+    </div>
+    
+    <div class="flex justify-between gap-2 mt-4 pb-3 border-gray-200 px-5">
+        <span
+            type="button" 
+            class="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200 flex items-center gap-2"
+            (click)="saveComment(2)">
+            <i class="pi pi-times"></i>
+            Reject
+        </span>
+        <span 
+            type="button" 
+            class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 flex items-center gap-2"
+            (click)="saveComment(1)">
+            <i class="pi pi-check"></i>
+            Approve
+        </span>
+    </div>
+</p-dialog>

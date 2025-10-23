@@ -1,0 +1,11 @@
+<app-commentor-sheet
+  title="SEG Form Records"
+  [customFormComponent]="segFormComponent"
+  [mode]="mode"
+  [record]="record"
+  [inputFormData]="formData"
+  [transactionId]="transactionId"
+  [submodule]="6"
+  (onSubmit)="onFormSubmit($event)"
+  (onAddComment)="onCommentAdded($event)">
+</app-commentor-sheet>

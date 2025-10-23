@@ -1,0 +1,118 @@
+<div class="w-72 h-screen bg-gradient-to-b from-navy-900 to-navy-800 text-white fixed left-0 top-0 z-50 shadow-2xl overflow-y-auto">
+  <!-- Sidebar Header -->
+  <div class="p-6 border-b border-navy-700 text-center">
+    <h3 class="text-xl font-semibold text-white">Form Management</h3>
+  </div>
+  
+  <!-- Navigation -->
+  <nav class="p-4 space-y-2">
+    <!-- ETMA Menu -->
+    <div class="space-y-1">
+      <div class="flex items-center justify-between p-4 rounded-lg cursor-pointer hover:bg-navy-700 transition-all duration-300 border-l-4 border-transparent hover:border-yellow-400" (click)="toggleETMA()">
+        <div class="flex items-center">
+          <span class="text-xl mr-3">⚡</span>
+          <span class="font-medium">ETMA</span>
+        </div>
+        <span class="text-sm transition-transform duration-300" [class.rotate-180]="isETMAExpanded">▼</span>
+      </div>
+      
+      <!-- ETMA Submenu -->
+      <div class="overflow-hidden transition-all duration-300 bg-navy-800 rounded-lg" [class.max-h-96]="isETMAExpanded" [class.max-h-0]="!isETMAExpanded">
+        <!-- Transaction Submenu -->
+        <div class="space-y-1">
+          <div class="flex items-center justify-between p-3 pl-12 cursor-pointer hover:bg-navy-600 transition-all duration-300 border-l-4 border-transparent hover:border-yellow-400" (click)="toggleTransaction()">
+            <div class="flex items-center">
+              <span class="text-lg mr-2">📊</span>
+              <span class="text-sm text-navy-200">Transaction</span>
+            </div>
+            <span class="text-xs transition-transform duration-300" [class.rotate-180]="isTransactionExpanded">▼</span>
+          </div>
+          
+          <!-- Transaction Forms Submenu -->
+          <div class="overflow-hidden transition-all duration-300 bg-navy-900 rounded-lg ml-4" [class.max-h-96]="isTransactionExpanded" [class.max-h-0]="!isTransactionExpanded">
+            <div class="flex items-center p-3 pl-8 transition-colors duration-200 border-l-4 cursor-pointer" 
+                 [class.bg-navy-600]="isSubmenuActive('/transaction/etma')"
+                 [class.border-yellow-400]="isSubmenuActive('/transaction/etma')"
+                 [class.border-transparent]="!isSubmenuActive('/transaction/etma')"
+                 [class.hover:bg-navy-600]="!isSubmenuActive('/transaction/etma')"
+                 [class.hover:border-yellow-400]="!isSubmenuActive('/transaction/etma')"
+                 (click)="navigateToHSConverter()">
+              <span class="text-sm" [class.text-yellow-300]="isSubmenuActive('/transaction/etma')" [class.text-navy-200]="!isSubmenuActive('/transaction/etma')">Gas Turbine Generator Load Trial Report</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEG Form Menu -->
+    <div class="space-y-1">
+      <div class="flex items-center p-4 rounded-lg cursor-pointer transition-all duration-300 border-l-4" 
+           [class.bg-navy-700]="isActive('/seg-form')"
+           [class.border-yellow-400]="isActive('/seg-form')"
+           [class.border-transparent]="!isActive('/seg-form')"
+           [class.hover:bg-navy-700]="!isActive('/seg-form')"
+           [class.hover:border-yellow-400]="!isActive('/seg-form')"
+           (click)="navigateToSegForm()">
+        <span class="text-xl mr-3">📋</span>
+        <span class="font-medium" [class.text-yellow-300]="isActive('/seg-form')" [class.text-white]="!isActive('/seg-form')">SEG Form</span>
+      </div>
+    </div>
+
+    <!-- HITU Forms Menu -->
+    <div class="space-y-1">
+      <div class="flex items-center justify-between p-4 rounded-lg cursor-pointer transition-all duration-300 border-l-4" 
+           [class.bg-navy-700]="isHITUExpanded"
+           [class.border-yellow-400]="isHITUExpanded"
+           [class.border-transparent]="!isHITUExpanded"
+           [class.hover:bg-navy-700]="!isHITUExpanded"
+           [class.hover:border-yellow-400]="!isHITUExpanded"
+           (click)="toggleHITU()">
+        <div class="flex items-center">
+          <span class="text-xl mr-3">🔧</span>
+          <span class="font-medium" [class.text-yellow-300]="isHITUExpanded" [class.text-white]="!isHITUExpanded">HITU Forms</span>
+        </div>
+        <span class="text-sm transition-transform duration-300" [class.rotate-180]="isHITUExpanded">▼</span>
+      </div>
+      
+      <!-- HITU Submenu -->
+      <div class="overflow-hidden transition-all duration-300 bg-navy-800 rounded-lg" [class.max-h-96]="isHITUExpanded" [class.max-h-0]="!isHITUExpanded">
+        <div class="flex items-center p-3 pl-12 transition-colors duration-200 border-l-4 cursor-pointer" 
+             [class.bg-navy-600]="isSubmenuActive('/etma-form')"
+             [class.border-yellow-400]="isSubmenuActive('/etma-form')"
+             [class.border-transparent]="!isSubmenuActive('/etma-form')"
+             [class.hover:bg-navy-600]="!isSubmenuActive('/etma-form')"
+             [class.hover:border-yellow-400]="!isSubmenuActive('/etma-form')"
+             (click)="navigateToETMAForm()">
+          <span class="text-sm" [class.text-yellow-300]="isSubmenuActive('/etma-form')" [class.text-navy-200]="!isSubmenuActive('/etma-form')">Preliminary Underwater Hull Inspection</span>
+        </div>
+        <div class="flex items-center p-3 pl-12 transition-colors duration-200 border-l-4 cursor-pointer" 
+             [class.bg-navy-600]="isSubmenuActive('/intermediate-form')"
+             [class.border-yellow-400]="isSubmenuActive('/intermediate-form')"
+             [class.border-transparent]="!isSubmenuActive('/intermediate-form')"
+             [class.hover:bg-navy-600]="!isSubmenuActive('/intermediate-form')"
+             [class.hover:border-yellow-400]="!isSubmenuActive('/intermediate-form')"
+             (click)="navigateToIntermediateForm()">
+          <span class="text-sm" [class.text-yellow-300]="isSubmenuActive('/intermediate-form')" [class.text-navy-200]="!isSubmenuActive('/intermediate-form')">Intermediate Form</span>
+        </div>
+        <div class="flex items-center p-3 pl-12 transition-colors duration-200 border-l-4 cursor-pointer" 
+             [class.bg-navy-600]="isSubmenuActive('/final-form')"
+             [class.border-yellow-400]="isSubmenuActive('/final-form')"
+             [class.border-transparent]="!isSubmenuActive('/final-form')"
+             [class.hover:bg-navy-600]="!isSubmenuActive('/final-form')"
+             [class.hover:border-yellow-400]="!isSubmenuActive('/final-form')"
+             (click)="navigateToFinalForm()">
+          <span class="text-sm" [class.text-yellow-300]="isSubmenuActive('/final-form')" [class.text-navy-200]="!isSubmenuActive('/final-form')">Final Form</span>
+        </div>
+        <div class="flex items-center p-3 pl-12 transition-colors duration-200 border-l-4 cursor-pointer" 
+             [class.bg-navy-600]="isSubmenuActive('/uw-compartments-form')"
+             [class.border-yellow-400]="isSubmenuActive('/uw-compartments-form')"
+             [class.border-transparent]="!isSubmenuActive('/uw-compartments-form')"
+             [class.hover:bg-navy-600]="!isSubmenuActive('/uw-compartments-form')"
+             [class.hover:border-yellow-400]="!isSubmenuActive('/uw-compartments-form')"
+             (click)="navigateToUWCompartmentsForm()">
+          <span class="text-sm" [class.text-yellow-300]="isSubmenuActive('/uw-compartments-form')" [class.text-navy-200]="!isSubmenuActive('/uw-compartments-form')">U/W Compartments Form</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

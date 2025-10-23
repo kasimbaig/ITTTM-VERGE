@@ -1,0 +1,66 @@
+<div class="">
+  <!-- Header Section -->
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-shield"></i>
+      <div>
+        <h2>OPS Authority Management</h2>
+        <p>View & manage operational authorities across the naval fleet</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <button class="btn primary btn-sm" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i> Add Authority
+      </button>
+
+      <button class="btn outlined btn-sm">
+        <i class="pi pi-upload"></i> Bulk Upload
+      </button>
+
+      <div class="menu-group">
+        <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+        <button class="btn outlined btn-sm" (click)="exportMenu.toggle($event)">
+          <i class="pi pi-file-export"></i> Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <app-paginated-table [data]="departments" [columns]="cols" [showEndActions]="true"
+    (viewEvent)="viewDeptDetails($event)" (editEvent)="editDetails($event, true)"
+    (deleteEvent)="deleteDeptDetails($event)"></app-paginated-table>
+
+</div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal
+  [visible]="showDeleteDialog"
+  [message]="'Are you sure you want to delete ' + (selectedDept?.name || 'this OPS authority') + '?'"
+  (onConfirm)="confirmDeletion()"
+  (onCancel)="cancelDeletion()">
+</app-delete-confirmation-modal>
+
+<app-toast></app-toast>
+
+<!-- View Details Component -->
+<app-view-details
+  *ngIf="viewdisplayModal"
+  [open]="viewdisplayModal"
+  [viewDetails]="selectedDept"
+  [headers]="formConfigForNewDetails"
+  (onOpenChange)="viewdisplayModal = $event"
+  [title]="'View OPS Authority Details'"
+></app-view-details>
+
+  <!-- Add Form -->
+  <app-add-form *ngIf="isFormOpen" [isSingleColumn]="true" [open]="isFormOpen" [formConfig]="formConfigForNewDetails" [formData]="newDepartment"
+    [fromTitle]="title" (onOpenChange)="isFormOpen = $event" (onSubmit)="handleSubmit($event)"></app-add-form>
+
+  <!-- Edit Form -->
+  <app-add-form *ngIf="isEditFormOpen" [isSingleColumn]="true" [open]="isEditFormOpen" [formConfig]="formConfigForNewDetails"
+    [formData]="selectedDept" [fromTitle]="editTitle" [isEditMode]="true" (onOpenChange)="isEditFormOpen = $event"
+    (onSubmit)="handleEditSubmit($event)"></app-add-form>

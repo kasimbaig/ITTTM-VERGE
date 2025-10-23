@@ -1,0 +1,232 @@
+<div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Equipment <span class="text-orange-500">Nomenclature List</span></h2>
+        <div class="h-1 w-20 bg-blue-600 rounded"></div>
+    </div>
+
+    <!-- Dropdown Filters -->
+    <div class=" rounded-lg shadow-md p-6 mb-6 border border-gray-200 bg-slate-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Unit Dropdown -->
+            <div class="flex items-center gap-4">
+                <label class="text-sm font-bold text-gray-700 w-20 flex-shrink-0">Unit Type</label>
+                <p-dropdown 
+                    [options]="unitTypeOptions" 
+                    [(ngModel)]="selectedUnitType"
+                    placeholder="--Select Unit Type--"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name"
+                    (onChange)="onUnitTypeChange()"
+                    styleClass="flex-1">
+                </p-dropdown>
+            </div>
+
+            <!-- Ship Name Dropdown -->
+            <div class="flex items-center gap-4">
+                <label class="text-sm font-bold text-gray-700 w-20 flex-shrink-0">Ship Name</label>
+                <p-dropdown 
+                    [options]="shipOptions" 
+                    [(ngModel)]="selectedShip"
+                    placeholder="--Select Ship--"
+                    optionLabel="name"  
+                    [filter]="true"
+                    filterBy="name"
+                    [disabled]="!selectedUnitType"
+                    (onChange)="onShipChange()"
+                    styleClass="flex-1">
+                </p-dropdown>
+            </div>
+            
+            <!-- Department Dropdown -->
+            <div class="flex items-center gap-4">
+                <label class="text-sm font-bold text-gray-700 w-20 flex-shrink-0">Department</label>
+                <p-dropdown 
+                    [options]="departmentOptions" 
+                    [(ngModel)]="selectDepartment"
+                    placeholder="--Select Department--"
+                    optionLabel="name"  
+                    [filter]="true"
+                    filterBy="name"
+                    (onChange)="onDepartmentChange()"
+                    styleClass="flex-1">
+                </p-dropdown>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Hierarchy Table using PrimeNG -->
+    <p-table [value]="tableData" 
+             [paginator]="true" 
+             #dt
+             [rows]="10" 
+             showGridlines="true"
+             [showCurrentPageReport]="true"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+             [rowsPerPageOptions]="[10, 25, 50]"
+             styleClass="p-datatable-sm"
+              [globalFilterFields]="['ship_id','equipment_ship_detail','equipment_code','equipment_name','no_of_file','location_code','location_on_board','equipment_nomenclature']">
+
+       
+        <ng-template pTemplate="caption">
+            <div class="flex justify-between items-center p-4 bg-amber-100  rounded ">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
+                    <h5 class="text-xl font-semibold text-slate-800 m-0">Equipment Nomenclature List</h5>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button 
+                        (click)="updateAllNomenclatures()"
+                        [disabled]="!hasChanges()"
+                        class="px-6 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200 flex items-center gap-2">
+                        <i class="pi pi-save"></i>
+                        Update All
+                        <span *ngIf="getChangedItemsCount() > 0" class="ml-2 px-2 py-1 bg-white text-green-600 text-xs font-bold rounded-full">
+                            {{ getChangedItemsCount() }}
+                        </span>
+                    </button>
+                    <button 
+                        (click)="resetChanges()"
+                        [disabled]="!hasChanges()"
+                        class="px-4 py-2.5 bg-gray-500 text-white font-medium rounded-lg hover:bg-gray-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 flex items-center gap-2">
+                        <i class="pi pi-refresh"></i>
+                        Reset
+                    </button>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="pi pi-search text-slate-400"></i>
+                        </div>
+                        <input type="text" 
+                            class="pl-10 pr-4 py-2.5 w-80 border border-slate-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-slate-400" 
+                            [(ngModel)]="searchValue"
+                            (ngModelChange)="dt.filterGlobal(onSearchInput($event), 'contains')" 
+                            placeholder="Search equipment, codes, names..." />
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        
+        <ng-template pTemplate="header">
+            <tr>
+                <!-- <th pSortableColumn="rowIndex" class="bg-slate-700 text-white">
+                    <p-sortIcon field="rowIndex"></p-sortIcon>
+                    S.No.
+                </th> -->
+                <th pSortableColumn="ship_id" class="bg-slate-700 text-white">
+                    <p-sortIcon field="ship_id"></p-sortIcon>
+                    Ship ID
+                    <p-columnFilter type="text"   field="ship_id" display="menu" />
+                    
+                </th>
+                
+                <th pSortableColumn="equipment_ship_detail" class="bg-slate-700 text-white">
+                    <p-sortIcon field="equipment_ship_detail"></p-sortIcon>
+                    Equipment Ship Detail
+                    <p-columnFilter type="text"   field="equipment_ship_detail" display="menu" />
+                    
+                </th>
+                <th pSortableColumn="equipment_code" class="bg-slate-700 text-white">
+                    <p-sortIcon field="equipment_code"></p-sortIcon>
+                    Equipment Code
+                    <p-columnFilter type="text"   field="equipment_code" display="menu" />
+                    
+                </th>
+                <th pSortableColumn="equipment_name" class="bg-slate-700  min-w-48 text-white">
+                    <p-sortIcon field="equipment_name"></p-sortIcon>
+                    Equipment Name
+                    <p-columnFilter type="text"  field="equipment_name" display="menu" />
+
+                </th>
+                <th pSortableColumn="no_of_file" class="bg-slate-700 text-white">
+                    <p-sortIcon field="no_of_file"></p-sortIcon>
+                    No. Of Fits
+                    <p-columnFilter type="text"  field="no_of_file" display="menu" />
+
+                </th>
+                <th pSortableColumn="location_code" class="bg-slate-700 text-white">
+                    <p-sortIcon field="location_code"></p-sortIcon>
+                    Location Code
+                    <p-columnFilter type="text"  field="location_code" display="menu" />
+
+                </th>
+                <th pSortableColumn="location_on_board" class="bg-slate-700 text-white">
+                    <p-sortIcon field="location_on_board"></p-sortIcon>
+                    Location Board
+                    <p-columnFilter type="text"  field="location_on_board" display="menu" />
+
+                </th>
+                <th pSortableColumn="equipment_nomenclature" class="bg-slate-700 text-white">
+                    <p-sortIcon field="equipment_nomenclature"></p-sortIcon>
+                    Equipment Nomenclature
+                    <p-columnFilter type="text"  field="equipment_nomenclature" display="menu" />
+
+                </th>
+                
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+            <tr [class.bg-gray-50]="rowIndex % 2 === 1"  
+            class="py-2"    >
+            <!-- <td>{{rowIndex + 1}}</td> -->
+                <td>{{ item.ship || '-' }}</td>
+                <td>{{ item.ship_name || '-' }}</td>
+                <td>{{ item.equipment_code || '-' }}</td>
+                <td>{{ item.equipment_name || '-' }}</td>
+                <td>{{ item.no_of_fits || '-' }}</td>
+                <td>{{ item.location_code || '-' }}</td>
+                                <td>
+                    <input type="text" 
+                           [(ngModel)]="item.location_on_board" 
+                           readonly
+                             class="w-full min-w-48 x-2 py-1 border-2 border-gray-300 rounded-sm bg-gray-100 cursor-not-allowed"
+                           placeholder="Location Board">
+                </td>
+                                <td>
+                    <input type="text" 
+                           [(ngModel)]="item.equipment_nomenclature" 
+                           (ngModelChange)="onNomenclatureChange(item, rowIndex)"
+                           [class]="'w-full px-2 min-w-48 py-1 border-2 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 ' + (item.equipment_nomenclature !== originalData[rowIndex]?.equipment_nomenclature ? 'border-orange-500' : 'border-gray-500')"
+                           placeholder="Equipment Nomenclature">
+                </td>
+                
+                <td class="px-4 py-3 text-center">
+                    <button mat-button [matMenuTriggerFor]="actionsMenu"   class="px-3 py-1.5 bg-blue-600 text-red-600  rounded-sm hover:bg-blue-600 -700 transition-colors duration-200">
+                        <small>Actions</small>
+                    </button>
+                    <mat-menu #actionsMenu="matMenu" class="shadow-lg border border-gray-200 rounded-sm">
+                        <!-- <button  mat-menu-item 
+                            class="flex items-center justify-start gap-3 px-4 py-3 w-full hover:bg-blue-600 -50 text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                            <i class="fa-solid fa-eye text-blue-500 w-4 h-4 flex-shrink-0"></i>
+                            <span class="text-sm font-medium">View</span>
+                        </button> -->
+                
+                        <button  mat-menu-item 
+                            (click)="updateNomenclature(item)"
+                            class="flex items-center justify-start gap-3 px-4 py-3 w-full hover:bg-green-50 text-green-600 hover:text-green-800 transition-colors duration-200">
+                            <i class="fa-solid fa-pen-to-square text-green-500 w-4 h-4 flex-shrink-0"></i>
+                            <span class="text-sm font-medium">Update</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+        </ng-template>
+        
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="10" class="text-center py-8 text-gray-500">
+                    <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                        <div class="flex flex-col items-center justify-center py-12">
+                            <i class="pi pi-inbox text-6xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-600 mb-2">No Records Found</h3>
+                            <p class="text-gray-500">There are no equipment nomenclature records available at the moment.</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>

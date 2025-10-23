@@ -1,0 +1,10 @@
+<div class="chart-card">
+  <div class="chart-header">
+    <i class="pi pi-cog"></i>
+    <span>Common / Unique Equipment</span>
+  </div>
+  <p-chart type="pie" [data]="chartData" (onDataSelect)="handleSelect($event)" [options]="chartOptions"></p-chart>
+  <p-dialog header="Equipment Details" [(visible)]="dialogVisible" modal>
+    <!-- <app-sfd-equipment-detail [items]="detailItems"></app-sfd-equipment-detail> -->
+  </p-dialog>
+</div>

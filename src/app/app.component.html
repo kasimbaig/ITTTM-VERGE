@@ -1,0 +1,21 @@
+<div class="layout-container" *ngIf="!isLoginRoute() && !isHomeRoute() && !isAboutUsRoute() && !isContactUsRoute()">
+  <div class="layout-body">
+    <div class="content">
+      <router-outlet></router-outlet>
+     
+    </div>
+  </div>
+ 
+  <!-- <app-chatbot-dialog 
+    [hidden]="!isChatbotOpen"
+    (closeDialog)="closeChatbot()" 
+    (minimizeDialog)="minimizeChatbot()">
+  </app-chatbot-dialog>
+  
+  <button mat-mini-fab aria-label="Chatbot" class="fab" class="floating-chatbot-btn" (click)="openChatbot()" pTooltip="Chatbot"
+    tooltipPosition="bottom">
+    <i class="fa-solid fa-comments fa-2x"></i>
+  </button> -->
+</div>
+<p-toast />
+<router-outlet *ngIf="isLoginRoute() || isHomeRoute() || isAboutUsRoute() || isContactUsRoute()"></router-outlet>

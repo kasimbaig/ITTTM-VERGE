@@ -1,0 +1,313 @@
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-2 text-center">
+    <h3 class="text-lg font-semibold text-green-700">Fill/Update the last FPT Parameters prior submitting SRAR</h3>
+  </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end mb-3">
+        <button (click)="addFullPowerTrials()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+        </button>
+        <button (click)="editFullPowerTrials()"
+          class="bg-orange-50 border-orange-500 border-2 hover:bg-orange-500 hover:text-white text-orange-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+        </button>
+        <button (click)="saveFullPowerTrials()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+        </button>
+      </div>
+  <!-- Table Section -->
+  <div class="mb-6">
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+      14. Full Power Trials / Performance Trials Full load Trials/Main Engines/Diesel Alternators(GTG)
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-400">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">Date</th>
+            <th class="border border-gray-400 p-2 text-center">Location/Ression</th>
+            <th class="border border-gray-400 p-2 text-center">Drought (in Mtrs)/FWD</th>
+            <th class="border border-gray-400 p-2 text-center">Drought (in Mtrs)/AFT</th>
+            <th class="border border-gray-400 p-2 text-center">Displacement (Tons)</th>
+            <th class="border border-gray-400 p-2 text-center">Max Speed (in Knots)</th>
+            <th class="border border-gray-400 p-2 text-center">Conducted By</th> 
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of fullPowerTrialsData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.date" placeholder="Date">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.occasion_reason" placeholder="Location/Reason">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.draught_fwd" placeholder="Draught FWD">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.draught_aft" placeholder="Draught AFT">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.displacement" placeholder="Displacement">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.max_speed" placeholder="Max Speed">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <select [disabled]="isEdit" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.conducted_by">
+                  <option value="">Select Conducted By</option>
+                  <option value="1">DTT</option>
+                  <option value="2">MTU</option>
+                  <option value="3">CTT</option>
+                  <option value="4">SS</option>
+                </select>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="fullPowerTrialsData.length === 0">
+            <td colspan="9" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No main engine data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-between items-center mt-3 gap-2">
+      <!-- Equipment Filter -->
+      <div class="flex gap-4 items-center">
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-medium text-gray-700">Equipment:</label>
+          <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+            [options]="srarEquipmentData"
+            optionLabel="equipment_name"
+            [filter]="true"
+            filterBy="equipment_name"
+            placeholder="Select Equipment"
+            class="w-48"
+            display="chip"
+            [(ngModel)]="selectedEquipment">
+          </p-multiSelect>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex gap-2">
+        <button (click)="addFptEquipment()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+        </button>
+        <button (click)="editFptEquipment()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+        </button>
+        <button (click)="saveFptEquipment()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+        </button>
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="w-full border-collapse border border-gray-400">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border border-gray-400 p-2 text-center">EQPT Name</th>
+            <th class="border border-gray-400 p-2 text-center">Nomenclature</th>
+            <th class="border border-gray-400 p-2 text-center">EQPT Code</th>
+            <th class="border border-gray-400 p-2 text-center">Loc on Board</th>
+            <th class="border border-gray-400 p-2 text-center">Ser No</th>
+            <th class="border border-gray-400 p-2 text-center">Fuel Rack DBR (max)</th>
+            <th class="border border-gray-400 p-2 text-center">PCL Trottle Marking (Max)</th>
+            <th class="border border-gray-400 p-2 text-center">Last DHM Trials Undertaken On</th>
+            <th class="border border-gray-400 p-2 text-center">Pitch</th>
+            <th class="border border-gray-400 p-2 text-center">Max RPM</th>
+            <th class="border border-gray-400 p-2 text-center">Rated Power (in KW)</th> 
+            <th class="border border-gray-400 p-2 text-center">Max Achieved Power (in KW)</th>
+            <th class="border border-gray-400 p-2 text-center">Remarks</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of fptEquipmentData; let i = index">
+            <tr class="bg-white">
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.equipment_name" placeholder="Equipment name">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.nomenclature" placeholder="Nomenclature">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.equipment_code" placeholder="Equipment code">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.location_name" placeholder="Location on board">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.serial_no" placeholder="Serial number">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.fuel_rack_dbr_max" placeholder="Fuel rack DBR max">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.marking_max" placeholder="PCL throttle marking max">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="date" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.undertaken_on" placeholder="Last DHM trials undertaken on">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.pitch" placeholder="Pitch">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.max_rpm" placeholder="Max RPM">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.rated_power" placeholder="Rated power">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.max_achieved_power" placeholder="Max achieved power">
+              </td>
+              <td class="border border-gray-400 p-2 text-center">
+                <input [disabled]="isEditEquipment" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.remarks" placeholder="Remarks">
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="fptEquipmentData.length === 0">
+            <td colspan="12" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+              No equipment data available
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+
+
+
+
+  </div>
+
+  
+  <div class="mb-6 mt-5">
+    <div class="flex justify-between items-center mb-2 gap-2">
+      <!-- Equipment Filter -->
+      <div class="flex gap-4 items-center">
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-medium text-gray-700">Equipment:</label>
+          <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+            [options]="srarEquipmentData"
+            optionLabel="equipment_name"
+            [filter]="true"
+            filterBy="equipment_name"
+            placeholder="Select Equipment"
+            class="w-48"
+            display="chip"
+            [(ngModel)]="selectedDieselEquipment">
+          </p-multiSelect>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex gap-2">
+        <button (click)="addFptDieselAlternators()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+        </button>
+        <button (click)="editFptDieselAlternators()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+        </button>
+        <button (click)="saveFptDieselAlternators()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+        </button>
+      </div>
+    </div>
+    <div class="bg-blue-600 -950 text-white p-2 font-semibold">
+      15. Diesel Alternators/GTG
+    </div>
+   
+    <div class="overflow-x-auto ">
+        <table class="w-full border-collapse border border-gray-400">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-400 p-2 text-center">EQPT Name</th>
+              <th class="border border-gray-400 p-2 text-center">Nomenclature</th>
+              <th class="border border-gray-400 p-2 text-center">EQPT Code</th>
+              <th class="border border-gray-400 p-2 text-center">Location</th>
+              <th class="border border-gray-400 p-2 text-center">EQPT Ser No</th>
+              <th class="border border-gray-400 p-2 text-center">Date</th>
+              <th class="border border-gray-400 p-2 text-center">Occasion/Reason</th>
+              <th class="border border-gray-400 p-2 text-center">Rated Load (KW)</th>
+              <th class="border border-gray-400 p-2 text-center">Max Load Achieved (kW)</th>
+              <th class="border border-gray-400 p-2 text-center">Conducted By DTTT/MTU/CTT/SS</th>
+              <th class="border border-gray-400 p-2 text-center">Last EHM Trials Undertaken on</th>
+              <th class="border border-gray-400 p-2 text-center">Remark</th>
+           
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of fptDieselAlternatorsData; let i = index">
+              <tr class="bg-white">
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.equipment_name" placeholder="Equipment name">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.nomenclature" placeholder="Nomenclature">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.equipment_code" placeholder="Equipment code">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.location_name" placeholder="Location">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.serial_no" placeholder="Equipment serial number">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="date" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.date" placeholder="Date">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.occasion" placeholder="Occasion/Reason">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.rated_load" placeholder="Rated load">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.max_load_achieved" placeholder="Max load achieved">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <select [disabled]="isEditDieselAlternators" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.conducted_by">
+                    <option value="">Select Conducted By</option>
+                    <option value="1">DTT</option>
+                    <option value="2">MTU</option>
+                    <option value="3">CTT</option>
+                    <option value="4">SS</option>
+                  </select>
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="date" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.last_ehm_trials_undertaken_on" placeholder="Last EHM trials undertaken on">
+                </td>
+                <td class="border border-gray-400 p-2 text-center">
+                  <input [disabled]="isEditDieselAlternators" pInputText type="text" class="w-full min-w-48 border border-gray-300 rounded px-2 py-1" [(ngModel)]="item.remark" placeholder="Remark">
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="fptDieselAlternatorsData.length === 0">
+              <td colspan="12" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+                No diesel alternators data available
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+  </div>
+
+
+</div>

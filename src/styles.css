@@ -1,0 +1,1512 @@
+@import "tailwindcss";
+@plugin "tailwindcss-primeui";
+@import "primeicons/primeicons.css";
+@import "./green-gradient-theme.css";
+
+/* ========================================
+   MODERN DESIGN SYSTEM - CSS VARIABLES
+   ======================================== */
+:root {
+  /* Primary Theme Colors */
+  --primary-purple: #6C63FF;
+  --primary-pink: #FF6584;
+  --primary-teal: #00D9A3;
+  --primary-blue: #00f2fe;
+  --primary-neon-pink: #f093fb;
+  --primary-orange: #FF6B35;
+  --primary-steel: #004E89;
+  
+  /* Dashboard Specific Colors */
+  --dashboard-primary: #6C63FF;
+  --dashboard-secondary: #FF6584;
+  --dart-neon-teal: #00FFE9;
+  --dart-neon-green: #00FF87;
+  --dart-purple: #7B2FF7;
+  --maintop-orange: #FF6B35;
+  --maintop-steel: #004E89;
+  --sfd-blue-gray: #546E7A;
+  --sfd-teal: #00897B;
+  
+  /* Status Colors */
+  --status-success: #00D9A3;
+  --status-warning: #FFC107;
+  --status-danger: #FF5252;
+  --status-info: #00f2fe;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-neon: linear-gradient(135deg, #00f2fe 0%, #f093fb 100%);
+  --gradient-sunset: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+  --gradient-ocean: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #2980b9 100%);
+  --gradient-dashboard: linear-gradient(135deg, #6C63FF 0%, #FF6584 100%);
+  --gradient-dart: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  --gradient-maintop: linear-gradient(135deg, #FF6B35 0%, #FFD23F 100%);
+  --gradient-sfd: linear-gradient(135deg, #546E7A 0%, #00897B 100%);
+  
+  /* Glass Effects */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: blur(20px);
+  --glass-dark-bg: rgba(0, 0, 0, 0.3);
+  --glass-dark-border: rgba(255, 255, 255, 0.1);
+  
+  /* Neumorphic Shadows */
+  --neomorph-shadow-light: 20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
+  --neomorph-shadow-hover: 25px 25px 75px #bebebe, -25px -25px 75px #ffffff;
+  --neomorph-bg: linear-gradient(145deg, #ffffff, #f0f0f0);
+  
+  /* Standard Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.3);
+  --shadow-neon-cyan: 0 0 20px rgba(0, 242, 254, 0.5);
+  --shadow-neon-pink: 0 0 20px rgba(240, 147, 251, 0.5);
+  --shadow-neon-purple: 0 0 20px rgba(108, 99, 255, 0.5);
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.6s ease;
+  --transition-bounce: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Typography */
+  --font-primary: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Courier New', monospace;
+  
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  
+  /* Legacy Variables (Keep for compatibility) */
+  --primary-gradient-start: #059669;
+  --primary-gradient-end: #047857;
+  --secondary-gradient-start: #10b981;
+  --secondary-gradient-end: #059669;
+  --bg-primary: #ffffff;
+  --bg-secondary: rgba(255, 255, 255, 0.95);
+  --bg-tertiary: #f8fafc;
+  --text-primary: #1f2937;
+  --text-white: #ffffff;
+  --border-light: rgba(255, 255, 255, 0.2);
+  --border-medium: rgba(0, 0, 0, 0.1);
+  --card-border: #e5e7eb;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+  --accent-light: #fbbf24;
+}
+
+/* Utility Classes */
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.neomorph-card {
+  background: var(--neomorph-bg);
+  box-shadow: var(--neomorph-shadow-light);
+  border-radius: var(--radius-2xl);
+  transition: all var(--transition-bounce);
+}
+
+.neomorph-card:hover {
+  box-shadow: var(--neomorph-shadow-hover);
+  transform: translateY(-4px);
+}
+
+.neon-glow-cyan {
+  box-shadow: var(--shadow-neon-cyan);
+}
+
+.neon-glow-pink {
+  box-shadow: var(--shadow-neon-pink);
+}
+
+.gradient-text {
+  background: var(--gradient-neon);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-dashboard);
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("assets/fonts/Poppins-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bg-primary-blue {
+  background-color: #059669;
+  color: white;
+}
+
+.bg-primary-blue-600 {
+  background-color: #047857;
+  color: white;
+}
+
+html {
+  min-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* :root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 214 100% 17%;
+  --primary-foreground: 35 90% 50%;
+  --secondary: 209 93% 24%;
+  --secondary-foreground: 60 100% 95%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 196 63% 36%;
+  --accent-foreground: 60 100% 95%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 214 100% 17%;
+  --radius: 0.5rem;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+} */
+
+::ng-deep .fancy-table .p-datatable-tbody>tr:nth-child(even) {
+  background-color: #f0fdf4 !important;
+  /* light green */
+}
+
+::ng-deep .p-datatable-scrollable-wrapper {
+  overflow-x: auto !important;
+}
+
+::ng-deep .fancy-table .p-datatable-tbody>tr:hover {
+  background-color: #dcfce7 !important;
+  /* slightly darker green on hover */
+}
+
+::ng-deep .p-datatable-scrollable-wrapper {
+  overflow-x: auto !important;
+  overflow-y: auto;
+  max-width: 100%;
+}
+
+::ng-deep .p-datatable-scrollable-view {
+  min-width: max-content;
+}
+
+/* Sticky Actions Column (first td/th) */
+::ng-deep .p-datatable-fancy .p-datatable-thead>tr>th:first-child,
+::ng-deep .p-datatable-fancy .p-datatable-tbody>tr>td:first-child {
+  position: sticky;
+  left: 0;
+  background: #f8fafc;
+  z-index: 5;
+  box-shadow: 2px 0 6px -3px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  overflow-y: scroll; /* Force vertical scrollbar globally */
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+main {
+  overflow-y: auto;
+}
+
+aside {
+  flex: 1 0 10%;
+}
+
+/* Custom Sidebar Scrollbar */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: var(--primary-gradient-start) #ffffff00;
+  /* Thumb & Track */
+  overflow-y: auto;
+  /* Ensure scrolling is enabled */
+}
+
+/* Hide scrollbar by default */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Style the scrollbar thumb */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  /* Thumb color */
+  width: 5px;
+  border-radius: 12px;
+}
+
+/* Style the scrollbar track */
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  /* Track color */
+}
+
+/* Show scrollbar only when hovering */
+.sidebar-scroll:hover::-webkit-scrollbar {
+  opacity: 1;
+}
+
+/* Ensure scrollbar appears while actively scrolling */
+.sidebar-scroll {
+  scrollbar-gutter: stable;
+  /* Keeps layout stable when scrollbar appears */
+}
+
+.card .p-card {
+  width: 100%;
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.card .p-card .p-card-body {
+  padding: 10px 0;
+}
+
+.card .p-card .p-card-body .p-card-content .p-select {
+  width: 100%;
+  background: #d1fae5;
+  font-size: 20px;
+  border: 1px solid #047857;
+  font-size: 16px;
+  text-align: left;
+}
+
+.p-button {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%) !important;
+  color: var(--text-white) !important;
+  border: none !important;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px var(--shadow-medium);
+}
+
+.view-report-btn .p-button {
+  width: 180px;
+}
+
+.details-list-wrapper .p-datatable-thead>tr>th,
+.p-datatable-sort-icon,
+.p-datatable-sort-badge {
+  vertical-align: middle;
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  color: var(--text-white);
+  padding: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.p-button-info {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%) !important;
+  color: var(--text-white) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px var(--shadow-medium);
+}
+
+/* .search-reports-wrapper input {
+  background: #e1e7fd;
+  font-size: 16px;
+  border: 1px solid #2f5079;
+  font-size: 16px;
+  text-align: left;
+  padding: 5px 10px;
+  width: 200px;
+  border-radius: 4px;
+  outline: none;
+} */
+/* .search-reports-wrapper .p-floatlabel:has(input:focus) label {
+  color: #2f5079; */
+/* margin: 10px 0; */
+/* } */
+/* .search-reports-wrapper .p-floatlabel:has(input:focus) { */
+/* outline: none; */
+/* border: 1px solid #2f5079 */
+/* } */
+.view-dept-modal .p-dialog-header .p-dialog-title {
+  font-size: 18px;
+  font-weight: 500px;
+}
+
+.frequency-dropdown .p-select,
+.p-focus {
+  border: 1px solid #047857;
+  outline: none;
+}
+
+.p-select:not(.p-disabled):hover {
+  border: 1px solid #047857;
+  outline: none;
+}
+
+/* General Padding */
+/* .p-4 {
+  padding: 1rem;
+} */
+
+h3 {
+  color: #374151;
+  /* Gray */
+  margin-bottom: 0.5rem;
+}
+
+p {
+  color: #6b7280;
+  /* Light Gray */
+}
+
+/* Card Styling */
+.p-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  background: var(--bg-primary);
+  margin: 32px 0;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+/* Input Field */
+.p-inputgroup {
+  width: 100%;
+}
+
+/* Table Styling */
+.p-datatable {
+  margin-top: 1rem;
+}
+
+th {
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%) !important;
+  color: var(--text-white) !important;
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dept-list {
+  margin-bottom: 32px;
+}
+
+td {
+  padding: 10px;
+}
+
+/* Alternate Row Colors */
+.p-datatable-tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Action Buttons */
+.p-button-rounded {
+  margin: 0 5px;
+}
+
+/* Add Department Button */
+.p-button-primary {
+  float: right;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.add-dept-btn {
+  font-size: 14px;
+  border: none;
+}
+
+.header span h2 {
+  text-align: left;
+  font-size: 32px;
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+  cursor: default;
+  line-height: 140%;
+}
+
+.add-dept-modal input,
+textarea {
+  width: 100%;
+  margin-bottom: 16px;
+  outline: none;
+  border: 1px solid #047857;
+  font-size: 14px;
+}
+
+.add-dept-modal textarea {
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.add-dept-modal label {
+  margin-top: 5px;
+}
+
+.close-modal-btn {
+  color: #10b981 !important;
+  font-size: 14px;
+}
+
+.save-dept {
+  font-size: 14px;
+}
+
+.p-button-text {
+  color: #047857;
+}
+
+.view-dept-modal {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.icon-wrapper {
+  background: #10b981;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.name-code p:nth-child(1) {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.name-code p:nth-child(2) {
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.description p:nth-child(1) {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.description p:nth-child(2) {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.border-line {
+  border-bottom: 2px solid #d1fae5;
+}
+
+.align-left {
+  margin: 8px 32px;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.delete-dept-msg {
+  font-size: 14px;
+  color: #047857;
+  font-weight: 500;
+  text-align: center;
+}
+
+.delete-dept-btn {
+  background: #ef4444 !important;
+}
+
+.delete-msg-wrapper {
+  display: flex;
+}
+
+.pi-file {
+  color: #fff;
+}
+
+.dropdowns-sec .p-select {
+  width: 100%;
+  max-width: 193px;
+}
+
+.reports-input {
+  font-size: 16px;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 6px 30px;
+}
+
+.table-actions {
+  background: transparent !important;
+  border: none !important;
+  color: #374151 !important;
+}
+
+.p-tab {
+  background: #e0e0e0 !important;
+  padding: 6px 12px !important;
+}
+
+.p-tab-active {
+  background: #fff;
+  color: #374151 !important;
+  border-color: #10b981 !important;
+}
+
+.p-tablist-active-bar {
+  background: none !important;
+  display: none;
+}
+
+.p-tabpanels {
+  padding: 20px 0 18px !important;
+}
+
+.p-button-icon-only.p-button-rounded {
+  background: #10b981;
+  border: none !important;
+  color: #ffffff !important;
+
+}
+
+/* .p-datatable-table {
+  border: 1px solid #e0e0e0;
+border-radius: 8px;
+} */
+.p-datatable-scrollable>.p-datatable-table-container>.p-datatable-table>.p-datatable-thead,
+.p-datatable.p-datatable-striped .p-datatable-tbody>tr {
+  background: none !important;
+}
+
+.export-btn {
+  background: transparent !important;
+  border: 1px solid #e0e0e0 !important;
+  color: #6b7280;
+  padding: 8px 10px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  min-width: 150px;
+  justify-content: space-around;
+}
+
+.pi-file,
+.pi-chevron-down {
+  color: #6b7280;
+}
+
+.pi-chevron-down {
+  font-size: 12px;
+}
+
+.p-tieredmenu {
+  min-width: 6.5rem !important;
+}
+
+.p-tieredmenu-item-link {
+  padding: 8px 4px !important;
+  gap: 0;
+}
+
+.p-menu .p-button {
+  background: #fff !important;
+}
+
+.bg-grey {
+  background-color: #f8f9fb;
+}
+
+.header-dropdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* Make the export button transparent */
+.custom-split-button .p-button {
+  background-color: transparent !important;
+  border: none !important;
+  color: #007bff !important;
+  /* Change text color */
+  box-shadow: none !important;
+}
+
+.custom-split-button .p-button:hover {
+  background-color: rgba(44, 107, 174, 0.1) !important;
+}
+
+/* Ensure the dropdown aligns properly with the button */
+.p-splitbutton-menubutton {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.p-menu {
+  min-width: 150px !important;
+  /* Adjust width if needed */
+  margin-top: 5px !important;
+  /* Add spacing for alignment */
+}
+
+.p-tieredmenu {
+  min-width: 10.5rem;
+  left: -13.675px;
+}
+
+.logo-heading {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  font-size: 20px !important;
+  font-weight: 600;
+  align-items: baseline;
+}
+
+.table-box p {
+  /* border: 2px solid #e0e0e0; */
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Flex container to align dropdowns in a row */
+.dropdowns-container {
+  display: flex;
+  /* flex-wrap: wrap;   */
+  flex-direction: row;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+/* Ensures dropdowns take up equal space */
+.dropdowns-sec {
+  flex: 1 1 calc(16.66% - 16px);
+  /* 6 items per row with 16px gap */
+  min-width: 160px;
+  /* Prevents shrinking too small */
+}
+
+/* Responsive Behavior */
+@media (max-width: 1024px) {
+
+  /* Tablet screens */
+  .dropdowns-sec {
+    flex: 1 1 calc(33.33% - 16px);
+    /* 3 items per row */
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Mobile screens */
+  .dropdowns-sec {
+    flex: 1 1 calc(50% - 16px);
+    /* 2 items per row */
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Small mobile screens */
+  .dropdowns-sec {
+    flex: 1 1 100%;
+    /* 1 item per row */
+  }
+}
+
+.header-dropdown {
+  display: flex;
+  flex-direction: column;
+  /* gap: 2px; */
+}
+
+.header-dropdown .header {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.reset-btn {
+  border: 1px solid #334155;
+  border-radius: 6px;
+  display: flex;
+  gap: 20px;
+  padding: 8px 12px;
+  align-items: center;
+}
+
+.row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 8px 0 16px 0;
+}
+
+.active-tab {
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.tab1 {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  width: 100%;
+  flex: 1 1 calc(33.333% - 16px);
+}
+
+.p-tieredmenu {
+  min-width: 6.5rem !important;
+}
+
+.p-tieredmenu-item-link {
+  padding: 8px !important;
+  gap: 0 !important;
+}
+
+.p-tieredmenu-item-label {
+  font-size: 12px;
+}
+
+.mast-header-dropdown {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.p-inputtext:enabled:focus {
+  border: 1px solid #e0e0e0 !important;
+}
+
+/* Set box-sizing globally to prevent layout shifts */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
+  box-sizing: border-box;
+  /* optional for full-background visuals */
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-y: scroll; /* Force vertical scrollbar globally */
+}
+
+/* for table and table pagee designs */
+.flex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 1rem 1.5rem; */
+  background-color: #f9fafb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logo-heading {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: #047857;
+  /* Deep Green */
+  gap: 0.5rem;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.export-btn {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.add-btn {
+  background-color: #a7f3d0;
+  color: #065f46;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0.95;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.search-group {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-dept-input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.2rem;
+  font-size: 0.95rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  transition: 0.2s ease;
+}
+
+.search-dept-input:focus {
+  outline: none;
+  border-color: #34d399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.3);
+}
+
+.search-icon-inside {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.filter-dropdown {
+  min-width: 200px;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+}
+
+.wide-dropdown {
+  flex: 1 1 20%;
+  min-width: 160px;
+}
+
+.btn.reset-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn.reset-btn:hover {
+  background-color: #e5e7eb;
+  border-color: #cbd5e1;
+}
+
+.table-wrapper {
+  padding: 0 1.5rem 1.5rem;
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.border-box {
+  /* padding: 1rem; */
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #fafafa;
+}
+
+.menu-group {
+  display: flex;
+  align-items: center;
+}
+
+.command-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: white;
+  padding: 1rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+
+.command-container {
+  /* padding: 2rem; */
+  background: #f4f6f8;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.command-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.command-title-block {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.command-title-block i {
+  font-size: 2rem;
+  color: #10b981;
+}
+
+.command-title-block h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.command-title-block p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.command-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn.primary {
+  background: #10b981;
+  color: white;
+  border: none;
+}
+
+.btn.outlined {
+  background: transparent;
+  color: #10b981;
+  border: 2px solid #10b981;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Search Input */
+.command-search-block {
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.command-search-block input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.8rem;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+/* Table Section */
+.command-table-section {
+  background: white;
+  /* padding: 2rem; */
+  border-radius: 1rem;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.04);
+}
+
+.btn-sm {
+  padding: 0.3rem 0.6rem !important;
+  font-size: 0.85rem;
+
+  i {
+    font-size: 0.9rem;
+  }
+}
+
+/* --- Keep these as they are good general styles --- */
+.flex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.heading {
+  color: #047857;
+  text-shadow: 1px 1px 0 #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+.filter-card {
+  background: #059669;
+  /* Dark green background for the filter bar */
+  border: 1px solid #059669;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Table Header Styles - Essential */
+.custom-navy-table .p-datatable-thead>tr>th,
+th {
+  /* Combine these as they apply to table headers */
+  background-color: #059669 !important;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+}
+
+.logo-heading {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: #047857;
+  /* Deep Green */
+  gap: 0.5rem;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  /* Default to no border, specific buttons can add it */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0.95;
+}
+
+.add-btn {
+  background-color: #f7fafc;
+  /* Light background to stand out on green */
+  color: #047857;
+  /* Dark green text */
+  border: 1px solid #047857;
+  /* Dark green border */
+}
+
+/* Export button - making it look like an 'outlined' button from your other component */
+.export-btn {
+  background: transparent;
+  /* Transparent background */
+  color: #f7fafc;
+  /* White/light text for contrast on purple filter card */
+  border: 2px solid #f7fafc;
+  /* White border */
+}
+
+.export-btn i {
+  /* Ensure icons within export button are also light */
+  color: #f7fafc !important;
+  /* Force white color for icon */
+}
+
+/* Reset button */
+.btn.reset-btn {
+  background-color: #f7fafc;
+  /* Light background */
+  color: #047857;
+  /* Dark green text */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+
+.btn.reset-btn:hover {
+  background-color: #e5e7eb;
+  border-color: #cbd5e1;
+}
+
+/* Input Styles - Essential for visibility on purple background */
+input[pInputText],
+textarea,
+p-dropdown {
+  border: 2px solid #767070 !important;
+  /* Dark border for definition */
+  color: #3b2f2f;
+  /* Dark text for readability */
+  border-radius: 0.375rem;
+}
+
+/* Other sections that are well-defined and likely used */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.search-group {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.filter-dropdown {
+  min-width: 100px;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+}
+
+.wide-dropdown {
+  flex: 1 1 20%;
+  min-width: 120px;
+}
+
+.table-wrapper {
+  padding: 0 1.5rem 1.5rem;
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* .dropdown-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+  min-width: 220px;
+} */
+
+.dropdown-container label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(145, 139, 139);
+  margin-bottom: 6px;
+  padding-left: 2px;
+  text-transform: capitalize;
+}
+
+.dropdown-label {
+  /* This seems to be a duplicate or less specific version of the above */
+  display: block;
+  font-weight: 300;
+  margin-bottom: 6px;
+  margin-left: 10px;
+  color: #b0b0b0;
+  /* Tailwind gray-700 */
+}
+.add-btn {
+    background-color: #f7fafc !important;
+    color: #047857 !important;
+    border: 1px solid #047857 !important;
+}
+.btn {
+    display: inline-flex !important;
+    align-items: center !important;
+  gap: 0.4rem !important;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+
+.p-dialog-header{
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  color: white !important;
+  /* border-radius: 0.5rem 0.5rem 0 0 !important; */
+  margin: 0 !important;
+}
+
+.p-dialog-content {
+  background-color: #f1f5f9 !important;
+  padding: 0 !important;
+  border-radius: 10px;
+}
+.p-datatable {
+  width: 100%;
+  /* max-width: 80vw; */
+  height: auto;
+  display: block;
+  overflow-x: scroll;
+  scrollbar-color: #059669 #dee2e6 !important;
+  background-color: white;
+  margin: auto
+}
+
+button[mat-button] {
+  background-color: #059669;
+  color: #fff !important;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 16px !important;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.875rem;
+}
+
+.dropdown-cell {
+  position: relative;
+  overflow: visible !important;
+}
+
+.dropdown-container {
+  width: 100%;
+  position: relative;
+}
+
+::ng-deep .p-dropdown-panel {
+  z-index: 9999 !important;
+  position: absolute !important;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #d1d5db;
+  background: white;
+}
+
+::ng-deep .p-dropdown {
+  width: 100% !important;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+  overflow-y: visible !important;
+}
+
+  .table-container {
+  /* padding-bottom: 150px;  */
+  /* margin-bottom: -150px;  */
+}
+
+::ng-deep table {
+  position: relative;
+}
+
+::ng-deep table td.dropdown-cell {
+  overflow: visible !important;
+  position: relative;
+}
+
+::ng-deep .p-dropdown .p-dropdown-trigger {
+  background: #f9fafb;
+  border-left: 1px solid #d1d5db;
+}
+
+::ng-deep .p-dropdown:not(.p-disabled):hover {
+  border-color: #10b981;
+}
+
+::ng-deep .p-dropdown-item {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+::ng-deep .p-dropdown-item:hover {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.mat-mdc-menu-content {
+  margin: 0;
+  padding: 8px 0;
+  outline: 0;
+  background-color: white;
+}
+
+/* Additional overflow prevention for all containers */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure all main containers prevent horizontal overflow */
+.container, .dashboard-container, .naval-dashboard, .maintop-dashboard-outer-container, 
+.command-container, .sfd-dashboard-container, .ocrc-container {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+/* Ensure all grid containers respect viewport width */
+.grid, .charts-grid, .kpi-cards-grid, .stats-grid, .dashboard-grid, 
+.charts-container, .dashboard-sections {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure chart containers don't overflow */
+.chart-container, .chart-card {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+

@@ -1,0 +1,62 @@
+/* hitu-main-component.component.css */
+.hitu-main-container {
+  background-color: #f8fafc;
+}
+
+.hitu-sub-navigation {
+  border: 1px solid #e2e8f0;
+}
+
+.nav-item {
+  position: relative;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.nav-item:hover {
+  transform: translateY(-1px);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.nav-item.active-head {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+/* Dropdown Styles */
+.hitu-dropdown-menu {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.hitu-dropdown-menu button:hover {
+  background-color: #f1f5f9;
+  color: #1e40af;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hitu-sub-navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .nav-item {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .hitu-dropdown-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}

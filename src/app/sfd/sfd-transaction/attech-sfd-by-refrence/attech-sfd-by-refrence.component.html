@@ -1,0 +1,82 @@
+
+<!-- Dialog for SFD Reference Form -->
+
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Attach <span class="text-orange-500"> SFD By Reference</span> </h2>
+    <div class="h-1 w-20 bg-blue-600 rounded"></div>
+</div>
+    <div class="p-6 bg-slate-100  shadow-md border border-gray-200 max-w-5xl mx-auto">
+        <form [formGroup]="sfdReferenceForm" class="space-y-4">
+            <!-- Section Dropdown -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Section</label>
+                <p-dropdown 
+                    [options]="sectionOptions" 
+                    formControlName="section"
+                    placeholder="---Please Select---"
+                    optionLabel="name"
+                    optionValue="id"
+                    [filter]="true"
+                    filterBy="name"
+                    styleClass="w-full col-span-4 ">
+                </p-dropdown>
+            </div>
+
+            <!-- Class Dropdown -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Class <span class="text-red-500">*</span></label>
+                <p-dropdown 
+                    [options]="classOptions" 
+                    formControlName="master_class"
+                    placeholder="---Please Select---"
+                    optionLabel="description"
+                    optionValue="id"
+                    (onChange)="onClassChange($event)"
+                    [filter]="true"
+                    filterBy="description"
+                    styleClass="w-full col-span-4">
+                </p-dropdown>
+            </div>
+
+            <!-- SFD Reference (Ship) Dropdown -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">SFD Reference (Ship) <span class="text-red-500">*</span></label>
+                <p-dropdown 
+                    [options]="sfdReferenceOptions" 
+                    formControlName="sfd_reference"
+                    placeholder="---Please Select---"
+                    optionLabel="name"
+                    optionValue="id"
+                    [filter]="true"
+                    filterBy="name"
+                    styleClass="w-full col-span-4">
+                </p-dropdown>
+            </div>
+
+            <!-- Apply To (Ship) Dropdown -->
+            <div class="grid grid-cols-6 gap-4 items-center">
+                <label class="text-sm font-medium text-gray-700 col-span-2">Apply To (Ship) <span class="text-red-500">*</span></label>
+                <p-dropdown 
+                    [options]="applyToOptions" 
+                    formControlName="apply_to"
+                    placeholder="---Please Select---"
+                    optionLabel="name"
+                    optionValue="id"
+                    [filter]="true"
+                    filterBy="name"
+                    styleClass="w-full col-span-4">
+                </p-dropdown>
+            </div>
+        </form>
+        <div class="flex justify-end gap-2 p-4">
+            
+            <button 
+                type="button" 
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-600 -700 transition-colors duration-200"
+                (click)="saveReference()">
+                Attach SFD
+            </button>
+        </div>
+
+    </div>
+        

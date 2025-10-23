@@ -1,0 +1,15 @@
+<!-- status-tabs.component.html -->
+<div class="status-tabs-container">
+  <div class="tabs-wrapper">
+    <div class="tabs-nav">
+      <button 
+        *ngFor="let tab of tabs" 
+        class="tab-button"
+        [class.active]="activeTab === tab.key"
+        (click)="onTabClick(tab.key)">
+        <i [class]="tab.icon" class="tab-icon"></i>
+        <span class="tab-label">{{ tab.label }}</span>
+      </button>
+    </div>
+  </div>
+</div>

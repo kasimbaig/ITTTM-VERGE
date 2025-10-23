@@ -1,0 +1,475 @@
+<div class="bg-gradient-to-br from-slate-25 via-white to-slate-50 p-0">
+  <!-- Button Controls -->
+  <div class="flex justify-between items-center p-4">
+    <!-- Left side: Timeline Visibility Toggle Button -->
+    <button 
+      type="button"
+      (click)="toggleTimelineVisibility()"
+      class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+      <i [ngClass]="showTimeline ? 'pi pi-eye-slash' : 'pi pi-eye'" class="text-lg"></i>
+      <span>{{ showTimeline ? 'Hide Timeline' : 'Show Timeline' }}</span>
+    </button>
+
+    <!-- Right side: Next Step Button -->
+    <button 
+      *ngIf="!hideButtons"
+      type="button"
+      (click)="goToNextStep()"
+      class="flex items-center gap-2 px-6 py-2 bg-[#04308f] hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+      <span>Next Step</span>
+      <i class="pi pi-arrow-right text-lg"></i>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="max-w-full mx-auto">
+    <div class="flex items-center justify-center py-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading && showTimeline" class="max-w-full mx-auto">
+    <div class="text-center py-8 px-4">
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 max-w-md mx-auto">
+        <div class="flex items-center justify-center mb-4">
+          <i class="pi pi-info-circle text-4xl text-gray-400"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">No Routes Available</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          There are no workflow routes configured for this transaction. Please contact your administrator to set up the required routing configuration.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Main Timeline -->
+  <div *ngIf="timelineData && timelineData.length > 0 && !loading && showTimeline" class="max-w-full mx-auto">
+    <div class="overflow-x-auto pb-0">
+      <div class="flex items-start gap-6 min-w-max px-4">
+        <div *ngFor="let item of timelineData; let i = index" class="flex flex-col items-center relative">
+          <!-- Timeline Node -->
+          <div 
+            class="relative transition-all duration-500 transform"
+            [class.scale-100]="animatedNodes.has(item.id)"
+            [class.opacity-100]="animatedNodes.has(item.id)"
+            [class.scale-50]="!animatedNodes.has(item.id)"
+            [class.opacity-0]="!animatedNodes.has(item.id)"
+            [class.scale-110]="selectedNode?.id === item.id"
+            [class.hover:scale-105]="selectedNode?.id !== item.id">
+            
+            <div 
+              class="w-16 h-16 rounded-xl border-2 flex items-center justify-center cursor-pointer transition-all duration-300"
+              [ngClass]="getStatusColor(item.status, item.userType)"
+              [class.animate-pulse]="item.status === 'working'"
+              (click)="handleNodeClick(item)">
+              <i [ngClass]="getStatusIcon(item.status)" class="text-white text-xl"></i>
+            </div>
+            
+            <!-- Priority Indicator -->
+            <div *ngIf="item.priority" 
+                 class="absolute -top-1 -right-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border"
+                 [ngClass]="getPriorityColor(item.priority)">
+              {{ item.priority.charAt(0).toUpperCase() }}
+            </div>
+          </div>
+
+          <!-- Connecting Line -->
+          <div *ngIf="i < timelineData.length - 1" 
+               class="absolute top-10 left-20 w-12 h-0.5 z-0"
+               [ngClass]="{
+                 'bg-emerald-300': item.status === 'completed',
+                 'bg-blue-300': item.status === 'working',
+                 'bg-slate-200': item.status === 'pending'
+               }">
+          </div>
+
+          <!-- Content Card -->
+          <div class="w-72 mt-2 transition-all duration-500 transform"
+               [class.scale-105]="selectedNode?.id === item.id"
+               [class.shadow-xl]="selectedNode?.id === item.id"
+               [class.shadow-md]="selectedNode?.id !== item.id"
+               [class.hover:shadow-lg]="selectedNode?.id !== item.id"
+               [class.translate-y-0]="animatedNodes.has(item.id)"
+               [class.opacity-100]="animatedNodes.has(item.id)"
+               [class.translate-y-8]="!animatedNodes.has(item.id)"
+               [class.opacity-0]="!animatedNodes.has(item.id)">
+            
+            <div class="bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition-all duration-300 overflow-hidden">
+              <button
+                (click)="toggleExpanded(item.id)"
+                class="w-full p-3 text-left hover:bg-slate-50 transition-all duration-200">
+                <div class="flex items-start justify-between">
+                  <div class="flex-1">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2 leading-tight">
+                      {{ item.name }}
+                    </h3>
+                    
+                    <!-- Status and Timestamp -->
+                    <div class="flex items-center justify-between gap-3 mb-1">
+                      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border"
+                            [ngClass]="getStatusBadgeColor(item.status)">
+                        <i [ngClass]="getStatusIcon(item.status)" class="text-sm"></i>
+                        {{ item.status === 'working' ? 'In Progress' : (item.status | titlecase) }}
+                      </span>
+                    </div>
+
+                    <!-- Timestamp -->
+                    <div class="flex items-center gap-2 text-sm text-slate-500">
+                      <i class="pi pi-calendar text-sm"></i>
+                      <span>{{ formatTimestamp(item.timestamp) }}</span>
+                    </div>
+
+                    <!-- Duration -->
+                    <div *ngIf="item.duration" class="flex items-center gap-2 text-sm text-slate-500 mt-1">
+                      <i class="pi pi-clock text-sm"></i>
+                      <span>{{ item.duration }}</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Expand/Collapse Button -->
+                  <div class="ml-3 mt-1">
+                    <div class="p-1 rounded-lg bg-slate-100 transition-transform duration-200"
+                         [class.rotate-180]="expandedItems[item.id]">
+                      <i class="pi pi-chevron-down text-slate-600 text-sm"></i>
+                    </div>
+                  </div>
+                </div>
+              </button>
+
+              <!-- Expanded Content -->
+              <div class="overflow-hidden transition-all duration-300 ease-in-out"
+                   [class.max-h-96]="expandedItems[item.id]"
+                   [class.opacity-100]="expandedItems[item.id]"
+                   [class.max-h-0]="!expandedItems[item.id]"
+                   [class.opacity-0]="!expandedItems[item.id]">
+                <div class="px-3 pb-3 pt-1 border-t border-slate-100">
+                  <!-- Description -->
+                  <p class="text-sm text-slate-600 mb-2 leading-relaxed">
+                    {{ item.description }}
+                  </p>
+
+                  <!-- Internal Users Section -->
+                  <div *ngIf="item.hasInternal && item.internalUsers && item.internalUsers.length > 0" class="mt-2">
+                    <div class="flex items-center gap-2 mb-2">
+                      <i class="pi pi-users text-blue-600 text-sm"></i>
+                      <h4 class="font-semibold text-slate-700 text-sm">Team Members</h4>
+                    </div>
+                    
+                    <div class="space-y-2">
+                      <div *ngFor="let internalUser of item.internalUsers; let internalIndex = index" 
+                           class="flex items-center justify-between bg-slate-50 rounded-lg p-3 border border-slate-100">
+                        <div class="flex items-center gap-3 flex-1">
+                          <div>
+                            <i *ngIf="internalUser.status === 'completed'" class="pi pi-check-circle text-emerald-500 text-sm"></i>
+                            <i *ngIf="internalUser.status === 'working'" class="pi pi-spin pi-spinner text-blue-500 text-sm"></i>
+                            <i *ngIf="internalUser.status === 'pending'" class="pi pi-clock text-slate-400 text-sm"></i>
+                          </div>
+                          <div class="flex-1">
+                            <p class="font-medium text-slate-800 text-sm">
+                              {{ internalUser.name }}
+                            </p>
+                            <p class="text-xs text-slate-500">{{ internalUser.role }}</p>
+                          </div>
+                          <span class="px-2 py-1 rounded-full text-xs font-medium"
+                                [ngClass]="getStatusBadgeColor(internalUser.status)">
+                            {{ internalUser.status === 'working' ? 'Active' : (internalUser.status | titlecase) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selected Node Details Modal -->
+  <div *ngIf="selectedNode && showTimeline" 
+       class="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+       (click)="closeModal()">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 transform transition-all duration-300 border border-slate-200"
+         (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-slate-800">
+          {{ selectedNode.name }}
+        </h3>
+        <button 
+          type="button"
+          (click)="closeModal()"
+          class="p-1 hover:bg-slate-100 rounded-lg transition-colors text-slate-500">
+          <i class="pi pi-times text-lg"></i>
+        </button>
+      </div>
+      <div class="flex flex-col gap-4">
+        <p class="text-slate-600 text-sm leading-relaxed">{{ selectedNode.description }}</p>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span class="font-medium text-slate-700">Status:</span>
+            <span class="ml-2 px-2 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="getStatusBadgeColor(selectedNode.status)">
+              {{ selectedNode.status | titlecase }}
+            </span>
+          </div>
+          <div>
+            <span class="font-medium text-slate-700">Priority:</span>
+            <span class="ml-2 px-2 py-1 rounded-full text-xs font-semibold"
+                  [ngClass]="getPriorityColor(selectedNode.priority)">
+              {{ selectedNode.priority | uppercase }}
+            </span>
+          </div>
+          <div *ngIf="selectedNode.duration">
+            <span class="font-medium text-slate-700">Duration:</span>
+            <span class="ml-2 text-slate-600">{{ selectedNode.duration }}</span>
+          </div>
+          <div>
+            <span class="font-medium text-slate-700">Type:</span>
+            <span class="ml-2 text-slate-600 capitalize">{{ selectedNode.userType }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Route Config Button -->
+  <div *ngIf="!hideButtons" class="mt-6 px-4">
+    <button 
+      type="button"
+      (click)="editRouteConfig()"
+      class="w-full bg-[#04308f] hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+      <i class="pi pi-pencil mr-2"></i>
+      Edit Route Config
+    </button>
+  </div>
+
+  <!-- Add Route Config Form using reusable AddFormComponent -->
+  <app-add-form 
+    *ngIf="isFormOpen" 
+    [open]="isFormOpen" 
+    [fromTitle]="'Add Route Config'"
+    [submitLabel]="'Save'"
+    [isEditMode]="false"
+    [formData]="routeConfigFormData" 
+    [formConfig]="visibleFormConfig"
+    (onOpenChange)="handleFormOpenChange($event)"
+    (onSubmit)="handleFormSubmit($event)"
+    (onSelectChange)="handleSelectChange($event)">
+  </app-add-form>
+
+  <!-- Next Step Modal -->
+  <div *ngIf="showNextStepModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-[#04308f] text-white rounded-t-lg">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+            <i class="pi pi-send text-lg"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold m-0">Forward for Review</h3>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button 
+            type="button"
+            (click)="toggleNextStepModal()"
+            class="p-2 bg-white/10 border-none rounded-md text-white cursor-pointer transition-all duration-200 hover:bg-white/20">
+            <i class="pi pi-window-maximize text-sm"></i>
+          </button>
+          <button 
+            type="button"
+            (click)="closeNextStepModal()"
+            class="p-2 bg-white/10 border-none rounded-md text-white cursor-pointer transition-all duration-200 hover:bg-white/20">
+            <i class="pi pi-times text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-6">
+        <!-- Remarks Label -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-0">
+            Remarks <span class="text-red-500">*</span>
+          </label>
+        </div>
+
+        <!-- Rich Text Editor -->
+        <div class="border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+          <!-- Toolbar -->
+          <div class="bg-gray-50 border-b border-gray-300 p-3 flex items-center gap-2 flex-wrap">
+            <!-- Text Style Dropdown -->
+            <select class="px-2 py-1 border border-gray-300 rounded text-sm">
+              <option>Normal</option>
+              <option>Heading 1</option>
+              <option>Heading 2</option>
+              <option>Heading 3</option>
+            </select>
+
+            <!-- Font Family Dropdown -->
+            <select class="px-2 py-1 border border-gray-300 rounded text-sm">
+              <option>Sans Serif</option>
+              <option>Serif</option>
+              <option>Monospace</option>
+            </select>
+
+            <!-- Separator -->
+            <div class="w-px h-6 bg-gray-300"></div>
+
+            <!-- Formatting Buttons -->
+            <button class="p-1 hover:bg-gray-200 rounded" title="Bold">
+              <i class="pi pi-bold text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Italic">
+              <i class="pi pi-italic text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Underline">
+              <i class="pi pi-underline text-sm"></i>
+            </button>
+
+            <!-- Separator -->
+            <div class="w-px h-6 bg-gray-300"></div>
+
+            <!-- Text Color -->
+            <button class="p-1 hover:bg-gray-200 rounded" title="Text Color">
+              <i class="pi pi-palette text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Highlight Color">
+              <i class="pi pi-paint-brush text-sm"></i>
+            </button>
+
+            <!-- Separator -->
+            <div class="w-px h-6 bg-gray-300"></div>
+
+            <!-- Alignment -->
+            <button class="p-1 hover:bg-gray-200 rounded" title="Align Left">
+              <i class="pi pi-align-left text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Align Center">
+              <i class="pi pi-align-center text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Align Right">
+              <i class="pi pi-align-right text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Justify">
+              <i class="pi pi-align-justify text-sm"></i>
+            </button>
+
+            <!-- Separator -->
+            <div class="w-px h-6 bg-gray-300"></div>
+
+            <!-- Lists -->
+            <button class="p-1 hover:bg-gray-200 rounded" title="Bullet List">
+              <i class="pi pi-list text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Numbered List">
+              <i class="pi pi-sort-numeric-down text-sm"></i>
+            </button>
+
+            <!-- Separator -->
+            <div class="w-px h-6 bg-gray-300"></div>
+
+            <!-- Additional Tools -->
+            <button class="p-1 hover:bg-gray-200 rounded" title="Insert Link">
+              <i class="pi pi-link text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Insert Image">
+              <i class="pi pi-image text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Code">
+              <i class="pi pi-code text-sm"></i>
+            </button>
+            <button class="p-1 hover:bg-gray-200 rounded" title="Plain Text">
+              <i class="pi pi-file text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Text Area -->
+          <div class="p-0 min-h-64">
+            <textarea 
+              [(ngModel)]="reviewRemarks"
+              placeholder="Enter your detailed remarks here... Be specific about what needs to be reviewed and any concerns you may have."
+              class="w-full h-64 border-none outline-none resize-none text-sm leading-relaxed p-4 font-inherit bg-white">
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex justify-end items-center p-6 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+        <!-- Right side - Action buttons -->
+        <div class="flex gap-3">
+          <button 
+            type="button"
+            (click)="rejectReview()"
+            class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white border-none rounded-lg cursor-pointer transition-all duration-200 font-medium flex items-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+            <i class="pi pi-ban text-sm"></i>
+            Reject
+          </button>
+          <button 
+            type="button"
+            (click)="sendForReview()"
+            class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white border-none rounded-lg cursor-pointer transition-all duration-200 font-medium flex items-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+            <i class="pi pi-send text-sm"></i>
+            Send for Review
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Another Route Configuration Confirmation Modal -->
+  <div *ngIf="showAddAnotherModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-[#04308f] text-white rounded-t-lg">
+        <h3 class="text-lg font-semibold">Add Another Route Configuration?</h3>
+        <button 
+          (click)="closeAddAnotherModal()"
+          class="p-1 hover:bg-blue-700 rounded transition-colors duration-200">
+          <i class="pi pi-times text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-6 text-center">
+        <!-- Question -->
+        <p class="text-gray-800 text-base mb-6">
+          Would you like to add another route configuration for this record?
+        </p>
+
+        <!-- Icon and Explanation -->
+        <div class="flex flex-col items-center mb-6">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+            <i class="pi pi-check text-2xl text-blue-600"></i>
+          </div>
+          <p class="text-gray-600 text-sm">
+            This will allow you to configure additional routing options for the current record.
+          </p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex justify-end items-center p-4 border-t border-gray-200 bg-gray-50 rounded-b-lg gap-3">
+        <button 
+          type="button"
+          (click)="closeAddAnotherModal()"
+          class="px-6 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 cursor-pointer outline-none hover:bg-gray-50 hover:border-gray-400">
+          No
+        </button>
+        <button 
+          type="button"
+          (click)="addAnotherRouteConfig()"
+          class="px-6 py-2 bg-[#04308f] text-white border-none rounded-lg transition-all duration-200 cursor-pointer outline-none hover:bg-blue-700">
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

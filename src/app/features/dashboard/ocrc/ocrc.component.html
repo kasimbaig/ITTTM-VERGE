@@ -1,0 +1,227 @@
+<!-- src/app/features/ocrc/ocrc.component.html -->
+<div class="ocrc-container overflow-x-hidden mx-auto" [ngClass]="menuExpanded ?'w-85vw': 'w-93vw' ">
+  <div class="ocrc-main-content w-full max-w-full">
+    <div class="ocrc-header">
+      <div class="ocrc-header-left">
+        <div class="date-navigation">
+          <!-- Navigation buttons to shift date range -->
+          <button class="nav-btn" (click)="shiftDateRange(-7)">
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <span class="current-date">
+            <!-- Display current date range -->
+            {{ dateRange[0] | date:'mediumDate' }} - {{ dateRange[1] | date:'mediumDate' }}
+          </span>
+          <button class="nav-btn" (click)="shiftDateRange(7)">
+            <i class="pi pi-chevron-right"></i>
+          </button>
+          <button class="today-btn" (click)="goToTodayRange()">This Week</button>
+        </div>
+      </div>
+
+      <div class="ocrc-header-right">
+        <div class="header-controls">
+          <!-- Command Filter Dropdown -->
+          <select
+            placeholder="Select Command"
+            [(ngModel)]="selectedCommand"
+            (change)="onCommandChange()"
+            class="w-48 px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400 transition-colors duration-200"
+          >
+            <option value="" disabled selected>Select Command</option>
+            <option *ngFor="let command of commands" [value]="command.value">
+              {{ command.label }}
+            </option>
+          </select>
+
+          <!-- Date Range Picker -->
+          <div class="date-range-picker">
+            <p-calendar
+              [(ngModel)]="dateRange"
+              selectionMode="range"
+              [readonlyInput]="true"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              placeholder="Select Date Range"
+              (onSelect)="onDateRangeChange()"
+              [minDate]="minDate"
+              [maxDate]="maxDate"
+              styleClass="ocrc-calendar-dropdown"
+            ></p-calendar>
+            <!-- Apply and Clear buttons for date range -->
+            <button pButton type="button" label="Apply" icon="pi pi-check" class="apply-btn" (click)="onDateRangeChange()"></button>
+            <button pButton type="button" label="Clear" icon="pi pi-times" class="clear-btn" (click)="dateRange = []; onDateRangeChange()"></button>
+          </div>
+
+          <!-- Status Filter Dropdown -->
+          <p-dropdown
+            [options]="statusOptions"
+            [(ngModel)]="selectedStatus"
+            placeholder="Filter Status"
+            styleClass="ocrc-control-dropdown"
+          ></p-dropdown>
+
+          <!-- Add OCRC Event Button (Placeholder, functionality not implemented here) -->
+          <button pButton type="button" label="Add OCRC Event" icon="pi pi-plus" class="bg-blue-600 hover:bg-blue-600 -700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center gap-2"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Wrapper -->
+    <div class="timeline-wrapper">
+      <!-- Timeline Header with Time Slots (Days) -->
+      <div class="timeline-time-header">
+        <div class="timeline-fixed-col">Ships</div>
+        <div class="timeline-scroll-area">
+          <div class="time-slots-grid">
+            <div class="time-slot" *ngFor="let timeSlot of timeSlots">
+              {{ formatDateForHeader(timeSlot) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline Body with Scrollable Content -->
+      <div class="timeline-body-scroll">
+        <div class="timeline-body-content">
+          <ng-container *ngFor="let group of resourceGroups">
+            <!-- Resource Group Header (e.g., Naval Fleet) -->
+            <div class="resource-group-header" (click)="toggleGroup(group.id)">
+              <div class="group-toggle">
+                <i
+                  class="pi"
+                  [ngClass]="group.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"
+                ></i>
+              </div>
+              <div class="group-info">
+                <div class="group-name">{{ group.name }}</div>
+                <div class="group-count">({{ group.resources.length }} ships)</div>
+              </div>
+              <div class="group-timeline-track">
+                <div class="time-grid-background">
+                  <div class="time-cell-bg" *ngFor="let timeSlot of timeSlots"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Individual Resource Rows (Ships) within an expanded group -->
+            <ng-container *ngIf="group.expanded">
+              <div
+                class="resource-row"
+                *ngFor="let resource of group.resources"
+                (drop)="onResourceDrop($event, resource.id)"
+                (dragover)="onResourceDragOver($event)"
+              >
+                <div class="resource-info">
+                  <div class="resource-indent"></div>
+                  <div class="resource-avatar">
+                    <img [src]="resource.avatar" [alt]="resource.name" />
+                  </div>
+                  <div class="resource-details">
+                    <div class="resource-name">{{ resource.name }}</div>
+                    <div class="resource-role">{{ resource.role }}</div>
+                  </div>
+                </div>
+
+                <!-- Timeline Track for Tasks -->
+                <div class="timeline-track">
+                  <div class="time-grid-background">
+                    <div class="time-cell-bg" *ngFor="let timeSlot of timeSlots"></div>
+                  </div>
+
+                  <div class="tasks-overlay">
+                    <!-- Individual Task Items (Refit Cycles) -->
+                    <div
+                      class="task-item"
+                      *ngFor="let task of getTasksForResource(resource.id)"
+                      [style.left]="getTaskPosition(task).left"
+                      [style.width]="getTaskPosition(task).width"
+                      [style.background-color]="task.color"
+                      (click)="openTaskDialog(task)"
+                      draggable="true"
+                      (dragstart)="onTaskDragStart(task)"
+                      (dragend)="onTaskDragEnd()"
+                    >
+                      <div class="task-content">
+                        <div class="task-title">{{ task.title }}</div>
+                      </div>
+                      <div class="task-status-indicator" [ngClass]="'status-' + task.status"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Details Dialog -->
+  <p-dialog
+    header="Refit Cycle Details"
+    [(visible)]="displayTaskDialog"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="ocrc-dialog"
+  >
+    <div *ngIf="selectedTask" class="p-fluid">
+      <div class="p-field mb-3">
+        <label for="taskTitle" class="font-semibold text-gray-700">Title:</label>
+        <div id="taskTitle">{{ selectedTask.title }}</div>
+      </div>
+      <div class="p-field mb-3">
+        <label for="taskShip" class="font-semibold text-gray-700">Ship:</label>
+        <div id="taskShip">{{ getResourceName(selectedTask.resourceId) }}</div>
+      </div>
+      <div class="p-field mb-3">
+        <label for="taskPeriod" class="font-semibold text-gray-700">Period:</label>
+        <div id="taskPeriod">
+          {{ selectedTask.startTime | date:'shortDate' }} -
+          {{ selectedTask.endTime | date:'shortDate' }}
+        </div>
+      </div>
+      <div class="p-field mb-3">
+        <label for="taskType" class="font-semibold text-gray-700">Type:</label>
+        <div id="taskType">{{ selectedTask.type | titlecase }}</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.refitType">
+        <label for="refitType" class="font-semibold text-gray-700">Refit Type:</label>
+        <div id="refitType">{{ selectedTask.refitType }}</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.ship_code">
+        <label for="shipCode" class="font-semibold text-gray-700">Ship Code:</label>
+        <div id="shipCode">{{ selectedTask.ship_code }}</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.location">
+        <label for="location" class="font-semibold text-gray-700">Location:</label>
+        <div id="location">{{ selectedTask.location }}</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.progress_percentage !== undefined">
+        <label for="progress" class="font-semibold text-gray-700">Progress:</label>
+        <div id="progress">{{ selectedTask.progress_percentage }}%</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.estimated_cost !== undefined">
+        <label for="cost" class="font-semibold text-gray-700">Estimated Cost:</label>
+        <div id="cost">{{ selectedTask.estimated_cost | currency:'INR':'symbol':'1.0-0' }}</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.crew_size !== undefined">
+        <label for="crewSize" class="font-semibold text-gray-700">Crew Size:</label>
+        <div id="crewSize">{{ selectedTask.crew_size }}</div>
+      </div>
+      <div class="p-field mb-3" *ngIf="selectedTask.priority">
+        <label for="priority" class="font-semibold text-gray-700">Priority:</label>
+        <div id="priority">{{ selectedTask.priority }}</div>
+      </div>
+      <div class="p-field mb-3">
+        <label for="taskStatus" class="font-semibold text-gray-700">Status:</label>
+        <div id="taskStatus" [ngClass]="'status-' + selectedTask.status">{{ selectedTask.status | titlecase }}</div>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Close" icon="pi pi-times" (onClick)="closeTaskDialog()" styleClass="p-button-secondary"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>

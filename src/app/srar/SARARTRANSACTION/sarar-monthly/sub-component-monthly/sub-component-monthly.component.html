@@ -1,0 +1,124 @@
+<div class="w-full bg-transparent shadow-xs px-1 pt-2">
+  <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+    <div class="flex min-w-max mb-3">
+      <ng-container *ngFor="let operation of Operation; let i = index">
+        <div>
+          <div (click)="openOperation(operation)" class="flex-shrink-0 px-4 py-3 border cursor-pointer transition-all duration-200 rounded mr-2 flex items-center" [ngClass]="operation.colorClass">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full  text-xs font-bold mr-2 border-2  " [ngClass]="operation.colorClass">
+              {{ i + 1 }}
+            </span>
+            <div class="flex items-center space-x-2 min-w-max">
+              <i [class]="'fas ' + operation.icon + ' text-sm'"></i>
+              <span class="text-sm font-medium whitespace-nowrap">
+                {{ operation.name }}
+              </span>
+            </div>
+          </div>
+          <div class="mx-auto text-center" *ngIf="activeOperation.id == operation.id"><i class="fa-solid fa-angles-down fa-beat-fade fa-xl"></i></div>
+
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Only load the active component -->
+  <div class="min-h-96  rounded-lg shadow-sm p-4">
+    <ng-container [ngSwitch]="activeOperation.id">
+      <app-ship-running-detail 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="1">
+      </app-ship-running-detail>
+      
+      <app-boiler-steaming-detail 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="2">
+      </app-boiler-steaming-detail>
+      
+      <app-ship-activity 
+        *ngSwitchCase="3">
+      </app-ship-activity>
+      
+      <app-fuel-avcat-torsionmeter 
+        *ngSwitchCase="4">
+      </app-fuel-avcat-torsionmeter>
+      
+      <app-iccp-h2s-sensor-mffs 
+        [srarEquipmentData]="srarEquipmentData" 
+        [srarLocationsData]="srarLocationsData" 
+        *ngSwitchCase="5">
+      </app-iccp-h2s-sensor-mffs>
+      
+      <app-test-kits-centrifuge 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="6">
+      </app-test-kits-centrifuge>
+      
+      <app-diesel-engine-sdc 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="7">
+      </app-diesel-engine-sdc>
+      
+      <app-dguf 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="8">
+      </app-dguf>
+      
+      <app-full-power-trials 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="9">
+      </app-full-power-trials>
+      
+      <app-g-t-parameter 
+        *ngSwitchCase="10">
+      </app-g-t-parameter>
+      
+      <app-gt-rg-exploitation 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="11">
+      </app-gt-rg-exploitation>
+      
+      <app-gtg-exploitation 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="12">
+      </app-gtg-exploitation>
+      
+      <app-gtg-parameter 
+        *ngSwitchCase="13">
+      </app-gtg-parameter>
+      
+      <app-lubricant-consumption 
+        *ngSwitchCase="14">
+      </app-lubricant-consumption>
+      
+      <app-r-h-extension 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="15">
+      </app-r-h-extension>
+      
+      <app-eo-remark 
+        *ngSwitchCase="16">
+      </app-eo-remark>
+      
+      <app-equipment-next-roution-due 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="17">
+      </app-equipment-next-roution-due>
+      
+      <app-final-page 
+        [srarEquipmentData]="srarEquipmentData" 
+        *ngSwitchCase="18">
+      </app-final-page>
+      
+      <!-- Loading state -->
+      <div *ngSwitchDefault class="text-center py-8">
+        <i class="pi pi-spin pi-spinner text-2xl text-blue-500"></i>
+        <p class="text-gray-600 mt-2">Loading component...</p>
+      </div>
+    </ng-container>
+  </div>
+
+</div>
+
+
+<p-toast />
+

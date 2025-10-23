@@ -1,0 +1,205 @@
+<!-- Custom Fullscreen Modal using Tailwind CSS -->
+<div *ngIf="openFullScreenSararMonthly"
+    class="fixed inset-0 z-[99999] flex items-center justify-center bg-black bg-opacity-60">
+    <div class="relative w-screen h-screen bg-white shadow-lg flex flex-col overflow-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-2  bg-blue-600 -950 text-white">
+            <p class="text-2xl font-bold text-white">{{reportName?.label || 'SRAR Report'}}</p>
+            <button
+                class="text-white hover:text-gray-200 text-2xl font-bold focus:outline-none bg-blue-600 -500 px-2 py-1 rounded"
+                (click)=" redirectToSFD('/sfd/sfd-dashboard')" aria-label="Close">
+                <i class="pi pi-times"></i>
+            </button>
+        </div>
+        <div class=" flex-1 overflow-auto bg-amber-100">
+            <div class="  p-2 mb-6  bg-blue-600 -950">
+                <form [formGroup]="headerFrom">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-white">
+                        <!-- Section Dropdown -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.section">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Command :</label>
+                            <p-dropdown [options]="commandOptions" formControlName="Command" (onChange)="handleSelectChange($event,'command')"
+                                placeholder="--Select Command--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.class">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Class :</label>
+                            <p-dropdown [options]="classOptions" formControlName="Class" (onChange)="handleSelectChange($event,'class')"
+                                placeholder="--Select Class--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.ship">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Ship :</label>
+                            <p-dropdown [options]="shipOptions" formControlName="Ship" (onChange)="handleSelectChange($event,'ship')" 
+                                placeholder="--Select Ship--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.shipStatus">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Ship Status :</label>
+                            <p-dropdown [options]="shipStatusOptions" formControlName="Ship Status"
+                                placeholder="--Select Ship Status--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.section">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Section :</label>
+                            <p-dropdown [options]="sectionOptions" formControlName="Section"
+                                placeholder="--Select Section--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <!-- Department Dropdown -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.department">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Department :</label>
+                            <p-dropdown [options]="departmentOptions" formControlName="Department"
+                                placeholder="--Select Department--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <!-- Group Dropdown -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.group">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Group :</label>
+                            <p-dropdown [options]="groupOptions" formControlName="Group"
+                                placeholder="--Select Group--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <!-- Generic Dropdown -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.generic">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Generic :</label>
+                            <p-dropdown [options]="genericOptions" formControlName="Generic"
+                                placeholder="--Select Generic--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                         <!-- Equipment Code Dropdown -->
+                         <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.equipmentCode">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Equipment Code :</label>
+                            <p-dropdown [options]="equipmentCodeOptions" formControlName="Equipment Code"
+                                placeholder="--Equipment Code--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <!-- Equipment Description Dropdown -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.equipmentDescription">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Equipment Description :</label>
+                            <p-dropdown [options]="equipmentDescriptionOptions" formControlName="Equipment Description"
+                                placeholder="-- Equipment" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.supplier">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Supplier :</label>
+                            <p-dropdown [options]="supplierOptions" formControlName="Supplier"
+                                placeholder="--Select Supplier--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <!-- Equipment Name Input -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.equipmentInput">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Equipment Name :</label>
+                            <input type="text" formControlName="Equipment Name"
+                                placeholder="Enter Equipment Name"
+                                class="flex-1 w-full px-3 py-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <!-- Equipment Model Input -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.equipmentModel">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Equipment Model :</label>
+                            <input type="text" formControlName="Equipment Model"
+                                placeholder="Enter Equipment Model"
+                                class="flex-1 w-full px-3 py-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <!-- Specification Name Input -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.specificationName">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Specification Name :</label>
+                            <input type="text" formControlName="Specification Name"
+                                placeholder="Enter Specification Name"
+                                class="flex-1 w-full px-3 py-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <!-- Equipment Code Input -->
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.equipmentCodeInput">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Equipment Code :</label>
+                            <input type="text" formControlName="Equipment Code"
+                                placeholder="Enter Equipment Code"
+                                class="flex-1 w-full px-3 py-2 border-2 border-gray-500 rounded-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.specificationCheckBox">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">with Specification :</label>
+                            <input type="checkbox" formControlName="Specification"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.country">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Country :</label>
+                            <p-dropdown [options]="countryOptions" formControlName="Country"
+                                placeholder="--Select Country--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" *ngIf="visibleObject.provider">
+                            <label class="text-sm font-bold w-full sm:w-32 flex-shrink-0">Provider :</label>
+                            <p-dropdown [options]="providerOptions" formControlName="Provider"
+                                placeholder="--Select Provider--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1 w-full">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 text-white mt-2">
+                       
+                        <!-- From Month Dropdown -->
+                        <div class="flex items-center gap-4" *ngIf="visibleObject.fromMonth">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">From Month :</label>
+                            <p-dropdown [options]="monthOptions" formControlName="From Month"
+                                placeholder="--Select Month--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1">
+                            </p-dropdown>
+                        </div>
+                        <!-- From Year Dropdown -->
+                        <div class="flex items-center gap-4" *ngIf="visibleObject.fromYear">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">From Year :</label>
+                            <p-dropdown [options]="yearOptions" formControlName="From Year" placeholder="--Select Year--"
+                                optionLabel="name" [filter]="true" filterBy="name" optionValue="value"
+                                styleClass="flex-1">
+                            </p-dropdown>
+                        </div>
+                        <!-- To Month Dropdown -->
+                        <div class="flex items-center gap-4" *ngIf="visibleObject.toMonth">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">To Month :</label>
+                            <p-dropdown [options]="monthOptions" formControlName="To Month"
+                                placeholder="--Select Month--" optionLabel="name" [filter]="true" filterBy="name"
+                                optionValue="value" styleClass="flex-1">
+                            </p-dropdown>
+                        </div>
+                        <!-- To Year Dropdown -->
+                        <div class="flex items-center gap-4" *ngIf="visibleObject.toYear">
+                            <label class="text-sm font-bold  w-32 flex-shrink-0">To Year :</label>
+                            <p-dropdown [options]="yearOptions" formControlName="To Year" placeholder="--Select Year--"
+                                optionLabel="name" [filter]="true" filterBy="name" optionValue="value"
+                                styleClass="flex-1">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button 
+                            type="button"
+                            class="px-6 py-2 bg-yellow-50 text-yellow-500 rounded hover:bg-yellow-100 transition-colors duration-200 flex items-center gap-2 font-semibold"
+                            (click)="viewReport()">
+                            <i class="pi pi-eye"></i>
+                            View Report
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+            <div *ngIf="isReportGenerating" class="border-2 border-slate-500 mx-1 px-1 min-h-[500px]">
+                <app-report [reportData]="headerFrom.value" [headerRows]="reportHeader" [tableData]="reportData"></app-report>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

@@ -1,0 +1,1162 @@
+@use '../shared-setup.scss';
+
+.role-access-container {
+  @extend .setup-component-container;
+}
+
+.role-access-header {
+  @extend .setup-header-base;
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .role-access-title {
+      @extend .setup-title;
+    }
+
+    .role-dropdown-container {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      
+      .role-dropdown,
+      .process-dropdown {
+        min-width: 200px;
+        
+        .p-dropdown {
+          width: 100%;
+          
+          .p-dropdown-label {
+            font-size: 14px;
+            color: #495057;
+          }
+          
+          .p-dropdown-trigger {
+            width: 40px;
+          }
+        }
+      }
+      
+      .process-dropdown {
+        .p-dropdown {
+          .p-dropdown-label {
+            color: #6c757d;
+          }
+        }
+      }
+    }
+  }
+}
+
+.role-access-controls {
+
+}
+
+// Custom styles for Role Access
+.role-access-container {
+  .search-container .search-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  }
+}
+
+// Instructional Text Styling
+.instructional-text {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 3rem;
+  text-align: center;
+
+  .instructional-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #6b7280;
+
+    i {
+      font-size: 3rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    h3 {
+      margin: 0;
+      color: #374151;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 500px;
+    }
+  }
+}
+
+// Warning Banner Styling
+.warning-banner {
+  margin-top: 2rem;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .warning-icon {
+    color: #d97706;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .warning-content {
+    color: #92400e;
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Debug Info Styling
+.debug-info {
+  margin-top: 2rem;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+
+  .debug-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: #374151;
+    font-weight: 600;
+
+    i {
+      color: #6b7280;
+    }
+  }
+
+  .debug-content {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: #374151;
+    line-height: 1.5;
+    overflow-x: auto;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+// Responsive Design - Mobile First Approach
+@media (max-width: 1200px) {
+  .role-access-container {
+    padding: 1.5rem;
+  }
+
+  .role-access-header {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+
+    .header-left {
+      gap: 1.25rem;
+
+      .role-dropdown-container .role-dropdown {
+        min-width: 180px;
+      }
+    }
+  }
+
+  .instructional-text {
+    padding: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .warning-banner {
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .debug-info {
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .role-access-container {
+    padding: 14px;
+    
+    .role-access-header {
+      padding: 16px;
+      margin-bottom: 16px;
+      
+      .header-content {
+        .header-left {
+          gap: 14px;
+          
+          .role-access-title {
+            font-size: 1.5rem;
+          }
+          
+          .btn-back {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+        
+        .header-right {
+          gap: 10px;
+          
+          .btn-switch-mode {
+            width: 36px;
+            height: 36px;
+          }
+          
+          .btn-add-primary {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+    
+    .role-access-content {
+      .content-section {
+        padding: 20px;
+        
+        .role-selection {
+          .role-dropdown {
+            .p-dropdown {
+              min-width: 250px;
+            }
+          }
+        }
+        
+        .permissions-table {
+          .table-header {
+            h3 {
+              font-size: 1.3rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .role-access-container {
+    padding: 12px;
+    
+    .role-access-header {
+      padding: 14px;
+      margin-bottom: 16px;
+      
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        
+        .header-left {
+          flex-direction: column;
+          gap: 12px;
+          align-items: center;
+          
+          .role-access-title {
+            font-size: 1.4rem;
+            text-align: center;
+          }
+          
+          .btn-back {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+        
+        .header-right {
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+          
+          .btn-switch-mode {
+            width: 40px;
+            height: 40px;
+          }
+          
+          .btn-add-primary {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+    
+    .role-access-content {
+      .content-section {
+        padding: 16px;
+        margin-bottom: 16px;
+        
+        .role-selection {
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+          
+          .role-dropdown {
+            .p-dropdown {
+              min-width: 100%;
+              max-width: 300px;
+            }
+          }
+          
+          .btn-refresh {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+          }
+        }
+        
+        .permissions-table {
+          .table-header {
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+            
+            h3 {
+              font-size: 1.2rem;
+              margin-bottom: 8px;
+            }
+            
+            .table-actions {
+              flex-direction: column;
+              gap: 8px;
+              align-items: center;
+              
+              .btn-close-all,
+              .btn-add-sub-menu,
+              .btn-test-form {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+              }
+            }
+          }
+          
+          .permissions-content {
+            .module-row {
+              .module-header {
+                padding: 12px;
+                
+                .module-info {
+                  .module-name {
+                    font-size: 1rem;
+                  }
+                  
+                  .module-description {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+              
+              .module-permissions {
+                padding: 12px;
+                
+                .permission-item {
+                  .permission-label {
+                    font-size: 0.85rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .role-access-container {
+    padding: 10px;
+    
+    .role-access-header {
+      padding: 12px;
+      margin-bottom: 12px;
+      
+      .header-content {
+        gap: 12px;
+        
+        .header-left {
+          gap: 10px;
+          
+          .role-access-title {
+            font-size: 1.3rem;
+          }
+          
+          .btn-back {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+        }
+        
+        .header-right {
+          gap: 8px;
+          
+          .btn-switch-mode {
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+            
+            i {
+              font-size: 0.9rem;
+            }
+          }
+          
+          .btn-add-primary {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .role-access-content {
+      .content-section {
+        padding: 12px;
+        margin-bottom: 12px;
+        
+        .role-selection {
+          gap: 10px;
+          
+          .role-dropdown {
+            .p-dropdown {
+              max-width: 250px;
+            }
+          }
+          
+          .btn-refresh {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+          }
+        }
+        
+        .permissions-table {
+          .table-header {
+            gap: 10px;
+            
+            h3 {
+              font-size: 1.1rem;
+              margin-bottom: 6px;
+            }
+            
+            .table-actions {
+              gap: 6px;
+              
+              .btn-close-all,
+              .btn-add-sub-menu,
+              .btn-test-form {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+              }
+            }
+          }
+          
+          .permissions-content {
+            .module-row {
+              .module-header {
+                padding: 10px;
+                
+                .module-info {
+                  .module-name {
+                    font-size: 0.9rem;
+                  }
+                  
+                  .module-description {
+                    font-size: 0.75rem;
+                  }
+                }
+              }
+              
+              .module-permissions {
+                padding: 10px;
+                
+                .permission-item {
+                  .permission-label {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .role-access-container {
+    padding: 8px;
+    
+    .role-access-header {
+      padding: 10px;
+      margin-bottom: 10px;
+      
+      .header-content {
+        gap: 10px;
+        
+        .header-left {
+          gap: 8px;
+          
+          .role-access-title {
+            font-size: 1.2rem;
+          }
+          
+          .btn-back {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+        
+        .header-right {
+          gap: 6px;
+          
+          .btn-switch-mode {
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+            
+            i {
+              font-size: 0.8rem;
+            }
+          }
+          
+          .btn-add-primary {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            
+            i {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .role-access-content {
+      .content-section {
+        padding: 10px;
+        margin-bottom: 10px;
+        
+        .role-selection {
+          gap: 8px;
+          
+          .role-dropdown {
+            .p-dropdown {
+              max-width: 200px;
+            }
+          }
+          
+          .btn-refresh {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+          }
+        }
+        
+        .permissions-table {
+          .table-header {
+            gap: 8px;
+            
+            h3 {
+              font-size: 1rem;
+              margin-bottom: 5px;
+            }
+            
+            .table-actions {
+              gap: 5px;
+              
+              .btn-close-all,
+              .btn-add-sub-menu,
+              .btn-test-form {
+                padding: 5px 10px;
+                font-size: 0.7rem;
+              }
+            }
+          }
+          
+          .permissions-content {
+            .module-row {
+              .module-header {
+                padding: 8px;
+                
+                .module-info {
+                  .module-name {
+                    font-size: 0.85rem;
+                  }
+                  
+                  .module-description {
+                    font-size: 0.7rem;
+                  }
+                }
+              }
+              
+              .module-permissions {
+                padding: 8px;
+                
+                .permission-item {
+                  .permission-label {
+                    font-size: 0.75rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .role-access-container {
+    padding: 6px;
+    
+    .role-access-header {
+      padding: 8px;
+      margin-bottom: 8px;
+      
+      .header-content {
+        gap: 8px;
+        
+        .header-left {
+          gap: 6px;
+          
+          .role-access-title {
+            font-size: 1.1rem;
+          }
+          
+          .btn-back {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+        }
+        
+        .header-right {
+          gap: 5px;
+          
+          .btn-switch-mode {
+            width: 28px;
+            height: 28px;
+            padding: 5px;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+          
+          .btn-add-primary {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+            
+            i {
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .role-access-content {
+      .content-section {
+        padding: 8px;
+        margin-bottom: 8px;
+        
+        .role-selection {
+          gap: 6px;
+          
+          .role-dropdown {
+            .p-dropdown {
+              max-width: 180px;
+            }
+          }
+          
+          .btn-refresh {
+            padding: 4px 8px;
+            font-size: 0.65rem;
+          }
+        }
+        
+        .permissions-table {
+          .table-header {
+            gap: 6px;
+            
+            h3 {
+              font-size: 0.9rem;
+              margin-bottom: 4px;
+            }
+            
+            .table-actions {
+              gap: 4px;
+              
+              .btn-close-all,
+              .btn-add-sub-menu,
+              .btn-test-form {
+                padding: 4px 8px;
+                font-size: 0.65rem;
+              }
+            }
+          }
+          
+          .permissions-content {
+            .module-row {
+              .module-header {
+                padding: 6px;
+                
+                .module-info {
+                  .module-name {
+                    font-size: 0.8rem;
+                  }
+                  
+                  .module-description {
+                    font-size: 0.65rem;
+                  }
+                }
+              }
+              
+              .module-permissions {
+                padding: 6px;
+                
+                .permission-item {
+                  .permission-label {
+                    font-size: 0.7rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Switch Mode Dialog Responsive
+@media (max-width: 768px) {
+  .switch-mode-dialog {
+    .p-dialog {
+      width: 95vw !important;
+      max-width: none !important;
+    }
+    
+    .switch-mode-content {
+      .switch-mode-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        
+        .switch-mode-tile {
+          padding: 16px;
+          
+          .tile-icon {
+            width: 50px;
+            height: 50px;
+            
+            i {
+              font-size: 1.25rem;
+            }
+          }
+          
+          .tile-content {
+            .tile-title {
+              font-size: 1.1rem;
+            }
+            
+            .tile-description {
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .switch-mode-dialog {
+    .switch-mode-content {
+      .switch-mode-grid {
+        gap: 10px;
+        
+        .switch-mode-tile {
+          padding: 14px;
+          
+          .tile-icon {
+            width: 45px;
+            height: 45px;
+            
+            i {
+              font-size: 1.1rem;
+            }
+          }
+          
+          .tile-content {
+            .tile-title {
+              font-size: 1rem;
+            }
+            
+            .tile-description {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+  // Responsive styles for dropdowns
+  @media (max-width: 768px) {
+    .role-dropdown-container {
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      
+      .role-dropdown,
+      .process-dropdown {
+        min-width: 100%;
+        width: 100%;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .role-access-header {
+      .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        
+        .role-dropdown-container {
+          width: 100%;
+        }
+      }
+      
+      .header-right {
+        flex-wrap: wrap;
+        gap: 8px;
+        
+        button {
+          font-size: 12px;
+          padding: 8px 12px;
+        }
+      }
+    }
+  }
+
+  // Permissions table styling
+  .permissions-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 20px;
+    
+    .permissions-table-content {
+      width: 100%;
+      border-collapse: collapse;
+      
+      th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+        vertical-align: middle;
+      }
+      
+      th {
+        background: #f8fafc;
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+        
+        &.module-column {
+          min-width: 200px;
+        }
+        
+        &.privilege-column {
+          min-width: 120px;
+          text-align: center;
+        }
+        
+        &.enabled-column {
+          min-width: 100px;
+          text-align: center;
+        }
+        
+        &.actions-column {
+          min-width: 150px;
+          text-align: center;
+        }
+      }
+      
+      td {
+        color: #374151;
+        font-size: 14px;
+        
+        &.module-name {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          .expand-icon {
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+            
+            &:hover {
+              color: #3b82f6;
+            }
+            
+            &.expanded {
+              color: #3b82f6;
+            }
+          }
+          
+          .module-icon {
+            color: #6b7280;
+            font-size: 16px;
+          }
+        }
+        
+        &.privilege-cell {
+          text-align: center;
+        }
+        
+        &.enabled-cell {
+          text-align: center;
+        }
+        
+        &.actions-cell {
+          text-align: center;
+        }
+      }
+      
+      tr {
+        transition: background-color 0.2s;
+        
+        &:hover {
+          background-color: #f9fafb;
+        }
+        
+        &.sub-module {
+          background-color: #f8fafc;
+          
+          &:hover {
+            background-color: #f1f5f9;
+          }
+        }
+      }
+    }
+  }
+
+  // Action buttons styling
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    
+    .btn-action {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      
+      &.btn-add-sub {
+        background: #10b981;
+        color: white;
+        
+        &:hover {
+          background: #059669;
+        }
+      }
+      
+      &.btn-edit {
+        background: #3b82f6;
+        color: white;
+        
+        &:hover {
+          background: #2563eb;
+        }
+      }
+      
+      &.btn-delete {
+        background: #ef4444;
+        color: white;
+        
+        &:hover {
+          background: #dc2626;
+        }
+      }
+    }
+  }
+
+  // No data message styling
+  .no-data-message {
+    text-align: center;
+    padding: 40px 20px;
+    
+    .no-data-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      color: #6b7280;
+      
+      i {
+        font-size: 48px;
+        color: #d1d5db;
+      }
+      
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+
+  // Form styling for AddFormComponent
+  ::ng-deep .add-form-dialog {
+    .p-dialog-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 8px 8px 0 0;
+      
+      .p-dialog-title {
+        color: white;
+        font-weight: 600;
+      }
+      
+      .p-dialog-header-icon {
+        color: white;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+    
+    .p-dialog-content {
+      padding: 24px;
+      
+      .form-group {
+        margin-bottom: 20px;
+        
+        label {
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 8px;
+          display: block;
+        }
+        
+        .p-inputtext,
+        .p-dropdown {
+          width: 100%;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          padding: 10px 12px;
+          font-size: 14px;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          
+          &:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+          }
+        }
+        
+        .p-dropdown {
+          .p-dropdown-label {
+            padding: 0;
+          }
+          
+          .p-dropdown-trigger {
+            width: 40px;
+          }
+        }
+      }
+      
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 24px;
+        
+        .p-button {
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: 500;
+          transition: all 0.2s;
+          
+          &.p-button-primary {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            
+            &:hover {
+              background: #2563eb;
+              border-color: #2563eb;
+            }
+          }
+          
+          &.p-button-secondary {
+            background: #6b7280;
+            border-color: #6b7280;
+            
+            &:hover {
+              background: #4b5563;
+              border-color: #4b5563;
+            }
+          }
+        }
+      }
+    }
+  }
+

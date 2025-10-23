@@ -1,0 +1,22 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: dialogWidth }"
+  [header]="header"
+>
+  <ng-content></ng-content>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-text"
+      (click)="onCancel()"
+    ></button>
+    <button
+      pButton
+      label="Save"
+      class="p-button-info"
+      (click)="onSave()"
+    ></button>
+  </ng-template>
+</p-dialog>

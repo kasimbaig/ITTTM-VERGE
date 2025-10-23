@@ -1,0 +1,315 @@
+<div class="p-4">
+  <!-- Header Section -->
+  <div class="mb-6 text-center">
+    <span class="text-xl font-semibold text-blue-500 text-center mb-2">(To be Rendered for the Last Week of Month)</span>
+    <h3 class="text-md font-medium text-center text-blue-600">Boiler-<span class="text-orange-500">Steaming Detail</span></h3>
+  </div>
+  
+  <div class="flex justify-between items-center mb-3 gap-2">
+    <!-- Equipment and Location Filters -->
+    <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Equipment:</label>
+        <p-multiSelect  *ngIf="srarEquipmentData.length > 0"
+          [options]="srarEquipmentData"
+          optionLabel="equipment_name"
+          [filter]="true"
+          filterBy="equipment_name"
+          placeholder="Select Equipment"
+          class="w-48"
+          display="chip"
+          [(ngModel)]="selectedEquipment">
+        </p-multiSelect>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button (click)="addBoiler()"
+      class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+      <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+    </button>
+      <button (click)="editBoiler()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+
+      <button (click)="saveBoiler()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+  <!-- Main Table -->
+  <div class="overflow-x-auto mb-6">
+    <table class="w-full border-collapse border border-gray-400">
+      <thead>
+        <tr class="bg-gray-600 text-white">
+          <th class="border border-gray-400 p-2 text-center">Eqpt Name</th>
+          <th class="border border-gray-400 p-2 text-center">Nomenclature</th>
+          <th class="border border-gray-400 p-2 text-center">Loc on Board</th>
+          <th class="border border-gray-400 p-2 text-center">Ser No</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed During The Month</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed Since Commissioning</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Above 20%</th>
+          <th class="border border-gray-400 p-2 text-center">Last Int Clg Date</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs steamed Since Last Int Clg</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed At Last Int Clg</th>
+          <th class="border border-gray-400 p-2 text-center">Last Ext Clg Date</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed Since Last Ext Clg</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed At Last Ext Clg</th>
+          <th class="border border-gray-400 p-2 text-center">Last Retubing Date</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed Since Last Retubing</th>
+          <th class="border border-gray-400 p-2 text-center">Hrs Steamed At Last Retubing</th>
+          <th class="border border-gray-400 p-2 text-center">Date Of Last Durability Test</th>
+          <th class="border border-gray-400 p-2 text-center">Due Date For Next Inspection</th>
+          <th class="border border-gray-400 p-2 text-center">Life Assessed In Months</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <ng-container *ngFor="let item of srarBoilerData; let i = index">
+        <tr class="bg-white">
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.equipment_name">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.nomenclature">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.location">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.serial_no">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_during_the_month">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_since_commissioning">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_above_20_percent">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.last_int_clg_date">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_since_last_int_clg">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_at_last_int_clg">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.last_ext_clg_date">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_since_last_ext_clg">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_at_last_ext_clg">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.last_retubing_date">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_since_last_retubing">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.hrs_steamed_at_last_retubing">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.date_of_last_durability_test">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="date" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.due_date_for_next_inspection">
+          </td>
+          <td class="border border-gray-400 p-2 text-center">
+            <input [disabled]="isEdit" pInputText type="text" class="w-full min-w-56 border border-gray-400 p-2 text-center" [(ngModel)]="item.life_assessed_in_months">
+          </td>
+
+        </tr>
+      </ng-container>
+      <tr *ngIf="srarBoilerData?.length === 0">
+        <td colspan="19" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+          No boiler steaming data available
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="mb-6 text-center">
+    <h3 class="text-md font-medium text-center mb-2">Boiler Detail - <span class="text-orange-500">Alkalinity And Salinity Detail</span></h3>
+    <span class="text-xl text-center font-semibold text-blue-500 mb-4">Scroll to fill fields as applicable for the boiler type fitted onboard</span>
+  </div>
+
+  <!-- Equipment Dropdown and Action Buttons for Second Table -->
+  <div class="flex justify-between items-center mb-3 gap-2">
+    <!-- Equipment Dropdown -->
+    <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Equipment:</label>
+        <p-multiSelect *ngIf="srarEquipmentData.length > 0"
+            [options]="srarEquipmentData"
+            optionLabel="equipment_name"
+            [filter]="true"
+            filterBy="equipment_name"
+            placeholder="Select Equipment"
+            class="w-48"
+            display="chip"
+            [(ngModel)]="selectedEquipmentDetail">
+        </p-multiSelect>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button (click)="addBoilerDetail()"
+          class="bg-green-50 border-green-500 border-2 hover:bg-green-500 hover:text-white text-green-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-plus"></i> <span class="ml-2 text-lg">Add</span>
+      </button>
+      <button (click)="editBoilerDetail()"
+          class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-pencil"></i> <span class="ml-2 text-lg">Edit</span>
+      </button>
+      <button (click)="saveBoilerDetail()"
+          class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold">
+          <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse border border-gray-400">
+      <thead>
+        <tr class="bg-gray-600 text-white">
+          <th colspan="7" class="border border-gray-400 p-2 text-center">Common</th>
+          <th colspan="2" class="border border-gray-400 p-2 text-center">Y-160 Boilers</th>
+          <th colspan="3" class="border border-gray-400 p-2 text-center">Y160/VKD</th>
+          <th  class="border border-gray-400 p-2 text-center">VKD Boilers</th>
+          <th colspan="3" class="border border-gray-400 p-2 text-center">JLW Boilers</th>
+          <th colspan="2" class="border border-gray-400 p-2 text-center">Common Detail</th>
+        </tr>
+        <tr class="bg-gray-600 text-white">
+          <th class="border border-gray-400 p-2 text-center">Eqpt Name</th>
+          <th class="border border-gray-400 p-2 text-center">Nomenclature</th>
+          <th class="border border-gray-400 p-2 text-center">Loc on Board</th>
+          <th class="border border-gray-400 p-2 text-center">Ser No</th>
+          <th class="border border-gray-400 p-2 text-center">Salinity Chloride At the Last week of Month</th>
+          <th class="border border-gray-400 p-2 text-center">Highest Salinity Chloride During Month [ Y160-max70(ppm), VKD-max10(mg/l), JLW-max10(mg/l) ]</th>
+          <th class="border border-gray-400 p-2 text-center">Lowest salinity/Chloride During Month </th>
+          <th class="border border-gray-400 p-2 text-center">Alkalinity .....</th>
+          <th class="border border-gray-400 p-2 text-center">(°C)</th>
+          <th class="border border-gray-400 p-2 text-center">TDS (PPM) (Max 1000)</th>
+          <th class="border border-gray-400 p-2 text-center">.............</th>
+          <th class="border border-gray-400 p-2 text-center">Phosphate (PPM) (Max 100)</th>
+          <th class="border border-gray-400 p-2 text-center">Alkalinity(mg/l) (4-6) (Max 100)</th>
+          <th class="border border-gray-400 p-2 text-center">Alkalinity(limit) (mg/l) (4-6) (Max 100)</th>
+          <th class="border border-gray-400 p-2 text-center">Phosphate (mg/l) (Max 100)</th>
+          <th class="border border-gray-400 p-2 text-center">Phosphate (limit) </th>
+          <th class="border border-gray-400 p-2 text-center">Conductivity(in mS/cm) (Max 1000)</th>
+          <th class="border border-gray-400 p-2 text-center">State Of Feed Water</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of boilerDetailData; let i = index">
+          <tr class="bg-white">
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="text" 
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.equipment_name" placeholder="Equipment Name">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="text" 
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.nomenclature" placeholder="Nomenclature">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="text" 
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.location_name" placeholder="Location">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="text" 
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.equipment_code" placeholder="Serial Number">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.salinity_chloride_last_week" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.highest_salinity_chloride_month" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.lowest_salinity_chloride_month" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.alkalinity_y160" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.temperature_y160" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.tds_ppm" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.phosphate_ppm" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.alkalinity_mg_l" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.alkalinity_limit" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.phosphate_mg_l" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.phosphate_limit" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.conductivity_ms_cm" placeholder="0.00">
+            </td>
+            <td class="border border-gray-400 p-2 text-center">
+              <input [disabled]="isEdit" pInputText type="text" 
+                  class="w-full border border-gray-300 rounded px-2 py-1 min-w-48"
+                  [(ngModel)]="item.state_of_feed_water" placeholder="State of Feed Water">
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="boilerDetailData?.length === 0">
+          <td colspan="19" class="px-4 py-8 text-center text-gray-500 border border-gray-400">
+            No boiler detail data available
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

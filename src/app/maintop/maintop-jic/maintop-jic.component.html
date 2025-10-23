@@ -1,0 +1,92 @@
+<div class="">
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="fa-solid fa-ship"></i>
+      <div>
+        <h2>Maintop JIC</h2>
+        <p>View & manage maintop JIC configurations</p>
+      </div>
+    </div>
+    <div class="command-actions">
+      <button class="btn outlined" (click)="resetFilters()">
+        <i class="pi pi-filter-slash"></i>
+        Reset
+      </button>
+      <button class="btn outlined" (click)="exportMenu.toggle($event)">
+        <i class="pi pi-file"></i>
+        Export <i class="pi pi-chevron-down"></i>
+      </button>
+      <button class="btn primary" (click)="toggleForm(true)">
+        <i class="pi pi-plus"></i>
+        ADD
+      </button>
+      <p-tieredMenu #exportMenu [model]="exportOptions" popup appendTo="body"></p-tieredMenu>
+    </div>
+  </div>
+
+
+
+  <div class=" rounded-lg shadow-md p-6 mb-6 border border-gray-200 bg-yellow-50 text-blue-500 my-2">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <ng-container *ngFor="let card of cards">
+        <div class="flex items-center gap-4">
+            <label class="text-sm font-bold  w-20 flex-shrink-0">{{ card.label }}</label>
+            <p-dropdown 
+                [options]="card.options" 
+                [(ngModel)]="card.selectedOption"
+                placeholder="--Select {{ card.label }}--"
+                optionLabel="name"
+                [filter]="true"
+                filterBy="name"
+                (onChange)="applyFilter(card.label, $event.value)"
+                
+                styleClass="flex-1">
+            </p-dropdown>
+        </div>
+        </ng-container>
+
+    </div>
+   
+</div>
+
+
+  <app-paginated-table [data]="maintopJIC" [columns]="cols" [showEndActions]="true"
+    (viewEvent)="viewDetails($event, true)" (editEvent)="editDetails($event, true)"
+    (deleteEvent)="deleteDetails($event)"></app-paginated-table>
+</div>
+
+<app-add-form
+  *ngIf="isFormOpen"
+  [open]="isFormOpen"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="newDetails"
+  [fromTitle]="title"
+  [context]="'maintop'"
+  (onOpenChange)="isFormOpen = $event"
+  (onSubmit)="handleSubmit($event)"
+></app-add-form>
+<app-add-form
+  *ngIf="isEditFormOpen"
+  [open]="isEditFormOpen"
+  [formConfig]="formConfigForNewDetails"
+  [formData]="selectedDetails"
+  [fromTitle]="editTitle"
+  [isEditMode]="true"
+  [context]="'maintop'"
+  (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"
+></app-add-form>
+<app-toast></app-toast>
+<app-confirm-dialog
+  *ngIf="showConfirmDialog"
+  [message]="'Do you really want to delete this Maintop JIC?'"
+  (confirm)="onConfirmDelete($event)"
+></app-confirm-dialog>
+<app-view-details
+  *ngIf="isViewDetailsOpen"
+  [open]="isViewDetailsOpen"
+  [viewDetails]="selectedDetails"
+  [headers]="filteredHeaders"
+  (onOpenChange)="isViewDetailsOpen = $event"
+  [title]="viewDetialsTitle"
+></app-view-details>

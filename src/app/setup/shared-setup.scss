@@ -1,0 +1,2057 @@
+// Shared styles for all setup components
+.setup-component-container {
+  padding: 2rem;
+  // background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.setup-component-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: #f1f5f9;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .header-icon {
+      width: 50px;
+      height: 50px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #3b82f6;
+
+      i {
+        font-size: 1.5rem;
+        color: white;
+      }
+    }
+    
+    .btn-secondary {
+      background: #64748b;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: #475569;
+        transform: translateY(-1px);
+      }
+    }
+  }
+  
+  .setup-component-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin: 0;
+  }
+  
+  .btn-primary {
+    background: white;
+    color: #3b82f6;
+    border: 2px solid #3b82f6;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: #3b82f6;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+    }
+  }
+}
+
+// Table controls section - matching reusable table design
+.table-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(4px);
+  margin-bottom: 1rem;
+
+  .controls-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .btn-clear-filters {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      
+      &:hover {
+        background: #bbf7d0;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+      }
+
+      i {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    width: 24rem;
+    position: relative;
+
+    .search-input {
+      width: 100%;
+      padding: 0.875rem 3rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      background: white;
+      transition: all 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+      }
+
+      &::placeholder {
+        color: #94a3b8;
+        font-weight: 500;
+      }
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.875rem;
+      pointer-events: none;
+      transition: color 0.3s ease;
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0.375rem;
+      color: #94a3b8;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        color: #ef4444;
+        background: #fef2f2;
+      }
+    }
+  }
+}
+
+.table-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+
+  // Table header styling to match reusable table
+  ::ng-deep .p-datatable {
+    .p-datatable-header {
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      padding: 0;
+      margin: 0;
+
+      th {
+        color: #374151;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border: none;
+        padding: 1rem;
+        background: #f3f4f6;
+        text-align: left;
+        
+        // Sort icons
+        .p-sortable-column-icon {
+          color: #6b7280;
+          margin-left: 0.5rem;
+        }
+
+        // Filter icons
+        .p-column-filter-trigger {
+          color: #6b7280;
+          margin-left: 0.5rem;
+        }
+      }
+    }
+
+    .p-datatable-tbody {
+      tr {
+        border-bottom: 1px solid #e5e7eb;
+        
+        &:hover {
+          background-color: #f9fafb;
+        }
+      }
+
+      td {
+        padding: 1rem;
+        border: none;
+        font-size: 0.875rem;
+        color: #111827;
+      }
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  
+  button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+  
+  .btn-view {
+    background: #3b82f6;
+    color: white;
+    
+    &:hover {
+      background: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+  }
+  
+  .btn-edit {
+    background: #3b82f6;
+    color: white;
+    
+    &:hover {
+      background: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+  }
+  
+  .btn-delete {
+    background: #3b82f6;
+    color: white;
+    
+    &:hover {
+      background: #2563eb;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+  }
+}
+
+// Action button styles matching reusable table
+.action-btn {
+  padding: 0.25rem 0.75rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+  }
+}
+
+// Enhanced Responsive Design - Mobile First Approach
+@media (max-width: 1200px) {
+  .setup-component-container {
+    padding: 1.5rem;
+  }
+  
+  .setup-component-header {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    
+    .header-left {
+      .header-icon {
+        width: 45px;
+        height: 45px;
+        
+        i {
+          font-size: 1.375rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.625rem;
+      }
+    }
+  }
+  
+  .table-controls {
+    padding: 1.25rem;
+    
+    .search-container {
+      width: 20rem;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .setup-component-container {
+    padding: 1.25rem;
+  }
+  
+  .setup-component-header {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+    
+    .header-left {
+      gap: 0.75rem;
+      
+      .header-icon {
+        width: 40px;
+        height: 40px;
+        
+        i {
+          font-size: 1.25rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.625rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    
+    .controls-left {
+      gap: 0.5rem;
+      
+      .btn-clear-filters {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.5rem;
+      
+      .btn-export {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .search-container {
+      width: 100%;
+      max-width: 24rem;
+      align-self: center;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .setup-component-container {
+    padding: 1rem;
+  }
+  
+  .setup-component-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    
+    .header-left {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      
+      .header-icon {
+        width: 45px;
+        height: 45px;
+        
+        i {
+          font-size: 1.375rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+      
+      .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      align-self: center;
+    }
+  }
+  
+  .table-controls {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    
+    .controls-left {
+      justify-content: center;
+      gap: 0.5rem;
+      
+      .btn-clear-filters {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .controls-right {
+      justify-content: center;
+      gap: 0.5rem;
+      
+      .btn-export {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .search-container {
+      max-width: 100%;
+      
+      .search-input {
+        padding: 0.75rem 2.5rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .table-container {
+    ::ng-deep .p-datatable {
+      .p-datatable-header th {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+      }
+      
+      .p-datatable-tbody td {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+    
+    button {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+  
+  .action-btn {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .setup-component-container {
+    padding: 0.75rem;
+  }
+  
+  .setup-component-header {
+    padding: 0.875rem;
+    margin-bottom: 0.875rem;
+    
+    .header-left {
+      gap: 0.625rem;
+      
+      .header-icon {
+        width: 40px;
+        height: 40px;
+        
+        i {
+          font-size: 1.25rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.375rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.375rem 0.875rem;
+        font-size: 0.75rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.375rem 0.875rem;
+      font-size: 0.75rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 0.875rem;
+    
+    .controls-left {
+      gap: 0.375rem;
+      
+      .btn-clear-filters {
+        padding: 0.25rem 0.625rem;
+        font-size: 0.75rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.375rem;
+      
+      .btn-export {
+        padding: 0.25rem 0.625rem;
+        font-size: 0.75rem;
+      }
+    }
+    
+    .search-container {
+      .search-input {
+        padding: 0.625rem 2.25rem;
+        font-size: 0.75rem;
+      }
+      
+      .search-icon, .clear-search {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
+  .table-container {
+    ::ng-deep .p-datatable {
+      .p-datatable-header th {
+        padding: 0.625rem;
+        font-size: 0.75rem;
+      }
+      
+      .p-datatable-tbody td {
+        padding: 0.625rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    button {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+  
+  .action-btn {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .setup-component-container {
+    padding: 0.5rem;
+  }
+  
+  .setup-component-header {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    
+    .header-left {
+      gap: 0.5rem;
+      
+      .header-icon {
+        width: 35px;
+        height: 35px;
+        
+        i {
+          font-size: 1.125rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.25rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.7rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.7rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 0.75rem;
+    
+    .controls-left {
+      gap: 0.25rem;
+      
+      .btn-clear-filters {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.25rem;
+      
+      .btn-export {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+    
+    .search-container {
+      .search-input {
+        padding: 0.5rem 2rem;
+        font-size: 0.7rem;
+      }
+      
+      .search-icon, .clear-search {
+        font-size: 0.7rem;
+      }
+    }
+  }
+  
+  .table-container {
+    ::ng-deep .p-datatable {
+      .p-datatable-header th {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+      }
+      
+      .p-datatable-tbody td {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    button {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  
+  .action-btn {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .setup-component-container {
+    padding: 0.375rem;
+  }
+  
+  .setup-component-header {
+    padding: 0.625rem;
+    margin-bottom: 0.625rem;
+    
+    .header-left {
+      gap: 0.375rem;
+      
+      .header-icon {
+        width: 30px;
+        height: 30px;
+        
+        i {
+          font-size: 1rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.125rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.125rem 0.625rem;
+        font-size: 0.65rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.125rem 0.625rem;
+      font-size: 0.65rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 0.625rem;
+    
+    .controls-left {
+      gap: 0.125rem;
+      
+      .btn-clear-filters {
+        padding: 0.125rem 0.375rem;
+        font-size: 0.65rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.125rem;
+      
+      .btn-export {
+        padding: 0.125rem 0.375rem;
+        font-size: 0.65rem;
+      }
+    }
+    
+    .search-container {
+      .search-input {
+        padding: 0.375rem 1.75rem;
+        font-size: 0.65rem;
+      }
+      
+      .search-icon, .clear-search {
+        font-size: 0.65rem;
+      }
+    }
+  }
+  
+  .table-container {
+    ::ng-deep .p-datatable {
+      .p-datatable-header th {
+        padding: 0.375rem;
+        font-size: 0.65rem;
+      }
+      
+      .p-datatable-tbody td {
+        padding: 0.375rem;
+        font-size: 0.65rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    button {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+  
+  .action-btn {
+    padding: 0.05rem 0.2rem;
+    font-size: 0.55rem;
+  }
+}
+
+// Landscape orientation adjustments for mobile
+@media (max-width: 768px) and (orientation: landscape) {
+  .setup-component-header {
+    flex-direction: row;
+    text-align: left;
+    gap: 1rem;
+    
+    .header-left {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .btn-primary {
+      align-self: flex-end;
+    }
+  }
+  
+  .table-controls {
+    flex-direction: row;
+    gap: 1rem;
+    
+    .controls-left {
+      justify-content: flex-start;
+    }
+    
+    .controls-right {
+      justify-content: flex-end;
+    }
+  }
+}
+
+// High DPI displays
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .setup-component-header {
+    .header-icon i {
+      font-weight: 300; // Thinner icons for high DPI
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .setup-component-container {
+    background: white;
+    padding: 0;
+  }
+  
+  .setup-component-header {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .table-controls {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+// Switch Mode Dialog Styles - Shared across all setup components
+:host ::ng-deep .switch-mode-dialog {
+  .p-dialog {
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: none;
+    overflow: hidden;
+  }
+  
+  .p-dialog-header {
+    background: #1e40af;
+    color: white;
+    border-radius: 0;
+    padding: 20px 24px;
+    border: none;
+    margin: 0;
+    
+    .p-dialog-title {
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+      margin: 0;
+    }
+    
+    .p-dialog-header-icons {
+      .p-dialog-header-icon {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-left: 8px;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+        
+        &:focus {
+          box-shadow: none;
+          outline: none;
+        }
+      }
+    }
+  }
+  
+  .p-dialog-content {
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    background: white;
+    margin: 0;
+  }
+}
+
+.switch-mode-content {
+  padding: 24px;
+  
+  .switch-mode-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+    .switch-mode-tile {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-color: #d1d5db;
+        
+        .tile-arrow {
+          transform: translateX(4px);
+          color: #3b82f6;
+        }
+      }
+      
+      // Border colors - using left border with exact colors from image
+      &.border-blue-500 {
+        border-left: 4px solid #3b82f6;
+        .tile-icon {
+          background: #dbeafe;
+          i {
+            color: #3b82f6;
+          }
+        }
+      }
+      
+      &.border-yellow-500 {
+        border-left: 4px solid #eab308;
+        .tile-icon {
+          background: #fef3c7;
+          i {
+            color: #eab308;
+          }
+        }
+      }
+      
+      &.border-green-500 {
+        border-left: 4px solid #22c55e;
+        .tile-icon {
+          background: #dcfce7;
+          i {
+            color: #22c55e;
+          }
+        }
+      }
+      
+      &.border-purple-500 {
+        border-left: 4px solid #a855f7;
+        .tile-icon {
+          background: #f3e8ff;
+          i {
+            color: #a855f7;
+          }
+        }
+      }
+      
+      &.border-red-500 {
+        border-left: 4px solid #ef4444;
+        .tile-icon {
+          background: #fee2e2;
+          i {
+            color: #ef4444;
+          }
+        }
+      }
+      
+      .tile-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        
+        i {
+          font-size: 20px;
+        }
+      }
+      
+      .tile-content {
+        flex: 1;
+        
+        .tile-title {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1f2937;
+          margin: 0 0 4px 0;
+          line-height: 1.4;
+        }
+        
+        .tile-description {
+          font-size: 14px;
+          color: #6b7280;
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
+      
+      .tile-arrow {
+        color: #9ca3af;
+        transition: all 0.2s ease;
+        margin-left: auto;
+        
+        i {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Switch Mode Dialog
+@media (max-width: 768px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 95vw !important;
+      max-width: none !important;
+      margin: 1rem;
+    }
+    
+    .p-dialog-header {
+      padding: 16px 20px;
+      
+      .p-dialog-title {
+        font-size: 16px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 16px;
+    
+    .switch-mode-grid {
+      gap: 12px;
+      
+      .switch-mode-tile {
+        padding: 16px;
+        
+        .tile-icon {
+          width: 40px;
+          height: 40px;
+          
+          i {
+            font-size: 18px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 16px;
+          }
+          
+          .tile-description {
+            font-size: 13px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 98vw !important;
+      margin: 0.5rem;
+    }
+    
+    .p-dialog-header {
+      padding: 12px 16px;
+      
+      .p-dialog-title {
+        font-size: 14px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 12px;
+    
+    .switch-mode-grid {
+      gap: 8px;
+      
+      .switch-mode-tile {
+        padding: 12px;
+        
+        .tile-icon {
+          width: 36px;
+          height: 36px;
+          
+          i {
+            font-size: 16px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 14px;
+          }
+          
+          .tile-description {
+            font-size: 12px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+// Extra small screens (320px and below)
+@media (max-width: 320px) {
+  :host ::ng-deep .switch-mode-dialog {
+    .p-dialog {
+      width: 99vw !important;
+      margin: 0.25rem;
+    }
+    
+    .p-dialog-header {
+      padding: 8px 12px;
+      
+      .p-dialog-title {
+        font-size: 12px;
+      }
+      
+      .p-dialog-header-icons .p-dialog-header-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  .switch-mode-content {
+    padding: 8px;
+    
+    .switch-mode-grid {
+      gap: 6px;
+      
+      .switch-mode-tile {
+        padding: 8px;
+        
+        .tile-icon {
+          width: 28px;
+          height: 28px;
+          
+          i {
+            font-size: 12px;
+          }
+        }
+        
+        .tile-content {
+          .tile-title {
+            font-size: 12px;
+          }
+          
+          .tile-description {
+            font-size: 10px;
+          }
+        }
+        
+        .tile-arrow i {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
+// Switch Mode Button Styling - Shared across all setup components
+.btn-switch-mode {
+  background: #1e40af;
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+    background: #1e3a8a;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+  }
+
+  .p-button-icon {
+    font-size: 1rem;
+    color: white;
+  }
+}
+
+// Alternative Switch Mode Button - Simple Grid Icon Style (like in the image)
+.btn-switch-mode-simple {
+  background: #64748b;
+  border: none;
+  color: #374151;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background: #475569;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.3);
+  }
+
+  .p-button-icon {
+    font-size: 1.25rem;
+    color: inherit;
+  }
+}
+
+// Responsive Switch Mode Buttons
+@media (max-width: 768px) {
+  .btn-switch-mode {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.8rem;
+    
+    .p-button-icon {
+      font-size: 0.875rem;
+    }
+  }
+  
+  .btn-switch-mode-simple {
+    width: 40px;
+    height: 40px;
+    padding: 0.625rem;
+    
+    .p-button-icon {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-switch-mode {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    
+    .p-button-icon {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .btn-switch-mode-simple {
+    width: 36px;
+    height: 36px;
+    padding: 0.5rem;
+    
+    .p-button-icon {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .btn-switch-mode {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6rem;
+    
+    .p-button-icon {
+      font-size: 0.7rem;
+    }
+  }
+  
+  .btn-switch-mode-simple {
+    width: 28px;
+    height: 28px;
+    padding: 0.25rem;
+    
+    .p-button-icon {
+      font-size: 0.7rem;
+    }
+  }
+}
+
+// Extra small screens (320px and below)
+@media (max-width: 320px) {
+  .btn-switch-mode {
+    padding: 0.125rem 0.375rem;
+    font-size: 0.55rem;
+    
+    .p-button-icon {
+      font-size: 0.65rem;
+    }
+  }
+  
+  .btn-switch-mode-simple {
+    width: 24px;
+    height: 24px;
+    padding: 0.125rem;
+    
+    .p-button-icon {
+      font-size: 0.65rem;
+    }
+  }
+}
+
+// Header styling for consistent layout
+.setup-header-base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .btn-secondary {
+      background: #64748b;
+      border: none;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background: #475569;
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .setup-title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .btn-primary {
+      background: #3b82f6;
+      border: none;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+// Responsive Header Base
+@media (max-width: 768px) {
+  .setup-header-base {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1.25rem;
+    
+    .header-left {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      
+      .setup-title {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+    }
+    
+    .header-right {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .setup-header-base {
+    padding: 1rem;
+    
+    .header-left {
+      .setup-title {
+        font-size: 1.25rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .header-right {
+      .btn-primary {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .setup-header-base {
+    padding: 0.75rem;
+    
+    .header-left {
+      .setup-title {
+        font-size: 1.125rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+      }
+    }
+    
+    .header-right {
+      .btn-primary {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .setup-header-base {
+    padding: 0.625rem;
+    
+    .header-left {
+      .setup-title {
+        font-size: 1rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.25rem 0.625rem;
+        font-size: 0.7rem;
+      }
+    }
+    
+    .header-right {
+      .btn-primary {
+        padding: 0.25rem 0.625rem;
+        font-size: 0.7rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .setup-header-base {
+    padding: 0.5rem;
+    
+    .header-left {
+      .setup-title {
+        font-size: 0.875rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.65rem;
+      }
+    }
+    
+    .header-right {
+      .btn-primary {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.65rem;
+      }
+    }
+  }
+}
+
+// Touch-friendly improvements for mobile devices
+@media (hover: none) and (pointer: coarse) {
+  .setup-component-header {
+    .btn-primary, .btn-secondary {
+      min-height: 44px; // iOS recommended minimum touch target
+      min-width: 44px;
+    }
+  }
+  
+  .table-controls {
+    .btn-clear-filters, .btn-export {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+  
+  .action-buttons button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .action-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .setup-component-header {
+    border: 2px solid #000;
+    
+    .setup-component-title {
+      color: #000;
+    }
+  }
+  
+  .table-controls {
+    border: 2px solid #000;
+  }
+  
+  .table-container {
+    border: 2px solid #000;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .setup-component-header,
+  .table-controls,
+  .action-buttons,
+  .action-btn {
+    transition: none;
+    
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// Dark mode support
+// @media (prefers-color-scheme: dark) {
+//   .setup-component-container {
+//     background-color: #1f2937;
+//   }
+  
+//   .setup-component-header {
+//     background: #374151;
+    
+//     .setup-component-title {
+//       color: #f9fafb;
+//     }
+//   }
+  
+//   .table-controls {
+//     background: #4b5563;
+//     border-color: #6b7280;
+    
+//     .btn-clear-filters {
+//       background: #374151;
+//       color: #f9fafb;
+//       border-color: #6b7280;
+//     }
+//   }
+  
+//   .table-container {
+//     background: #374151;
+    
+//     ::ng-deep .p-datatable {
+//       .p-datatable-header {
+//         background: #4b5563;
+        
+//         th {
+//           background: #4b5563;
+//           color: #f9fafb;
+//         }
+//       }
+      
+//       .p-datatable-tbody {
+//         tr {
+//           border-bottom-color: #6b7280;
+          
+//           &:hover {
+//             background-color: #4b5563;
+//           }
+//         }
+        
+//         td {
+//           color: #f9fafb;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// Focus styles for accessibility
+.setup-component-header:focus-within,
+.table-controls:focus-within,
+.action-buttons:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+// Improved loading states
+.setup-component-header.loading,
+.table-controls.loading {
+  opacity: 0.7;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive Design for Small Screens
+@media (max-width: 1200px) {
+  .setup-component-container {
+    padding: 1.5rem;
+  }
+  
+  .setup-component-header {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    
+    .header-left {
+      gap: 0.875rem;
+      
+      .header-icon {
+        width: 45px;
+        height: 45px;
+        
+        i {
+          font-size: 1.375rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.75rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 1.25rem;
+    
+    .controls-left {
+      gap: 0.625rem;
+      
+      .btn-clear-filters {
+        padding: 0.375rem 0.875rem;
+        font-size: 0.875rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.625rem;
+      
+      .btn-export {
+        padding: 0.375rem 0.875rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .setup-component-container {
+    padding: 1.25rem;
+  }
+  
+  .setup-component-header {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+    
+    .header-left {
+      gap: 0.75rem;
+      
+      .header-icon {
+        width: 40px;
+        height: 40px;
+        
+        i {
+          font-size: 1.25rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.625rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 1rem;
+    
+    .controls-left {
+      gap: 0.5rem;
+      
+      .btn-clear-filters {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.5rem;
+      
+      .btn-export {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .setup-component-container {
+    padding: 1rem;
+  }
+  
+  .setup-component-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    
+    .header-left {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      
+      .header-icon {
+        width: 45px;
+        height: 45px;
+        
+        i {
+          font-size: 1.375rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+      
+      .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      align-self: center;
+    }
+  }
+  
+  .table-controls {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    
+    .controls-left {
+      justify-content: center;
+      gap: 0.5rem;
+      
+      .btn-clear-filters {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .controls-right {
+      justify-content: center;
+      gap: 0.5rem;
+      
+      .btn-export {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .search-container {
+      max-width: 100%;
+      
+      .search-input {
+        padding: 0.75rem 2.5rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .table-container {
+    ::ng-deep .p-datatable {
+      .p-datatable-header th {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+      }
+      
+      .p-datatable-tbody td {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+    
+    button {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+  
+  .action-btn {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+  }
+}
+
+// Extra small screens (320px and below)
+@media (max-width: 320px) {
+  .setup-component-container {
+    padding: 0.25rem;
+  }
+  
+  .setup-component-header {
+    padding: 0.375rem;
+    margin-bottom: 0.75rem;
+    
+    .header-left {
+      gap: 0.25rem;
+      
+      .header-icon {
+        width: 28px;
+        height: 28px;
+        
+        i {
+          font-size: 0.875rem;
+        }
+      }
+      
+      .setup-component-title {
+        font-size: 1rem;
+      }
+      
+      .btn-secondary {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.6rem;
+      }
+    }
+    
+    .btn-primary {
+      padding: 0.125rem 0.5rem;
+      font-size: 0.6rem;
+    }
+  }
+  
+  .table-controls {
+    padding: 0.375rem;
+    
+    .controls-left {
+      gap: 0.125rem;
+      
+      .btn-clear-filters {
+        padding: 0.125rem 0.375rem;
+        font-size: 0.6rem;
+      }
+    }
+    
+    .controls-right {
+      gap: 0.125rem;
+      
+      .btn-export {
+        padding: 0.125rem 0.375rem;
+        font-size: 0.6rem;
+      }
+    }
+    
+    .search-container {
+      .search-input {
+        padding: 0.25rem 1.5rem;
+        font-size: 0.6rem;
+      }
+      
+      .search-icon, .clear-search {
+        font-size: 0.6rem;
+      }
+    }
+  }
+  
+  .table-container {
+    ::ng-deep .p-datatable {
+      .p-datatable-header th {
+        padding: 0.25rem;
+        font-size: 0.6rem;
+      }
+      
+      .p-datatable-tbody td {
+        padding: 0.25rem;
+        font-size: 0.6rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    button {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  
+  .action-btn {
+    padding: 0.05rem 0.15rem;
+    font-size: 0.5rem;
+  }
+}

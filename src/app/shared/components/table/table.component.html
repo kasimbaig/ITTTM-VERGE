@@ -1,0 +1,58 @@
+<p-table
+  #table
+  [value]="data"
+  [paginator]="true"
+  stripedRows
+  scrollable="true"
+  scrollHeight="62vh"
+  styleClass="rounded-lg shadow-md"
+  [rows]="10"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [rowsPerPageOptions]="[10, 20, 50, 100, 200, 500]"
+  [sortMode]="'multiple'"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+        {{ col.header }}
+        
+        <span class="filter-icon" (click)="toggleFilter(col.field)">
+          <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter>
+        </span>
+      </th>
+      <th *ngIf="showEndActions">{{ customHeaderNameEnd }}</th>
+    </tr>
+    <!-- <tr>
+      <th *ngFor="let col of columns">
+      </th>
+      <th *ngIf="showEndActions"></th>
+    </tr> -->
+  </ng-template>
+
+  <ng-template pTemplate="body" let-rowData>
+    <tr>
+      <td *ngFor="let col of columns">{{ rowData[col.field] }}</td>
+      <td *ngIf="showEndActions">
+        <ng-container
+          *ngTemplateOutlet="actionsTemplate; context: { $implicit: rowData }"
+        ></ng-container>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+<!-- sample to use it -->
+
+<!-- <app-table
+  [columns]="cols"
+  [data]="chatBotQueries"
+  tableName="chatbotTable"
+  [showActions]="true"
+  [actionsTemplate]="actions"
+>
+<ng-template #actions  let-rowData>
+  <button class="bg-blue-600 p-3" (click)="showData(rowData)">Delete</button>
+</ng-template>
+</app-table> -->

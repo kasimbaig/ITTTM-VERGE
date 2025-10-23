@@ -1,0 +1,12 @@
+<div class="row-counter-container" [class.compact]="compact">
+  <div class="flex items-center gap-2">
+    <span class="text-md text-gray-600">Enter Total Number of Rows.</span>
+    <input 
+      type="number" 
+      [min]="minRows"
+      [max]="maxRows"
+      [value]="currentRows"
+      (input)="onRowCountChange($event)"
+      class="w-20 px-2 py-1 border border-gray-400 text-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+  </div>
+</div>

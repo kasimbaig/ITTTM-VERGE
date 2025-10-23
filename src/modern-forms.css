@@ -1,0 +1,394 @@
+/* ========================================
+   MODERN FORM STYLES
+   Apply these classes to all forms
+   ======================================== */
+
+.modern-form-container {
+  background: var(--neomorph-bg);
+  padding: 2rem;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--neomorph-shadow-light);
+}
+
+.modern-form-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.modern-form-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-normal);
+}
+
+.modern-form-field label.floating {
+  position: absolute;
+  top: -0.5rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  background: linear-gradient(135deg, var(--primary-purple), var(--primary-pink));
+  color: #fff;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.modern-form-field input,
+.modern-form-field select,
+.modern-form-field textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  color: #1f2937;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.modern-form-field input::placeholder,
+.modern-form-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+.modern-form-field input:focus,
+.modern-form-field select:focus,
+.modern-form-field textarea:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1),
+              inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.modern-form-field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modern-form-field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.modern-form-field-error input,
+.modern-form-field-error select,
+.modern-form-field-error textarea {
+  border-color: var(--status-danger);
+}
+
+.modern-form-error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--status-danger);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.modern-form-error-message::before {
+  content: '⚠';
+  font-size: 1rem;
+}
+
+.modern-form-success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--status-success);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.modern-form-success-message::before {
+  content: '✓';
+  font-size: 1rem;
+}
+
+.modern-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.modern-btn {
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all var(--transition-bounce);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.modern-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.modern-btn span,
+.modern-btn i {
+  position: relative;
+  z-index: 1;
+}
+
+.modern-btn:hover {
+  transform: translateY(-2px);
+}
+
+.modern-btn-primary {
+  background: linear-gradient(135deg, var(--primary-purple), var(--primary-pink));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+}
+
+.modern-btn-primary:hover {
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.5);
+}
+
+.modern-btn-secondary {
+  background: #ffffff;
+  color: var(--primary-purple);
+  border: 2px solid var(--primary-purple);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.modern-btn-secondary:hover {
+  background: #f8f9fa;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.modern-btn-success {
+  background: linear-gradient(135deg, var(--status-success), #26F9D1);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 217, 163, 0.3);
+}
+
+.modern-btn-success:hover {
+  box-shadow: 0 8px 24px rgba(0, 217, 163, 0.5);
+}
+
+.modern-btn-danger {
+  background: linear-gradient(135deg, var(--status-danger), #FF8A80);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(255, 82, 82, 0.3);
+}
+
+.modern-btn-danger:hover {
+  box-shadow: 0 8px 24px rgba(255, 82, 82, 0.5);
+}
+
+/* Checkbox and Radio Styles */
+.modern-form-checkbox,
+.modern-form-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+}
+
+.modern-form-checkbox input[type="checkbox"],
+.modern-form-radio input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary-purple);
+}
+
+.modern-form-checkbox label,
+.modern-form-radio label {
+  cursor: pointer;
+  margin: 0;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+/* File Upload */
+.modern-file-upload {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.modern-file-upload input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.modern-file-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.modern-file-upload-label:hover {
+  background: #e9ecef;
+  border-color: var(--primary-purple);
+}
+
+.modern-file-upload-label i {
+  font-size: 1.5rem;
+  color: var(--primary-purple);
+}
+
+/* Form Groups */
+.modern-form-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Inline Form Fields */
+.modern-form-inline {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modern-form-inline .modern-form-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Required Indicator */
+.modern-form-field label.required::after {
+  content: ' *';
+  color: var(--status-danger);
+  font-weight: 700;
+}
+
+/* Disabled State */
+.modern-form-field input:disabled,
+.modern-form-field select:disabled,
+.modern-form-field textarea:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Loading State */
+.modern-btn-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.modern-btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Form Sections */
+.modern-form-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.modern-form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.modern-form-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--primary-purple);
+  display: inline-block;
+}
+
+/* Help Text */
+.modern-form-help-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modern-form-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .modern-form-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .modern-form-actions {
+    flex-direction: column;
+  }
+  
+  .modern-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

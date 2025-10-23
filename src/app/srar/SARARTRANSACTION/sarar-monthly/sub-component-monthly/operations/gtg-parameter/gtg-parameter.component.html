@@ -1,0 +1,209 @@
+<div class="p-4">
+    <!-- Header Section -->
+    <div class="mb-2 text-center">
+        <h3 class="text-lg font-semibold text-green-700">GTG - <span class=" text-orange-500">Exploitation</span> </h3>
+    </div>
+
+
+    <div class="flex justify-between mb-3 gap-2 ">
+
+        <p-dropdown 
+            [options]="dropdownOptions" 
+            [(ngModel)]="selectedOption" 
+            placeholder="---Select an option---" 
+            optionLabel="name"
+            [filter]="true"
+            [filterBy]="'name'"
+            [filterPlaceholder]="'Search'"
+            [filterMatchMode]="'contains'"
+            [filterFields]="['name']"
+            (onChange)="onOptionChange()"
+            class="w-96">
+        </p-dropdown>
+        <div class="flex gap-2">
+            <button
+                class="bg-yellow-50 border-yellow-500 border-2 hover:bg-yellow-500 hover:text-white text-yellow-500 px-4 py-2 rounded font-semibold">
+                <i class="pi pi-eye"></i> <span class="ml-2 text-lg">View Details</span>
+            </button>
+            <button
+                (click)="save()"
+                [disabled]="!isFormEnabled"
+                class="bg-blue-600 -50 border-blue-500 border-2 hover:bg-blue-600 -500 hover:text-white text-blue-500 px-4 py-2 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="pi pi-save"></i> <span class="ml-2 text-lg">Save</span>
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Tables Section -->
+    <div class="space-y-4">
+        <!-- First Row - 2 Tables -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Table 1 -->
+            <div class="bg-white rounded-lg shadow-md border border-gray-200">
+                <div class="bg-blue-600 -100 text-blue-700 border-1 border-blue-300 px-4 py-2 rounded-t-lg">
+                    <h4 class="font-semibold text-md">Spectromatric T</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-md border-collapse border border-gray-400">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Element</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Element Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">Fe</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="number" [(ngModel)]="formData.fe_value" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">Cu</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="number" [(ngModel)]="formData.cu_value" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 2 -->
+            <div class="bg-white rounded-lg shadow-md border border-gray-200">
+                <div class="bg-green-100 text-green-700 border-1 border-green-300 px-4 py-2 rounded-t-lg">
+                    <h4 class="font-semibold text-md">Physical Property Lub Oil</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-md border-collapse">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Element</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Element Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">Water Content (Present or not)</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="number" [(ngModel)]="formData.lub_oil_water_content" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">Mechanical Impurity (Present or not)</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="number" [(ngModel)]="formData.lub_oil_mechanical_impurities" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row - 2 Tables -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Table 3 -->
+            <div class="bg-white rounded-lg shadow-md border border-gray-200">
+                <div class="bg-purple-100 text-purple-700 border-1 border-purple-300 px-4 py-2 rounded-t-lg">
+                    <h4 class="font-semibold text-md">Record of Replacement FNT and CT500 Filters   </h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-md border-collapse">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Filters</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">FNT</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="date" [(ngModel)]="formData.fnt_filter_date" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">CT500</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="date" [(ngModel)]="formData.ct_500_filter_date" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 4 -->
+            <div class="bg-white rounded-lg shadow-md border border-gray-200">
+                <div class="bg-orange-100 text-orange-700 border-1 border-orange-300 px-4 py-2 rounded-t-lg">
+                    <h4 class="font-semibold text-md">Records of Cleaning Service Tank</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-md border-collapse">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Tank No.</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Date of Cleaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">#574444</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="date" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600 border border-gray-400">#696236</td>
+                                <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="date" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Row - 1 Table (centered) -->
+        <div class="flex justify-center">
+            <div class="w-full md:w-1/2">
+                <!-- Table 5 -->
+                <div class="bg-white rounded-lg shadow-md border border-gray-200">
+                    <div class="bg-red-100 text-red-700 border-1 border-red-300 px-4 py-2 rounded-t-lg">
+                        <h4 class="font-semibold text-md">GT Parameters</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-md border-collapse">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Parameter</th>
+                                    <th class="px-4 py-2 text-left font-medium text-gray-700 border border-gray-400">Parameter Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-gray-600 border border-gray-400">Hourly Consumption</td>
+                                    <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="text" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-gray-600 border border-gray-400">Hourly Consumption</td>
+                                    <td class="px-4 py-2 text-gray-800 border border-gray-400">
+                                    <input pInputText type="text" [disabled]="!isFormEnabled" class="w-full border border-gray-300 rounded px-2 py-1 min-w-48">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

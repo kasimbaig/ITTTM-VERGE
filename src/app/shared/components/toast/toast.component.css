@@ -1,0 +1,19 @@
+.toast {
+  position: fixed;
+  top: 50px; /* ⬆️ Move to top */
+  right: 20px; /* ➡️ Stick to right */
+  padding: 12px 20px;
+  border-radius: 4px;
+  color: white;
+  z-index: 999;
+  transition: opacity 0.3s ease-in-out;
+  backdrop-filter: blur(2px); /* Optional: adds glassy effect */
+}
+
+.success {
+  background-color: rgba(40, 167, 69, 0.7); /* green with 70% opacity */
+}
+
+.error {
+  background-color: rgba(220, 53, 69, 0.85); /* optional transparent red */
+}

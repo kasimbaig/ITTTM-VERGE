@@ -1,0 +1,78 @@
+/* U/W Compartments Form specific styles */
+.uw-compartments-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section h2 {
+  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.form-section h3 {
+  color: #374151;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Custom styling for form inputs */
+.form-input {
+  border: 1px solid #9ca3af;
+  background-color: white;
+  color: black;
+}
+
+.form-input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #3b82f6;
+}
+
+/* Table styling */
+.dynamic-table {
+  border: 1px solid #d1d5db;
+}
+
+.table-header {
+  background-color: #0d9488;
+  color: white;
+}
+
+.table-cell {
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1rem;
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: #6b7280;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.btn-success {
+  background-color: #059669;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #047857;
+}

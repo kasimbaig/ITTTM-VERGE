@@ -1,0 +1,316 @@
+<div style="min-height: 100vh; background-color: #f9fafb; padding: 2rem 0;">
+  <div class="w-full px-4">
+    <!-- Header -->
+    <!-- Table View -->
+    <div *ngIf="showTableView && !formOnlyMode">
+      <app-uw-compartments-form-table
+        (editEvent)="onEditForm($event)"
+        (viewEvent)="onViewForm($event)"
+        (deleteEvent)="onDeleteForm($event)"
+        (tabChanged)="onTabChanged($event)">
+      </app-uw-compartments-form-table>
+    </div>
+
+    <!-- Form View -->
+    <div *ngIf="!showTableView || formOnlyMode">
+      <form [formGroup]="uwCompartmentsForm" (ngSubmit)="onFormSubmit($event)" class="space-y-8">
+        
+        <!-- Inspection Details Section -->
+        <div class="bg-white shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+            <div class="flex justify-between items-center">
+              <h2 class="text-lg font-semibold text-white">Inspection Details</h2>
+              <!-- Back to Table button (for same component) -->
+              <button
+                *ngIf="!formOnlyMode"
+                type="button"
+                (click)="toggleView()"
+                style="padding: 1rem 1.5rem; background-color: transparent; color: white; font-weight: 500; border: 1px solid white; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 0 0 2px transparent;">
+                <i class="pi pi-arrow-left mr-2"></i> Back to Table
+              </button>
+              <!-- Back to List button (for Commentor Sheet) -->
+              <button
+                *ngIf="formOnlyMode && (mode === 'edit' || mode === 'view')"
+                type="button"
+                (click)="goBackToList()"
+                style="padding: 1rem 1.5rem; background-color: transparent; color: white; font-weight: 500; border: 1px solid white; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease; outline: none; box-shadow: 0 0 0 2px transparent;">
+                <i class="pi pi-arrow-left mr-2"></i> Back to List
+              </button>
+            </div>
+          </div>
+           
+        <!-- Route Configuration Section - Only show in edit mode -->
+        <div *ngIf="!isAddMode && uwCompartmentsForm.get('id')?.value" class="bg-white shadow-sm border border-gray-200">
+          <div class="p-6">
+            <app-route-config 
+              [useApi]="true"
+              [transactionId]="uwCompartmentsForm.get('id')?.value"
+              [submodule]="1"
+              [vesselId]="uwCompartmentsForm.get('inspectionReport')?.value"
+              [formTitle]="'U/W Compartments Route Config'"
+              [hideButtons]="isViewMode"
+              (routeConfigSaved)="onRouteConfigSaved($event)"
+              (nextStepClicked)="onNextStep($event)"
+              (timelineToggled)="onTimelineToggle($event)">
+            </app-route-config>
+          </div>
+        </div>
+        
+        <div class="p-6">
+          <!-- Inspection Details in Single Row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                U/W COMPARTMENTS INSPECTION REPORT - INS <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="inspectionReport"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="uwCompartmentsForm.get('inspectionReport')?.invalid && uwCompartmentsForm.get('inspectionReport')?.touched"
+                [disabled]="loading">
+                <option value="">--Select Ship--</option>
+                <option *ngFor="let ship of ships" [value]="ship.id">
+                  {{ ship.name }}
+                </option>
+              </select>
+              <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
+            </div>
+            
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                DATE OF INSPECTION <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="date"
+                formControlName="dateOfInspection"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="uwCompartmentsForm.get('dateOfInspection')?.invalid && uwCompartmentsForm.get('dateOfInspection')?.touched">
+            </div>
+          </div>
+
+          <!-- Main Inspection Table -->
+          <div class="mb-4">
+            <app-dynamic-table
+              title=""
+              [columns]="inspectionColumns"
+              [formArray]="inspectionObservations"
+              [minRows]="0"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createInspectionRow.bind(this)"
+              (rowCountChange)="updateInspectionRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary of Inspection Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold text-white">SUMMARY OF INSPECTION OF U/W COMPARTMENTS AND TANKS</h2>
+        </div>
+        
+        <div class="p-6">
+          <!-- Internal U/W Compartments -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-black mb-4">INTERNAL U/W COMPARTMENTS</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (a) Total Number of U/W Compartments <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="totalUwCompartments"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('totalUwCompartments')?.invalid && uwCompartmentsForm.get('totalUwCompartments')?.touched">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (b) No. of U/W Compartments offered <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="offeredUwCompartments"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('offeredUwCompartments')?.invalid && uwCompartmentsForm.get('offeredUwCompartments')?.touched">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (c) No. of Compartments inspected <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="inspectedUwCompartments"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('inspectedUwCompartments')?.invalid && uwCompartmentsForm.get('inspectedUwCompartments')?.touched ? '#ef4444' : '#9ca3af'">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (d) Total number of Compartments-SAT/ SAT <span class="text-red-500">**</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="satUwCompartments"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (e) Total number of Compartments-UNSAT <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="unsatUwCompartments"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('unsatUwCompartments')?.invalid && uwCompartmentsForm.get('unsatUwCompartments')?.touched ? '#ef4444' : '#9ca3af'">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tanks -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-black mb-4">TANKS</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (a) Total Number of tanks <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="totalTanks"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('totalTanks')?.invalid && uwCompartmentsForm.get('totalTanks')?.touched ? '#ef4444' : '#9ca3af'">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (b) No. of tanks offered <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="offeredTanks"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('offeredTanks')?.invalid && uwCompartmentsForm.get('offeredTanks')?.touched ? '#ef4444' : '#9ca3af'">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (c) No. of tanks inspected <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="inspectedTanks"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('inspectedTanks')?.invalid && uwCompartmentsForm.get('inspectedTanks')?.touched ? '#ef4444' : '#9ca3af'">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (d) Total number of tanks-SAT/ SAT <span class="text-red-500">**</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="satTanks"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (e) Total number of tanks-UNSAT <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="unsatTanks"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  [class.border-red-500]="uwCompartmentsForm.get('unsatTanks')?.invalid && uwCompartmentsForm.get('unsatTanks')?.touched ? '#ef4444' : '#9ca3af'">
+              </div>
+              
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">
+                  (f) Total number of tanks-SAT <span class="text-red-500">**</span>
+                </label>
+                <input 
+                  type="number"
+                  formControlName="satTanksFinal"
+                  class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approves Checkbox Section -->
+  
+
+      <!-- Action Buttons Section - Hide in view mode -->
+      <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+        <div class="p-6">
+          <div class="flex justify-center gap-4 flex-wrap">
+            <button 
+              type="button"
+              style="padding: 1rem 1.5rem; background-color: #6b7280; color: white; font-weight: 500; border: none; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s ease;">
+              <i class="pi pi-download mr-2"></i> Fetch Drafts
+            </button>
+            <button 
+              type="button"
+              (click)="onSaveDraft($event)"
+              class="px-4 py-2 bg-amber-500 text-white font-medium rounded border-none cursor-pointer hover:bg-amber-600 transition-colors duration-200">
+              <i class="pi pi-save mr-2"></i> SAVE DRAFT
+            </button>
+            <button 
+              type="button"
+              (click)="onClear()"
+              class="px-4 py-2 bg-red-500 text-white font-medium rounded border-none cursor-pointer hover:bg-red-600 transition-colors duration-200">
+              <i class="pi pi-trash mr-2"></i> Clear
+            </button>
+            <button 
+              type="button"
+              (click)="onSubmit($event)"
+              [disabled]="uwCompartmentsForm.invalid"
+              class="px-4 py-2 bg-green-500 text-white font-medium rounded border-none cursor-pointer hover:bg-green-600 transition-colors duration-200">
+              <i class="pi pi-check mr-2"></i> Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- Route Config Popup -->
+      <app-route-config-popup
+        *ngIf="showRouteConfigPopup"
+        [isVisible]="showRouteConfigPopup"
+        [title]="'U/W Compartments Route Config'"
+        [subtitle]="'Smart Configuration'"
+        [submodule]="1"
+        [shipId]="uwCompartmentsForm.get('inspectionReport')?.value"
+        [transactionId]="uwCompartmentsForm.get('id')?.value"
+        [useApi]="true"
+        (close)="onCloseRouteConfigPopup()"
+        (configureRoute)="onConfigureRoute()"
+        (saveDirectly)="onSaveDirectly()"
+        (routeConfigSaved)="onRouteConfigSaved($event)"
+        (refreshTimeline)="onRefreshTimeline()">
+      </app-route-config-popup>
+
+<!-- Route Config Modal Placeholder -->
+<div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
+    <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
+    <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
+    <button 
+      (click)="showRouteConfigModal = false"
+      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+      Close
+    </button>
+  </div>
+</div>

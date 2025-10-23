@@ -1,0 +1,288 @@
+<!-- Route Configuration Smart Configuration Popup -->
+<div *ngIf="isVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="z-index: 20000;">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between p-6 border-b border-gray-200 text-white rounded-t-lg" style="background-color: #04308f;">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+          <i class="pi pi-cog text-lg"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold m-0">{{ title }}</h3>
+          <p class="text-sm m-0 opacity-90">{{ subtitle }}</p>
+        </div>
+      </div>
+      <button
+        (click)="onClose()"
+        class="p-2 bg-white/10 border-none rounded-md text-white cursor-pointer transition-all duration-200 hover:bg-white/20">
+        <i class="pi pi-times text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="p-6 text-center">
+      <!-- Quick Decision Button -->
+      <button class="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium mb-6 hover:bg-blue-200 transition-colors duration-200">
+        <i class="pi pi-bolt mr-2"></i>Quick Decision
+      </button>
+
+      <!-- Main Question -->
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Do you want to add route config?</h4>
+      <p class="text-gray-600 text-sm mb-6">Choose your preferred workflow.</p>
+
+      <!-- Workflow Options -->
+      <div class="space-y-4">
+        <!-- Configure Route Option -->
+        <div 
+          (click)="onConfigureRouteClick()"
+          class="p-4 border-2 border-blue-500 bg-blue-50 rounded-lg cursor-pointer transition-all duration-200 hover:bg-blue-100 hover:shadow-md">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <i class="pi pi-cog text-white text-sm"></i>
+              </div>
+              <div class="text-left">
+                <h5 class="font-semibold text-gray-800">Configure Route</h5>
+                <p class="text-sm text-gray-600">Set up routing options</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-blue-600 text-sm font-medium">Recommended</span>
+              <i class="pi pi-arrow-right text-blue-600"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Directly Option -->
+        <div 
+          (click)="onSaveDirectly()"
+          class="p-4 border border-gray-300 bg-white rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:shadow-md">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                <i class="pi pi-check text-white text-sm"></i>
+              </div>
+              <div class="text-left">
+                <h5 class="font-semibold text-gray-800">Save Directly</h5>
+                <p class="text-sm text-gray-600">Skip configuration</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-gray-500 text-sm font-medium">Quick Save</span>
+              <i class="pi pi-arrow-right text-gray-500"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Route Config Popup -->
+<div *ngIf="showAddRouteConfigPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="z-index: 20000;">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4">
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between p-4 text-white rounded-t-lg" style="background-color: #04308f;">
+      <h3 class="text-lg font-semibold m-0">Add Route Config</h3>
+      <div class="flex items-center gap-2">
+        <button
+          (click)="closeAddRouteConfigPopup()"
+          class="p-1 bg-white/20 border-none rounded text-white cursor-pointer transition-all duration-200 hover:bg-white/30">
+          <i class="pi pi-window-maximize text-sm"></i>
+        </button>
+        <button
+          (click)="closeAddRouteConfigPopup()"
+          class="p-1 bg-white/20 border-none rounded text-white cursor-pointer transition-all duration-200 hover:bg-white/30">
+          <i class="pi pi-times text-sm"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="p-6">
+      <form>
+        <!-- Route Type Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Route Type <span class="text-red-500">*</span>
+          </label>
+        
+        <!-- Radio Button Options -->
+        <div class="flex gap-6">
+          <!-- Internal Option -->
+          <label class="flex items-center cursor-pointer">
+            <input 
+              type="radio" 
+              name="routeType" 
+              value="internal"
+              [checked]="selectedRouteType === 'internal'"
+              (change)="onRouteTypeSelected('internal')"
+              class="mr-2 text-blue-600 focus:ring-blue-500">
+            <span class="text-sm text-gray-700">Internal</span>
+          </label>
+
+          <!-- External Option -->
+          <label class="flex items-center cursor-pointer">
+            <input 
+              type="radio" 
+              name="routeType" 
+              value="external"
+              [checked]="selectedRouteType === 'external'"
+              (change)="onRouteTypeSelected('external')"
+              class="mr-2 text-blue-600 focus:ring-blue-500">
+            <span class="text-sm text-gray-700">External</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Internal Route Fields -->
+      <div *ngIf="selectedRouteType === 'internal'" class="space-y-4">
+        <!-- User Dropdown -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            User <span class="text-red-500">*</span>
+          </label>
+          <select 
+            [(ngModel)]="selectedUserId"
+            (change)="onUserDropdownChange($event)"
+            [disabled]="usersLoading"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.bg-gray-100]="usersLoading">
+            <option value="">{{ usersLoading ? 'Loading...' : 'Select User' }}</option>
+            <option *ngFor="let user of userList" [value]="user.id">{{ user.name }}</option>
+          </select>
+        </div>
+
+        <!-- Permission Type Radio Buttons -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Permission Type <span class="text-red-500">*</span>
+          </label>
+          <div class="flex gap-6">
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="radio" 
+                name="permissionType" 
+                value="edit"
+                [checked]="selectedPermissionType === 'edit'"
+                (change)="onPermissionTypeSelected('edit')"
+                class="mr-2 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm text-gray-700">Edit</span>
+            </label>
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="radio" 
+                name="permissionType" 
+                value="comment"
+                [checked]="selectedPermissionType === 'comment'"
+                (change)="onPermissionTypeSelected('comment')"
+                class="mr-2 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm text-gray-700">Comment</span>
+            </label>
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="radio" 
+                name="permissionType" 
+                value="view"
+                [checked]="selectedPermissionType === 'view'"
+                (change)="onPermissionTypeSelected('view')"
+                class="mr-2 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm text-gray-700">View</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Approve Checkbox -->
+        <div class="flex items-center">
+          <input
+            type="checkbox"
+            name="isApprover"
+            [(ngModel)]="isApprover"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 rounded focus:ring-blue-500"
+            id="approve-checkbox">
+          <label for="approve-checkbox" class="ml-2 text-sm text-gray-700 cursor-pointer">
+            Approve
+          </label>
+        </div>
+      </div>
+
+      <!-- External Route Fields -->
+      <div *ngIf="selectedRouteType === 'external'">
+        <!-- Directorate Dropdown -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Directorate <span class="text-red-500">*</span>
+          </label>
+          <select 
+            [(ngModel)]="selectedDirectorateId"
+            (change)="onDirectorateDropdownChange($event)"
+            [disabled]="directoratesLoading"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.bg-gray-100]="directoratesLoading">
+            <option value="">{{ directoratesLoading ? 'Loading...' : 'Select Directorate' }}</option>
+            <option *ngFor="let directorate of directorateList" [value]="directorate.id">{{ directorate.name }}</option>
+          </select>
+        </div>
+
+        <!-- Permission Type Radio Buttons -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Permission Type <span class="text-red-500">*</span>
+          </label>
+          <div class="flex gap-6">
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="radio" 
+                name="permissionType" 
+                value="edit"
+                [checked]="selectedPermissionType === 'edit'"
+                (change)="onPermissionTypeSelected('edit')"
+                class="mr-2 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm text-gray-700">Edit</span>
+            </label>
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="radio" 
+                name="permissionType" 
+                value="comment"
+                [checked]="selectedPermissionType === 'comment'"
+                (change)="onPermissionTypeSelected('comment')"
+                class="mr-2 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm text-gray-700">Comment</span>
+            </label>
+            <label class="flex items-center cursor-pointer">
+              <input 
+                type="radio" 
+                name="permissionType" 
+                value="view"
+                [checked]="selectedPermissionType === 'view'"
+                (change)="onPermissionTypeSelected('view')"
+                class="mr-2 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm text-gray-700">View</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="flex justify-end gap-3 p-4 bg-gray-50 rounded-b-lg">
+      <button
+        (click)="onCancelAddRouteConfig()"
+        class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white border-none rounded cursor-pointer transition-all duration-200 font-medium">
+        Cancel
+      </button>
+      <button
+        (click)="onSaveAddRouteConfig()"
+        [disabled]="!selectedRouteType || saving"
+        class="px-4 py-2 text-white border-none rounded cursor-pointer transition-all duration-200 font-medium"
+        [class.bg-blue-500]="selectedRouteType && !saving"
+        [class.hover:bg-blue-600]="selectedRouteType && !saving"
+        [class.bg-gray-400]="!selectedRouteType || saving"
+        [class.cursor-not-allowed]="!selectedRouteType || saving">
+        {{ saving ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  </div>
+</div>

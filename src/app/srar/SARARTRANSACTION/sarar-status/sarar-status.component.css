@@ -1,0 +1,121 @@
+/* SARAR Status Component Styles */
+
+/* Container styling */
+.container {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Table wrapper styling */
+app-resuable-table {
+  display: block;
+  width: 100%;
+}
+
+/* Ensure proper text wrapping in table cells */
+:host ::ng-deep .p-datatable td {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+}
+
+/* Column specific styling for better readability */
+:host ::ng-deep .p-datatable th:nth-child(1),
+:host ::ng-deep .p-datatable td:nth-child(1) {
+  /* Command column */
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+}
+
+:host ::ng-deep .p-datatable th:nth-child(2),
+:host ::ng-deep .p-datatable td:nth-child(2) {
+  /* Ops Authority column */
+  width: 150px !important;
+  min-width: 150px !important;
+  max-width: 150px !important;
+}
+
+:host ::ng-deep .p-datatable th:nth-child(3),
+:host ::ng-deep .p-datatable td:nth-child(3) {
+  /* Ship Name column */
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+}
+
+:host ::ng-deep .p-datatable th:nth-child(4),
+:host ::ng-deep .p-datatable td:nth-child(4) {
+  /* Month Not Render column - wider for long text */
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  :host ::ng-deep .p-datatable th:nth-child(4),
+  :host ::ng-deep .p-datatable td:nth-child(4) {
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .p-datatable th:nth-child(1),
+  :host ::ng-deep .p-datatable td:nth-child(1) {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+  }
+  
+  :host ::ng-deep .p-datatable th:nth-child(2),
+  :host ::ng-deep .p-datatable td:nth-child(2) {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+  }
+  
+  :host ::ng-deep .p-datatable th:nth-child(3),
+  :host ::ng-deep .p-datatable td:nth-child(3) {
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+  }
+  
+  :host ::ng-deep .p-datatable th:nth-child(4),
+  :host ::ng-deep .p-datatable td:nth-child(4) {
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+  }
+}
+
+/* Ensure table has horizontal scroll when needed */
+:host ::ng-deep .p-datatable-wrapper {
+  overflow-x: auto !important;
+}
+
+/* Text content styling */
+:host ::ng-deep .p-datatable td span {
+  display: inline-block !important;
+  width: 100% !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  line-height: 1.4 !important;
+}
+
+/* Header text styling */
+:host ::ng-deep .p-datatable th span {
+  display: inline-block !important;
+  width: 100% !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  font-weight: 600 !important;
+}

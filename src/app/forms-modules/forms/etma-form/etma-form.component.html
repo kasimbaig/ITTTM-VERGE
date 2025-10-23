@@ -1,0 +1,1094 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="bg-primary-blue shadow-sm border border-gray-200 mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h1 class="text-2xl font-bold text-center">
+          TRIAL REQUISITION FORM HULL INSPECTION AND TRIAL UNIT (HITU)
+        </h1>
+      </div>
+    </div>
+
+    <form [formGroup]="etmaForm" (ngSubmit)="onSubmit()" class="space-y-8">
+      
+      <!-- Preliminary Underwater Hull Inspection Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">Preliminary Underwater Hull Inspection</h2>
+        </div>
+        
+        <div class="p-6 space-y-6">
+          <!-- Inspection Type -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                PRELIMINARY UNDERWATER HULL INSPECTION - INS
+              </label>
+              <select 
+                formControlName="inspectionType"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('inspectionType')?.invalid && etmaForm.get('inspectionType')?.touched">
+                <option value="">--Select--</option>
+                <option value="routine">Routine Inspection</option>
+                <option value="emergency">Emergency Inspection</option>
+                <option value="pre-trial">Pre-Trial Inspection</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Date and Authority -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Date of Inspection <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="date"
+                formControlName="inspectionDate"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('inspectionDate')?.invalid && etmaForm.get('inspectionDate')?.touched">
+            </div>
+            
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Authority for Inspection <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text"
+                formControlName="inspectionAuthority"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('inspectionAuthority')?.invalid && etmaForm.get('inspectionAuthority')?.touched">
+            </div>
+          </div>
+
+          <!-- HITU's Inspectors Section -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="HITU's Inspectors"
+              [columns]="inspectorColumns"
+              [formArray]="inspectors"
+                [minRows]="1"
+                [maxRows]="20"
+              [showRowCounter]="true"
+                [showLabel]="false"
+              [createRowFunction]="createInspectorRow.bind(this)"
+                (rowCountChange)="updateInspectorRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCKING Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">DOCKING</h2>
+        </div>
+        
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Docking Version <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="dockingVersion"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('dockingVersion')?.invalid && etmaForm.get('dockingVersion')?.touched">
+                <option value="">--Select--</option>
+                <option value="version1">Version 1</option>
+                <option value="version2">Version 2</option>
+                <option value="version3">Version 3</option>
+              </select>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Nature of docking <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text"
+                formControlName="natureOfDocking"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('natureOfDocking')?.invalid && etmaForm.get('natureOfDocking')?.touched">
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                No of Dock Blocks Wedged <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number"
+                formControlName="dockBlocksWedged"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('dockBlocksWedged')?.invalid && etmaForm.get('dockBlocksWedged')?.touched">
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                No of Dock Blocks excessively crushed <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="number"
+                formControlName="dockBlocksCrushed"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('dockBlocksCrushed')?.invalid && etmaForm.get('dockBlocksCrushed')?.touched">
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Are all UW openings clear of Dock blocks <span class="text-red-500">*</span>
+              </label>
+              <select 
+                formControlName="uwOpeningsClear"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('uwOpeningsClear')?.invalid && etmaForm.get('uwOpeningsClear')?.touched">
+                <option value="">--Select--</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                Duration of docking <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text"
+                formControlName="dockingDuration"
+                placeholder="e.g., 5 days"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('dockingDuration')?.invalid && etmaForm.get('dockingDuration')?.touched">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNDERWATER CLEANING Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">UNDERWATER CLEANING</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Presence of marine growth -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Presence of marine growth at *"
+              [columns]="observationColumns"
+              [formArray]="marineGrowthObservations"
+                [minRows]="1"
+                [maxRows]="20"
+              [showRowCounter]="true"
+                [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updateMarineGrowthRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Cleaning of Propellers -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Cleaning of Propellers *"
+              [columns]="observationColumns"
+              [formArray]="propellerCleaningObservations"
+                [minRows]="1"
+                [maxRows]="20"
+              [showRowCounter]="true"
+                [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+                (rowCountChange)="updatePropellerCleaningRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Remnants of ropes, fishing nets or any other foreign objects -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Remnants of ropes, fishing nets or any other foreign objects *"
+              [columns]="observationColumns"
+              [formArray]="foreignObjectsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateForeignObjectsRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAINTING Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">PAINTING</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- Condition of A/F -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="Condition of A/F *"
+              [columns]="observationColumns"
+              [formArray]="conditionOfAFObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateConditionOfAFRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (a) Outer bottom between bilge keel -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Outer bottom between bilge keel *"
+              [columns]="observationColumns"
+              [formArray]="outerBottomObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateOuterBottomRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Stern /Aft cut up -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Stern /Aft cut up *"
+              [columns]="observationColumns"
+              [formArray]="sternAftCutupObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateSternAftCutupRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Boot top -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Boot top *"
+              [columns]="observationColumns"
+              [formArray]="bootTopObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateBootTopRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Rudders -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Rudders *"
+              [columns]="observationColumns"
+              [formArray]="ruddersObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateRuddersRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (e) Stabilizers -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(e) Stabilizers *"
+              [columns]="observationColumns"
+              [formArray]="stabilizersObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateStabilizersRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (f) Old dock block areas -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(f) Old dock block areas *"
+              [columns]="observationColumns"
+              [formArray]="oldDockBlockAreasObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateOldDockBlockAreasRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (g) Other observations -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(g) Other observations *"
+              [columns]="observationColumns"
+              [formArray]="otherObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateOtherObservationsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (h) Paint scheme being applied -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(h) Paint scheme being applied *"
+              [columns]="observationColumns"
+              [formArray]="paintSchemeObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updatePaintSchemeRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- RUSTING & CORROSION Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">RUSTING & CORROSION *</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- Areas having rust & corrosion -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="Areas having rust & corrosion *"
+              [columns]="observationColumns"
+              [formArray]="areasHavingRustObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateAreasHavingRustRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (a) General Outer bottom -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) General Outer bottom *"
+              [columns]="observationColumns"
+              [formArray]="generalOuterBottomObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateGeneralOuterBottomRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Boot top -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Boot top *"
+              [columns]="observationColumns"
+              [formArray]="bootTopRustObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateBootTopRustRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Stern / Aft cut up -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Stern / Aft cut up *"
+              [columns]="observationColumns"
+              [formArray]="sternAftCutupRustObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateSternAftCutupRustRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Rudders -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Rudders *"
+              [columns]="observationColumns"
+              [formArray]="ruddersRustObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateRuddersRustRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (e) Bilge keel, stem, stabilizers, weld seams -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(e) Bilge keel, stem, stabilizers, weld seams *"
+              [columns]="observationColumns"
+              [formArray]="bilgeKeelObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateBilgeKeelRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (f) Old dock block areas -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(f) Old dock block areas *"
+              [columns]="observationColumns"
+              [formArray]="oldDockBlockRustObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateOldDockBlockRustRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (g) Other Observations -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(g) Other Observations *"
+              [columns]="observationColumns"
+              [formArray]="otherRustObservations"
+                [minRows]="1"
+                [maxRows]="20"
+              [showRowCounter]="true"
+                [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateOtherRustRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- STRUCTURE Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">STRUCTURE</h2>
+            </div>
+
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Extent of Hull Survey -->
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                (a) Extent of Hull Survey <span class="text-red-500">*</span>
+              </label>
+                      <input 
+                        type="text"
+                formControlName="extentOfHullSurvey"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('extentOfHullSurvey')?.invalid && etmaForm.get('extentOfHullSurvey')?.touched">
+            </div>
+          </div>
+
+          <!-- (b) Dents at -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Dents at *"
+              [columns]="observationColumns"
+              [formArray]="dentsAtObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateDentsAtRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Suspect cracks at -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Suspect cracks at *"
+              [columns]="observationColumns"
+              [formArray]="suspectCracksObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateSuspectCracksRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Deep scratch/Notch at -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Deep scratch/Notch at *"
+              [columns]="observationColumns"
+              [formArray]="deepScratchObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateDeepScratchRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (e) Holes/doublers at -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(e) Holes/doublers at *"
+              [columns]="observationColumns"
+              [formArray]="holesDoublersObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateHolesDoublersRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (f) Other Observations, if any -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(f) Other Observations, if any *"
+              [columns]="observationColumns"
+              [formArray]="otherStructureObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateOtherStructureRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (g) SS to confirm known structural defects -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(g) SS to confirm known structural defects required to be undertaken during DD * Sr No."
+              [columns]="observationColumns"
+              [formArray]="structuralDefectsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateStructuralDefectsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (h) Survey / Preservation underneath stabilizers -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(h) Survey / Preservation underneath stabilizers *"
+              [columns]="observationColumns"
+              [formArray]="stabilizersSurveyObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateStabilizersSurveyRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SONAR DOME Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">SONAR DOME</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Clean ship -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Clean ship *"
+              [columns]="simpleObservationColumns"
+              [formArray]="cleanShipObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createSimpleObservationRow.bind(this)"
+              (rowCountChange)="updateCleanShipRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Cracks/dents/fouling -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Cracks/dents/fouling *"
+              [columns]="simpleObservationColumns"
+              [formArray]="cracksDentsFoulingObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createSimpleObservationRow.bind(this)"
+              (rowCountChange)="updateCracksDentsFoulingRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) If GRP dome, Delamination, blistering, cracking of Gel / GRP coat -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) If GRP dome, Delamination, blistering, cracking of Gel / GRP coat *"
+              [columns]="simpleObservationColumns"
+              [formArray]="grpDomeObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createSimpleObservationRow.bind(this)"
+              (rowCountChange)="updateGrpDomeRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Condition of fairing skirt -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Condition of fairing skirt *"
+              [columns]="simpleObservationColumns"
+              [formArray]="fairingSkirtObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createSimpleObservationRow.bind(this)"
+              (rowCountChange)="updateFairingSkirtRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- RUDDER Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">RUDDER</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Cracks/dents/fouling -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Cracks/dents/fouling *"
+              [columns]="observationColumns"
+              [formArray]="rudderCracksObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateRudderCracksRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Mis-alignment if any -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Mis-alignment if any *"
+              [columns]="observationColumns"
+              [formArray]="rudderMisalignmentObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateRudderMisalignmentRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATHODIC PROTECTION SYSTEM Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">CATHODIC PROTECTION SYSTEM</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Serviceability check of ICCP system -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Serviceability check of ICCP system *"
+              [columns]="dropdownObservationColumns"
+              [formArray]="iccpSystemObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDropdownObservationRow.bind(this)"
+              (rowCountChange)="updateIccpSystemRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Condition of sacrificial anodes -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Condition of sacrificial anodes *"
+              [columns]="dropdownObservationColumns"
+              [formArray]="sacrificialAnodesObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDropdownObservationRow.bind(this)"
+              (rowCountChange)="updateSacrificialAnodesRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Condition of ICCP anodes and fairing -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Condition of ICCP anodes and fairing *"
+              [columns]="dropdownObservationColumns"
+              [formArray]="iccpAnodesObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDropdownObservationRow.bind(this)"
+              (rowCountChange)="updateIccpAnodesRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Condition of ICCP reference electrode and fairing -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Condition of ICCP reference electrode and fairing *"
+              [columns]="dropdownObservationColumns"
+              [formArray]="iccpReferenceElectrodeObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDropdownObservationRow.bind(this)"
+              (rowCountChange)="updateIccpReferenceElectrodeRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (e) Condition of dielectric shields -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(e) Condition of dielectric shields *"
+              [columns]="dropdownObservationColumns"
+              [formArray]="dielectricShieldsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDropdownObservationRow.bind(this)"
+              (rowCountChange)="updateDielectricShieldsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (f) SS to confirm pre-docking checks of ICCP -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(f) SS to confirm pre-docking checks of ICCP *"
+              [columns]="dropdownObservationColumns"
+              [formArray]="preDockingChecksObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createDropdownObservationRow.bind(this)"
+              (rowCountChange)="updatePreDockingChecksRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROPELLERS Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">PROPELLERS</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Cleaning of propellers -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Cleaning of propellers *"
+              [columns]="observationColumns"
+              [formArray]="propellerCleaningObservations2"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updatePropellerCleaning2Rows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Condition of edges of propeller blades -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Condition of edges of propeller blades *"
+              [columns]="observationColumns"
+              [formArray]="propellerBladeEdgesObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updatePropellerBladeEdgesRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Condition of propeller hubs -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Condition of propeller hubs *"
+              [columns]="observationColumns"
+              [formArray]="propellerHubsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updatePropellerHubsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Pitting / erosion if any -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Pitting / erosion if any *"
+              [columns]="observationColumns"
+              [formArray]="propellerPittingObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updatePropellerPittingRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (e) Condition of epoxy coating of shaft (P/S) -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(e) Condition of epoxy coating of shaft (P/S) *"
+              [columns]="observationColumns"
+              [formArray]="propellerShaftCoatingObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updatePropellerShaftCoatingRows($event)">
+            </app-dynamic-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISCELLANEOUS Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">MISCELLANEOUS</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- (a) Eddy cone / Rope guards, U/W gratings etc -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(a) Eddy cone / Rope guards, U/W gratings etc *"
+              [columns]="observationColumns"
+              [formArray]="eddyConeObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateEddyConeRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (b) Water seepage from OBD sea tubes etc -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(b) Water seepage from OBD sea tubes etc *"
+              [columns]="observationColumns"
+              [formArray]="waterSeepageObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateWaterSeepageRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (c) Missing parts like draught marks, gratings, hull outfit parts etc -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(c) Missing parts like draught marks, gratings, hull outfit parts etc *"
+              [columns]="observationColumns"
+              [formArray]="missingPartsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateMissingPartsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (d) Blanking of any parts like Sea Tubes, Propeller shafts boss, rudder stock boss, etc -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(d) Blanking of any parts like Sea Tubes, Propeller shafts boss, rudder stock boss, etc *"
+              [columns]="observationColumns"
+              [formArray]="blankingPartsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateBlankingPartsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (e) Condition of scupper lips -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(e) Condition of scupper lips *"
+              [columns]="observationColumns"
+              [formArray]="scupperLipsObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateScupperLipsRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (f) Condition of Araldite fairing of rudders, 'A' brackets, stabilizer, Echo sounders, log rod, eddy cones, eddy plates, rope guards, U/W openings -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title="(f) Condition of Araldite fairing of rudders, 'A' brackets, stabilizer, Echo sounders, log rod, eddy cones, eddy plates, rope guards, U/W openings *"
+              [columns]="observationColumns"
+              [formArray]="aralditeFairingObservations"
+              [minRows]="1"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createObservationRow.bind(this)"
+              (rowCountChange)="updateAralditeFairingRows($event)">
+            </app-dynamic-table>
+          </div>
+
+          <!-- (g) Angle of list -->
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-700">
+                (g) Angle of list <span class="text-red-500">*</span>
+              </label>
+                      <input 
+                        type="text"
+                formControlName="angleOfList"
+                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                [class.border-red-500]="etmaForm.get('angleOfList')?.invalid && etmaForm.get('angleOfList')?.touched">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other observations Section -->
+      <div class="bg-white shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+          <h2 class="text-lg font-semibold">Other observations</h2>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          
+          <!-- File Upload Table -->
+          <div class="space-y-4">
+            <app-dynamic-table
+              title=""
+              [columns]="fileUploadColumns"
+              [formArray]="otherObservationsFinal"
+              [minRows]="3"
+              [maxRows]="20"
+              [showRowCounter]="true"
+              [showLabel]="false"
+              [createRowFunction]="createFileUploadRow.bind(this)"
+              (rowCountChange)="updateOtherObservationsFinalRows($event)">
+            </app-dynamic-table>
+          </div>
+
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-4 pt-6">
+            <button 
+              type="button"
+              class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200">
+              Fetch Drafts
+            </button>
+            <button 
+              type="button"
+              class="px-6 py-2 bg-yellow-500 text-white font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors duration-200">
+              SAVE DRAFT
+            </button>
+            <button 
+              type="button"
+              class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200">
+              Clear
+            </button>
+            <button 
+              type="submit"
+              class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex justify-center pt-6">
+        <button 
+          type="submit"
+          class="px-8 py-3 bg-primary-blue font-medium hover:bg-primary-teal focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+          Submit Form
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

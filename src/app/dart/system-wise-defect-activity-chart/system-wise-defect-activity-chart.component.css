@@ -1,0 +1,26 @@
+   .chart-container {
+      position: relative;
+      width: 100%;
+      /* min-height will be set dynamically by Chart.js */
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important; /* Let Chart.js manage height based on content */
+    }
+    /* Custom styles for the slider to make it look good */
+    .p-slider .p-slider-handle {
+      background-color: #4f46e5; /* Indigo-600 */
+      border: 2px solid #4f46e5;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2); /* Indigo-600 with transparency */
+      transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .p-slider .p-slider-range {
+      background-color: #6366f1; /* Indigo-500 */
+    }
+    .p-slider:not(.p-disabled) .p-slider-handle:hover {
+      background-color: #4338ca; /* Indigo-700 */
+      border-color: #4338ca;
+    }
+    .p-slider.p-slider-horizontal .p-slider-handle {
+        margin-top: -0.5rem; /* Adjust handle vertical position */
+    }

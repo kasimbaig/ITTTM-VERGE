@@ -1,0 +1,14 @@
+<div class="card col-span-2 md:col-span-3">
+  <div class="card-header">
+    <h2 class="card-title">{{ title }}</h2>
+  </div>
+  <div class="card-content chart-container" style="height: 300px">
+    <p-chart
+      type="bar"
+      [data]="chartData"
+      [options]="chartOptions"
+      width="450px"
+      height="300px"
+    ></p-chart>
+  </div>
+</div>

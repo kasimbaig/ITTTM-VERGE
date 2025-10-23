@@ -1,0 +1,60 @@
+<div class="">
+  <div class="command-header">
+    <div class="command-title-block">
+      <i class="pi pi-sitemap"></i>
+      <div>
+        <h2>SFD Hierarchy</h2>
+        <p>View and manage all SFD hierarchy levels in the system</p>
+      </div>
+    </div>
+
+    <div class="command-actions">
+      <button class="btn primary btn-sm" (click)="goBack()">
+        <i class="pi pi-arrow-left"></i> Back
+      </button>
+      <button class="btn primary btn-sm" (click)="openNew()">
+        <i class="pi pi-plus"></i> Add SFD Hierarchy
+      </button>
+    </div>
+  </div>
+
+  <app-paginated-table
+    [data]="departments"
+    [columns]="cols"
+    [showEndActions]="true"
+    (viewEvent)="viewDeptDetails($event,true)"
+    (editEvent)="editDetails($event, true)"
+    (deleteEvent)="deleteDeptDetails($event)"
+  ></app-paginated-table>
+</div>
+
+<!-- Forms and Dialogs -->
+<app-add-form 
+  *ngIf="isFormOpen" 
+  [open]="isFormOpen" 
+  [formConfig]="formConfigForNewDetails" 
+  [formData]="newDepartment"
+  [fromTitle]="title" 
+  (onOpenChange)="isFormOpen = $event" 
+  (onSubmit)="handleSubmit($event)"
+></app-add-form>
+
+<app-add-form 
+  *ngIf="isEditFormOpen" 
+  [open]="isEditFormOpen" 
+  [formConfig]="formConfigForNewDetails"
+  [formData]="selectedDept" 
+  [fromTitle]="editTitle" 
+  [isEditMode]="true" 
+  (onOpenChange)="isEditFormOpen = $event"
+  (onSubmit)="handleEditSubmit($event)"
+></app-add-form>
+
+<app-view-details
+  *ngIf="isViewDetailsOpen"
+  [open]="isViewDetailsOpen"
+  [viewDetails]="selectedDetails"
+  [headers]="formConfigForNewDetails"
+  [title]="viewDetailsTitle"
+  (onOpenChange)="isViewDetailsOpen = $event"
+></app-view-details>

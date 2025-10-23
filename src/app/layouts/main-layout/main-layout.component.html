@@ -1,0 +1,87 @@
+<!-- <ngx-ui-loader /> -->
+
+<!-- Wrapper -->
+<div class="layout-container" [class.sidebar-open]="sidebarOpen">
+  <!-- Sidebar -->
+  <app-sidebar class="sidebar" [ngClass]="{
+      collapsed: sidebarCollapsed,
+      'mobile-visible': sidebarOpen
+    }" [isCollapsed]="sidebarCollapsed" (collapseSidebar)="autoCollapseSidebar()"></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="main-content  bg-amber-100/70">
+    <!-- <header>
+      <div class="left-header">
+        <button class="mobile-toggle" (click)="toggleSidebar()">☰</button>
+      </div>
+      <div class="right-header">
+        <div class="user-menu-wrapper relative" #userMenu>
+          <button (click)="toggleUserMenu()"
+            class="flex items-center gap-3  rounded-full bg-indigo-500 hover:bg-indigo-100 border border-blue-200 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105">
+           <i class="pi pi-user text-white"></i>
+            
+          </button>
+
+          <div class="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 transform transition-all duration-200" 
+               [class.opacity-0]="!isUserMenuOpen" 
+               [class.scale-95]="!isUserMenuOpen" 
+               [class.opacity-100]="isUserMenuOpen" 
+               [class.scale-100]="isUserMenuOpen"
+               *ngIf="isUserMenuOpen">
+            
+            <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+              <div class="text-sm font-semibold text-blue-800">Profile Settings</div>
+            </div>
+            
+            <div class="py-2">
+              <button (click)="switchRole('Super Admin'); $event.preventDefault()"
+                      class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-600 -50 hover:text-blue-700 transition-colors duration-200 flex items-center gap-3">
+                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                <span class="font-medium ">Super Admin</span>
+              </button>
+              
+              <button (click)="switchRole('Ship User'); $event.preventDefault()"
+                      class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-blue-600 -50 hover:text-blue-700 transition-colors duration-200 flex items-center gap-3">
+                <div class="w-2 h-2 bg-blue-600 -400 rounded-full"></div>
+                <span class="font-medium">Ship User</span>
+              </button>
+            </div>
+
+            <div class="border-t border-gray-100">
+              <button (click)="logout()"
+                      class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-200 flex items-center gap-3">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span class="font-medium">Log out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header> -->
+
+    <main>
+      <div class="main-inner">
+        <div class="table-container">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </main>
+
+  </div>
+  <app-chatbot-dialog [hidden]="!isChatbotOpen" (closeDialog)="closeChatbot()" (minimizeDialog)="minimizeChatbot()">
+  </app-chatbot-dialog>
+
+<button
+    pButton
+    pRipple
+    type="button"
+    class="floating-chatbot-btn p-button-rounded p-button-secondary"
+    (click)="openChatbot()"
+    pTooltip="Chatbot"
+    tooltipPosition="bottom"
+  >
+    <i class="fa-solid fa-comments fa-2x text-white"></i>
+  </button>
+</div>

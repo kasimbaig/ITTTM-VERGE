@@ -1,0 +1,77 @@
+/* ETMA Form Component Styles */
+/* Minimal custom styles - most styling handled by Tailwind CSS */
+
+/* Custom focus states for better accessibility */
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Table row hover effect enhancement */
+.table-row-hover:hover {
+  background-color: rgba(249, 250, 251, 0.8);
+}
+
+/* Custom scrollbar for tables */
+.table-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Form section spacing */
+.form-section {
+  margin-bottom: 2rem;
+}
+
+/* Required field indicator */
+.required-field::after {
+  content: " *";
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* Button hover animation */
+.btn-submit {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Form validation error styling */
+.field-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Loading state for form submission */
+.form-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Responsive table adjustments */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    padding: 0.5rem 0.25rem;
+  }
+}
