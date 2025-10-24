@@ -1,0 +1,2798 @@
+<div class="container mx-auto p-6">
+  <!-- Header Section -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Form Builder</h1>
+    <div class="flex gap-3">
+      <button 
+        pButton 
+        type="button" 
+        label="Add Field" 
+        icon="pi pi-plus" 
+        class="p-button-success"
+        (click)="addField()">
+      </button>
+      <button 
+        pButton 
+        type="button" 
+        label="Preview Form" 
+        icon="pi pi-eye" 
+        class="p-button-info"
+        (click)="openBox=true">
+      </button>
+      <button 
+        pButton 
+        type="button" 
+        label="Generate Form Preview" 
+        icon="pi pi-eye" 
+        class="p-button-info"
+        (click)="generateFormPreview()">
+      </button>
+      <button 
+        pButton 
+        type="button" 
+        label="Export Config" 
+        icon="pi pi-download" 
+        class="p-button-secondary"
+        (click)="exportFormConfig()">
+      </button>
+    </div>
+  </div>
+
+  <!-- Dynamic Table -->
+  <div class="bg-white rounded-lg shadow-md">
+    <p-table 
+      [value]="fields" 
+      [paginator]="true" 
+      [rows]="10" 
+      [responsiveLayout]="'scroll'"
+      [sortMode]="'multiple'"
+      styleClass="p-datatable-striped">
+      
+      <!-- Dynamic Header -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of columns" 
+              [pSortableColumn]="col.sortable ? col.field : undefined"
+              [style.width]="col.field === 'actions' ? '150px' : 'auto'">
+            <div class="flex items-center gap-2">
+              <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+              <span class="font-semibold text-gray-700">{{ col.header }}</span>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- Dynamic Body -->
+      <ng-template pTemplate="body" let-field let-rowIndex="rowIndex">
+        <tr>
+          <td class="font-medium text-gray-900">{{ field.name }}</td>
+          <td>
+            <span class="px-2 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-blue-100 text-blue-800': field.type === 'text',
+                    'bg-green-100 text-green-800': field.type === 'email',
+                    'bg-purple-100 text-purple-800': field.type === 'number',
+                    'bg-orange-100 text-orange-800': field.type === 'date',
+                    'bg-pink-100 text-pink-800': field.type === 'select',
+                    'bg-gray-100 text-gray-800': field.type === 'textarea',
+                    'bg-yellow-100 text-yellow-800': field.type === 'checkbox',
+                    'bg-red-100 text-red-800': field.type === 'file'
+                  }">
+              {{ getFieldTypeLabel(field.type) }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="field.required" 
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+              <i class="pi pi-check mr-1"></i>Required
+            </span>
+            <span *ngIf="!field.required" 
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+              <i class="pi pi-times mr-1"></i>Optional
+            </span>
+          </td>
+          <td class="text-gray-600">
+            <span *ngIf="field.defaultValue; else noDefault">
+              {{ field.defaultValue }}
+            </span>
+            <ng-template #noDefault>
+              <span class="text-gray-400 italic">No default</span>
+            </ng-template>
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-pencil" 
+                class="p-button-text p-button-sm p-button-info"
+                pTooltip="Edit Field"
+                (click)="editField(field)">
+              </button>
+              <button 
+                pButton 
+                type="button" 
+                icon="pi pi-trash" 
+                class="p-button-text p-button-sm p-button-danger"
+                pTooltip="Delete Field"
+                (click)="deleteField(field)">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty State -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columns.length" class="text-center py-8">
+            <div class="flex flex-col items-center text-gray-500">
+              <i class="pi pi-table text-4xl mb-4"></i>
+              <h3 class="text-lg font-medium mb-2">No fields defined yet</h3>
+              <p class="text-sm mb-4">Start building your form by adding fields</p>
+              <button 
+                pButton 
+                type="button" 
+                label="Add First Field" 
+                icon="pi pi-plus" 
+                class="p-button-success"
+                (click)="addField()">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Field Configuration Dialog -->
+  <p-dialog 
+    [(visible)]="showFieldDialog" 
+    [modal]="true" 
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="p-fluid"
+    [style]="{ width: '600px' }"
+    header="{{ isEditMode ? 'Edit Field' : 'Add New Field' }}">
+    
+    <div class="grid grid-cols-1 gap-4" *ngIf="selectedField">
+      <!-- Field Name -->
+      <div class="field">
+        <label for="fieldName" class="block text-sm font-medium text-gray-700 mb-2">
+          Field Name <span class="text-red-500">*</span>
+        </label>
+        <input 
+          id="fieldName"
+          pInputText 
+          [(ngModel)]="selectedField.name"
+          placeholder="Enter field name"
+          class="w-full">
+      </div>
+
+      <!-- Field Type -->
+      <div class="field">
+        <label for="fieldType" class="block text-sm font-medium text-gray-700 mb-2">
+          Field Type <span class="text-red-500">*</span>
+        </label>
+        <p-dropdown 
+          id="fieldType"
+          [(ngModel)]="selectedField.type"
+          [options]="fieldTypes"
+          placeholder="Select field type"
+          class="w-full">
+        </p-dropdown>
+      </div>
+
+      <!-- Required Checkbox -->
+      <div class="field">
+        <div class="flex items-center">
+          <p-checkbox 
+            [(ngModel)]="selectedField.required"
+            [binary]="true"
+            inputId="required">
+          </p-checkbox>
+          <label for="required" class="ml-2 text-sm font-medium text-gray-700">
+            Required Field
+          </label>
+        </div>
+      </div>
+
+      <!-- Default Value -->
+      <div class="field">
+        <label for="defaultValue" class="block text-sm font-medium text-gray-700 mb-2">
+          Default Value
+        </label>
+        <input 
+          id="defaultValue"
+          pInputText 
+          [(ngModel)]="selectedField.defaultValue"
+          placeholder="Enter default value"
+          class="w-full">
+      </div>
+
+      <!-- Placeholder -->
+      <div class="field">
+        <label for="placeholder" class="block text-sm font-medium text-gray-700 mb-2">
+          Placeholder Text
+        </label>
+        <input 
+          id="placeholder"
+          pInputText 
+          [(ngModel)]="selectedField.placeholder"
+          placeholder="Enter placeholder text"
+          class="w-full">
+      </div>
+
+      <!-- Options for Select Field -->
+      <div class="field" *ngIf="selectedField.type === 'select'">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Select Options
+        </label>
+        <div class="text-sm text-gray-600 mb-2">
+          Add options for dropdown selection (one per line)
+        </div>
+        <textarea 
+          rows="4"
+          placeholder="Option 1&#10;Option 2&#10;Option 3"
+          class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        </textarea>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-3">
+        <button 
+          pButton 
+          type="button" 
+          label="Cancel" 
+          icon="pi pi-times" 
+          class="p-button-secondary"
+          (click)="cancelEdit()">
+        </button>
+        <button 
+          pButton 
+          type="button" 
+          label="{{ isEditMode ? 'Update' : 'Add' }}" 
+          icon="pi pi-check" 
+          class="p-button-success"
+          (click)="saveField()">
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>
+
+
+<!-- Popup Dialog using Tailwind CSS -->
+<div *ngIf="openBox" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
+    <div class="w-screen h-screen bg-white flex flex-col rounded-none shadow-none overflow-hidden">
+      <!-- Header -->
+      <div class="flex items-center justify-between bg-blue-800 text-white px-3 py-6">
+        <h3 class="text-3xl font-bold">Form Preview</h3>
+        <div class="flex items-center gap-2">
+       
+            <button (click)="openBox=false" class="p-2 rounded-full hover:bg-blue-600 transition-colors"  aria-label="Close" > <i class="pi pi-times"></i>
+            </button>
+  
+        </div>
+      </div>
+
+    <div class="flex-1 overflow-auto p-6">
+        <!-- INSERT_YOUR_CODE -->
+        <!-- INSERT_YOUR_CODE -->
+        <div class="p-6 flex flex flex-wrap gap-3">
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.ship"
+              name="shipCheckbox"
+              (click)="onSectionCheckboxClick('ship', $event)"
+            >
+            <span class="ml-2 text-gray-700">Ship</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.trialDetails"
+              name="trialDetailsCheckbox"
+              (click)="onSectionCheckboxClick('trialDetails', $event)"
+            >
+            <span class="ml-2 text-gray-700">Trial Details</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.testEquipmentUsed"
+              name="testEquipmentUsedCheckbox"
+              (click)="onSectionCheckboxClick('testEquipmentUsed', $event)"
+            >
+            <span class="ml-2 text-gray-700">Test Equipment Used</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.equipmentDetails"
+              name="equipmentDetailsCheckbox"
+              (click)="onSectionCheckboxClick('equipmentDetails', $event)"
+            >
+            <span class="ml-2 text-gray-700">Equipment Details</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.insulationResistance"
+              name="insulationResistanceCheckbox"
+              (click)="onSectionCheckboxClick('insulationResistance', $event)"
+            >
+            <span class="ml-2 text-gray-700">Insulation Resistance</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.protectionChecks"
+              name="protectionChecksCheckbox"
+              (click)="onSectionCheckboxClick('protectionChecks', $event)"
+            >
+            <span class="ml-2 text-gray-700">Protection Checks</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.instrumentation"
+              name="instrumentationCheckbox"
+              (click)="onSectionCheckboxClick('instrumentation', $event)"
+            >
+            <span class="ml-2 text-gray-700">Instrumentation</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.miscellaneousChecks"
+              name="miscellaneousChecksCheckbox"
+              (click)="onSectionCheckboxClick('miscellaneousChecks', $event)"
+            >
+            <span class="ml-2 text-gray-700">Miscellaneous Checks</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.speedControlTest"
+              name="speedControlTestCheckbox"
+              (click)="onSectionCheckboxClick('speedControlTest', $event)"
+            >
+            <span class="ml-2 text-gray-700">Speed Control Test</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-blue-600"
+              [(ngModel)]="view.voltageControlTest"
+              name="voltageControlTestCheckbox"
+              (click)="onSectionCheckboxClick('voltageControlTest', $event)"
+            >
+            <span class="ml-2 text-gray-700">Voltage Control Test</span>
+          </label>
+        </div>
+
+        <div *ngIf="view.ship" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+              <h2 class="text-lg font-semibold text-white">1. Ship</h2>
+            </div>
+            
+            <div class="p-4 bg-amber-50">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    Select Ship <span class="text-red-500">*</span>
+                  </label>
+                  <select 
+                    formControlName="shipSelection"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Select ship</option>
+                    <option value="ship1">Udaygiri</option>
+                    <option value="ship2">Vikrant</option>
+                    <option value="ship3">Tara Giri</option>
+                    <option value="ship4">Sindhukirti</option>
+                    <option value="ship5">Surat</option>
+                    <option value="ship9">Kamorta</option>
+                    <option value="ship10">Kadmatt</option>
+                    <option value="ship11">Kiltan</option>
+                    <option value="ship12">Chennai</option>
+                    <option value="ship13">Rajwir</option>
+                    <option value="ship14">Teg</option>
+                    <option value="ship15">Talwar</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div *ngIf="view.trialDetails" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+              <h2 class="text-lg font-semibold text-white">1. Trial Details</h2>
+            </div>
+            
+            <div class="p-4 bg-amber-50">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                
+                <!-- Presented By -->
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (a) Presented by<span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text"
+                    formControlName="presentedBy"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"    
+                    placeholder="Enter presenter name">
+                </div>
+    
+                <!-- Trial Date -->
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (b) Trial date<span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="date"
+                    formControlName="trialDate"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+    
+                <!-- Occasion of Current Trial -->
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (c) Occasion of current trial<span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text"
+                    formControlName="occasionOfCurrentTrial"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"        
+                    placeholder="Enter occasion">
+                </div>
+    
+                <!-- Date of Last Trial -->
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (d) Date of last trial carried out on<span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="date"
+                    formControlName="dateOfLastTrial"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter date of last trial">
+                </div>
+    
+                <!-- Proposal Reference -->
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (e) Proposal reference<span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text"
+                    formControlName="proposalReference"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter proposal reference">
+                </div>
+    
+                <!-- File Reference -->
+                <div class="space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (f) File reference<span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text"
+                    formControlName="fileReference"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter file reference">
+                </div>
+    
+                <!-- Reference Document -->
+                <div class="lg:col-span-2 space-y-1">
+                  <label class="block text-base font-medium text-gray-700">
+                    (g) Reference document for trial:
+                  </label>
+                  <input 
+                    type="text"
+                    formControlName="referenceDocument"
+                    class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter reference document">
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Section 2: Test Equipment Used -->
+          <div *ngIf="view.testEquipmentUsed" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+              <h2 class="text-lg font-semibold text-white">2. Test Equipment Used</h2>
+            </div>
+            
+            <div class="p-4 bg-amber-50">
+              <select 
+                formControlName="equipmentId"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                <option value="">Select Equipment</option>
+              </select>
+            </div>
+          </div>
+    
+          <!-- Section 3: Equipment Details -->
+          <div *ngIf="view.equipmentDetails"class="bg-white shadow-sm border border-gray-200">
+            <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+              <h2 class="text-lg font-semibold text-white">3. Equipment Details</h2>
+            </div>
+            
+            <div class="p-4 space-y-6">
+              
+              <!-- Engine Subsection -->
+              <div class="border border-gray-300 bg-amber-50 rounded-lg p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-300 pb-2">Engine</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (a) Make<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="engineMake"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter engine make">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (b) Model & serial no.<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="engineModelSerial"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter model and serial number">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (c) RPM<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="engineRpm"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter RPM">
+                  </div>
+                </div>
+              </div>
+    
+              <!-- Governor Subsection -->
+              <div class="border border-gray-300 bg-amber-50 rounded-lg p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-300 pb-2">Governor</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (a) Make<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="governorMake"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter governor make">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (b) Model & serial no.<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="governorModelSerial"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter model and serial number">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (c) Type<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="governorType"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter governor type">
+                  </div>
+                </div>
+              </div>
+    
+              <!-- Alternator Subsection -->
+              <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">Alternator</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (a) Make and rating<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorMakeRating"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter make and rating">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (b) Model & serial no.<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorModelSerial"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter model and serial number">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (c) Type<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorType"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter alternator type">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (d) Rated voltage<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorRatedVoltage"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter rated voltage">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (e) Rated frequency<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorRatedFrequency"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter rated frequency">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (f) Rated kVA/ kW<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorRatedKvaKw"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter rated kVA/kW">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (g) Rated current<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorRatedCurrent"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter rated current">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (h) Bearing number<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="alternatorBearingNumber"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter bearing number">
+                  </div>
+                </div>
+              </div>
+    
+              <!-- AVR Subsection -->
+              <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">AVR</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (a) Make and type<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="avrMakeType"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter make and type">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (b) Model & serial no.<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="avrModelSerial"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter model and serial number">
+                  </div>
+                </div>
+              </div>
+    
+              <!-- Supply Breaker Subsection -->
+              <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">Supply Breaker</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (a) Make<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="supplyBreakerMake"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter supply breaker make">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (b) Model & serial no.<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="supplyBreakerModelSerial"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter model and serial number">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="block text-base font-medium text-gray-700">
+                      (c) Rated capacity (Amps)<span class="text-red-500">**</span>
+                    </label>
+                    <input 
+                      type="text"
+                      formControlName="supplyBreakerRatedCapacity"
+                      class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Enter rated capacity in Amps">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Section 4: Insulation Resistance -->
+          <div *ngIf="view.insulationResistance" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading ">
+              <h2 class="text-lg font-semibold text-white">4. Insulation Resistance (iaw NES 511(Issue 2) and NES 502 issue 4)</h2>
+            </div>
+            
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Item</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2">(a) Generator hot (>1MΩ)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="generatorHot1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2">(b) Generator cold (>1MΩ)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="generatorCold1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2">(c) Switchboard (>2MΩ)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="switchboard1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2">(d) Generator to switchboard cable (>20MΩ)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="generatorCable1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2">(e) Insulation breaker (>10MΩ)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="insulationBreaker1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Section 5: Protection Checks -->
+          <div *ngIf="view.protectionChecks" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+              <h2 class="text-lg font-semibold text-white">5. Protection Checks</h2>
+            </div>
+            
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Ser</th>
+                      <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Protection</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Calibration Date<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Calibration Certificate Provided (Yes/No)<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Tripping Value<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Observed Value<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Status (Sat/Unsat)<span class="text-red-500">*</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Breaker Protection -->
+                    <tr class="bg-gray-50">
+                      <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] ">Breaker Protection</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
+                      <td class="border border-gray-400 px-4 py-2">Over voltage</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="overVoltageCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="overVoltageCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">110% of rated voltage</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="overVoltageObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="overVoltageStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(b)</td>
+                      <td class="border border-gray-400 px-4 py-2">Under voltage</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="underVoltageCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="underVoltageCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">85% of rated voltage</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="underVoltageObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="underVoltageStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(c)</td>
+                      <td class="border border-gray-400 px-4 py-2">Overload</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="overloadCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="overloadCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="overloadObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="overloadStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    
+                    <!-- Generator/Switchboard Protection -->
+                    <tr class="bg-gray-50">
+                      <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] ">Generator/Switchboard Protection</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
+                      <td class="border border-gray-400 px-4 py-2">Over voltage trip</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="genOverVoltageCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="genOverVoltageCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">110% of rated voltage</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="genOverVoltageObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="genOverVoltageStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(b)</td>
+                      <td class="border border-gray-400 px-4 py-2">Under voltage trip</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="genUnderVoltageCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="genUnderVoltageCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">85% of rated voltage</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="genUnderVoltageObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="genUnderVoltageStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(c)</td>
+                      <td class="border border-gray-400 px-4 py-2">Reverse power relay</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="reversePowerCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="reversePowerCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="reversePowerStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(d)</td>
+                      <td class="border border-gray-400 px-4 py-2">Winding temp alarm</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="windingTempCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="windingTempCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="windingTempStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Section 6: Instrumentation -->
+          <div *ngIf="view.instrumentation" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+              <h2 class="text-lg font-semibold text-white">6. Instrumentation</h2>
+            </div>
+            
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Ser</th>
+                      <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Meter</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Ops/Non Ops<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Calibration Date<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Calibration Certificate Provided (Yes/No)<span class="text-red-500">*</span></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Status (Sat/Unsat)<span class="text-red-500">*</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
+                      <td class="border border-gray-400 px-4 py-2">KW meter</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="kwMeterOps" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Ops">Ops</option>
+                          <option value="Non Ops">Non Ops</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="kwMeterCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="kwMeterCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="kwMeterStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(b)</td>
+                      <td class="border border-gray-400 px-4 py-2">Voltmeter</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="voltmeterOps" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Ops">Ops</option>
+                          <option value="Non Ops">Non Ops</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="voltmeterCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="voltmeterCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="voltmeterStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(c)</td>
+                      <td class="border border-gray-400 px-4 py-2">Ammeter</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="ammeterOps" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Ops">Ops</option>
+                          <option value="Non Ops">Non Ops</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="ammeterCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="ammeterCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="ammeterStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(d)</td>
+                      <td class="border border-gray-400 px-4 py-2">Frequency meter</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="frequencyMeterOps" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Ops">Ops</option>
+                          <option value="Non Ops">Non Ops</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="frequencyMeterCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="frequencyMeterCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="frequencyMeterStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(e)</td>
+                      <td class="border border-gray-400 px-4 py-2">Power factor meter</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="powerFactorMeterOps" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Ops">Ops</option>
+                          <option value="Non Ops">Non Ops</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="powerFactorMeterCalibrationDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="powerFactorMeterCertificate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="powerFactorMeterStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Section 7: Miscellaneous Checks -->
+          <div *ngIf="view.miscellaneousChecks" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+              <h2 class="text-lg font-semibold text-white">7. Miscellaneous Checks</h2>
+            </div>
+            
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Ser</th>
+                      <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Check Description</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Result/Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Resistance Checks -->
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
+                      <td class="border border-gray-400 px-4 py-2">Main stator resistance checks<span class="text-red-500">***</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="mainStatorResistance" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(b)</td>
+                      <td class="border border-gray-400 px-4 py-2">Main rotor resistance checks<span class="text-red-500">***</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="mainRotorResistance" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(c)</td>
+                      <td class="border border-gray-400 px-4 py-2">Exciter stator resistance checks<span class="text-red-500">***</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="exciterStatorResistance" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(d)</td>
+                      <td class="border border-gray-400 px-4 py-2">Exciter rotor resistance checks<span class="text-red-500">***</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="exciterRotorResistance" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    
+                    <!-- Condition/Status Checks -->
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(e)</td>
+                      <td class="border border-gray-400 px-4 py-2">Check condition of slip ring (Sat/ Unsat)<span class="text-red-500">**</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="slipRingCondition" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(f)</td>
+                      <td class="border border-gray-400 px-4 py-2">Check condition of zinc plugs (Sat/ Unsat)<span class="text-red-500">**</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="zincPlugsCondition" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(g)</td>
+                      <td class="border border-gray-400 px-4 py-2">Anti-condensation heater (Ops/Non ops)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="antiCondensationHeater" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Ops">Ops</option>
+                          <option value="Non Ops">Non Ops</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(h)</td>
+                      <td class="border border-gray-400 px-4 py-2">GTTT trial status (Sat/ Unsat)<span class="text-red-500">**</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="gtttTrialStatus" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(j)</td>
+                      <td class="border border-gray-400 px-4 py-2">Internal communication (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="internalCommunication" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(k)</td>
+                      <td class="border border-gray-400 px-4 py-2">Lighting of compartment (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="lightingCompartment" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(l)</td>
+                      <td class="border border-gray-400 px-4 py-2">Ventilation of compartment (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="ventilationCompartment" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(m)</td>
+                      <td class="border border-gray-400 px-4 py-2">Generator terminal box and top cover nuts and bolts cover are secured (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="terminalBoxSecured" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(n)</td>
+                      <td class="border border-gray-400 px-4 py-2">Loose cables / wires of various Instrumentation secured (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="looseCablesSecured" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(p)</td>
+                      <td class="border border-gray-400 px-4 py-2">Generator/ Swbd is earthed (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="generatorEarthed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(q)</td>
+                      <td class="border border-gray-400 px-4 py-2">Generator supply breaker operates electrically (Sat/ Unsat)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="supplyBreakerOperates" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    
+                    <!-- Temperature/Routine Checks -->
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(r)</td>
+                      <td class="border border-gray-400 px-4 py-2">Ambient temperature at start<span class="text-red-500">**</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="ambientTemperatureStart" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter temperature">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(s)</td>
+                      <td class="border border-gray-400 px-4 py-2">Temperature rise after two hours of running at full load<span class="text-red-500">**</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="temperatureRiseTwoHours" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter temperature rise">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(t)</td>
+                      <td class="border border-gray-400 px-4 py-2">Routine on cooler last carried out on (date)<span class="text-red-500">**</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="date" formControlName="coolerRoutineDate" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(u)</td>
+                      <td class="border border-gray-400 px-4 py-2">Temperature of cooler inlet pipe line<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="coolerInletTemperature" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter temperature">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(v)</td>
+                      <td class="border border-gray-400 px-4 py-2">Temperature of cooler outlet pipe line<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="coolerOutletTemperature" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter temperature">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center">(w)</td>
+                      <td class="border border-gray-400 px-4 py-2">Stator winding temperature (where applicable)<span class="text-red-500">*</span></td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="statorWindingTemperature" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter temperature">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- Note Section -->
+              <div class="note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <p class="text-sm text-gray-700 mb-3">For Para 1 to 7, following to be followed while filling the details mentioned in sub serials:-</p>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>(i) <span class="font-semibold">"*"</span> - To be checked/filled/measured by ETMA trial member.</li>
+                  <li>(ii) <span class="font-semibold">"**"</span> - To be provided by SS.</li>
+                  <li>(iii) <span class="font-semibold">"***"</span> - To be checked/provided by Yard.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+    
+            <!-- Section 8: Speed Control Test -->
+            <div *ngIf="view.speedControlTest" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+              <h2 class="text-lg font-semibold text-white">8. Speed Control Test</h2>
+            </div>
+            
+            <div class="p-6">
+              <!-- Sub-section: (a) Steady State Test -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 ">(a) Steady State Test</h3>
+              
+              <!-- Sub-sub-section: WITH PYM (RCHM) 'ON' -->
+              <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">WITH PYM (RCHM) 'ON'</h4>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Load (% of Rated Capacity)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Initial Speed (Hz)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Final Speed (Hz)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Permissible Limit</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Frequency Modulation (Less than ± 0.25% of Rated Frequency)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">0</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn0FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">25</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn25InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn25FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn25FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">50</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn50InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn50FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">50± 0.1 Hz</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn50FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">75</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn75InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn75FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn75FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">110</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn110InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn110FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOn110FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Sub-sub-section: WITH PYM (RCHM) 'OFF' -->
+              <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">WITH PYM (RCHM) 'OFF'</h4>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Load (% of Rated Capacity)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Initial Speed (Hz)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Final Speed (Hz)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Governor Droop (at 100% Load Change)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Permissible limits</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Frequency Modulation (Less than ± 0.25% of Rated Frequency)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">0</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff0FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">25</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff25InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff25FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff25FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">50</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff50InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff50FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">3% ± 0.2% of rated frequency</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff50FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">75</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff75InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff75FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff75FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">110</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff110InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff110FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">NA</td>
+                      <td class="border border-gray-400 px-4 py-2">-</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOff110FrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 font-medium">100-0 (Governor Droop)</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOffGovernorDroopInitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOffGovernorDroopFinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOffGovernorDroopValue" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">Between 2 to 4%</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="pymOffGovernorDroopFrequencyModulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                 <!-- Steady State Test Notes Section -->
+              <div class="note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                  <li>The load to be gradually reduced in say quarter load steps from full load to no load and increased in the same manner up to full load. When the speed has stabilised after each load change the steady state frequency to be recorded. (Set frequency to rated value when at 50% load).</li>
+                  <li>Governor Droop - <span class="font-mono bg-gray-100 px-1 rounded">(No load frequency - Full load frequency) *100 / Nominal frequency</span></li>
+                  <li>Frequency Modulation. Frequency Modulation is the periodic variation in frequency. The periodicity of Frequency modulation should be considered to be longer than 1 cycle time at nominal frequency and less than 10 seconds.</li>
+                </ol>
+                <p class="text-sm text-gray-700 mt-4">
+                  Frequency Modulation (Percent) = <span class="font-mono bg-gray-100 px-1 rounded">100 x (Fmax - Fmin) / (2 x Fnominal)</span>
+                </p>
+              </div>
+              </div>
+    
+              <!-- Sub-section: (b) Transient Test -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(b) Transient Test</h3>
+              
+              <!-- Sub-sub-section: PЧM (RChM) 'ON' -->
+              <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">PЧM (RChM) 'ON'</h4>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Load %</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Initial Speed (Hz)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Momentary Speed (Hz)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Final Speed (Hz)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">% Peak</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Time of Recovery to within ± 0.5% of Rated Value</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Initial</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">To</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Observed</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Permissible Limit</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Observed (Sec)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Permissible Limit (Sec)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to25InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to25MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to25FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to25PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to25RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn25to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn25to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn25to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn25to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn25to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to50InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to50MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to50FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to50PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">± 1%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to50RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">3</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn50to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn50to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn50to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn50to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn50to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to75InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to75MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to75FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to75PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to75RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn75to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn75to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn75to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn75to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn75to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to100InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to100MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to100FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to100PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">± 2%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn0to100RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">5</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn100to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn100to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn100to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn100to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOn100to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Sub-sub-section: PЧM (RChM) 'OFF' -->
+              <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">PЧM (RChM) 'OFF'</h4>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50 ">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Load %</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Initial Speed (Hz)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Momentary Speed (Hz)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Final Speed (Hz)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">% Peak</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Time of Recovery to within ± 0.5% of Final Value</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Initial</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">To</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Observed</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Permissible Limits</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Observed (Sec)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Permissible Limits (Sec)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to25InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to25MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to25FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to25PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to25RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff25to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff25to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff25to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff25to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff25to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to50InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to50MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to50FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to50PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">± 5%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to50RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff50to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff50to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff50to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff50to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff50to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to75InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to75MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to75FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to75PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to75RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff75to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff75to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff75to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff75to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff75to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to100InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to100MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to100FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to100PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">± 5%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff0to100RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">15</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff100to0InitialSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff100to0MomentarySpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff100to0FinalSpeed" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff100to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="transientOff100to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Transient Test Notes Section -->
+              <div class=" note-section mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <ol class="text-sm text-gray-700 space-y-3 list-decimal list-inside">
+                  <li>Frequency deviation in the event of instantaneous load shedding and surge of 50% and 100% of rated active load should be recorded.</li>
+                  <li>Formula for % peak - <span class="font-mono bg-gray-100 px-1 rounded">(Initial frequency - Momentary frequency) / Nominal frequency * 100</span></li>
+                </ol>
+              </div>
+    
+              <!-- Sub-section: (c) Governor Range -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(c) Governor Range</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Measured Frequency (Hz)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Remark</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="governorRange0Frequency" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter frequency">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="governorRange0Remark" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="governorRange100Frequency" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter frequency">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <select formControlName="governorRange100Remark" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Select</option>
+                          <option value="Sat">Sat</option>
+                          <option value="Unsat">Unsat</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Governor Range Notes Section -->
+              <div class=" note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                  <li>Permitted limits for frequencies measured at 0% and 100% loads should not be less than ± 3% (as per def stan) and ± 1% of Nominal for mechanical governors and electronic governors respectively.</li>
+                  <li>This test is undertaken by varying the frequency using the frequency control knob/ lever provided for the alternator on the switchboards.</li>
+                </ol>
+              </div>
+    
+              <!-- Sub-section: (d) Rate Affected by Governor Motor -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(d) Rate Affected by Governor Motor</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold" colspan="2">Rate (Hz/Sec)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Permissible Limit</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Up</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Down</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="governorRate0Up" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter rate">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="governorRate0Down" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter rate">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center" rowspan="2">0.15 to 0.25Hz/ Sec</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="governorRate100Up" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter rate">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="governorRate100Down" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter rate">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Governor Rate Notes Section -->
+              <div class=" note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                  <li>Permitted limits for frequencies measured at 0% and 100% loads should not be less than ± 3% and ± 1% of Nominal for mechanical governors and electronic governors respectively.</li>
+                  <li>This test is undertaken by holding the lever for frequency change in Up position or Down position for durations sufficient to record the graphs.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Section 9: Voltage Control Test -->
+          <div *ngIf="view.voltageControlTest" class="bg-white shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+              <h2 class="text-lg font-semibold text-white">9. Voltage Control Test</h2>
+            </div>
+            
+            <div class="p-6">
+              <!-- Sub-section: (a) Steady State Test -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">(a) Steady State Test</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">kW</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold" colspan="2">Volts</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">P.F.</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Voltage Modulation (Less than 2% of Rated Voltage)</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Observe</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Permissible Limit</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl0kW" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter kW">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl0VoltsObserve" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter volts">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        -
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl0PF" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter P.F.">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl0Modulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter modulation">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl25kW" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter kW">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl25VoltsObserve" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter volts">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        -
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl25PF" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter P.F.">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl25Modulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter modulation">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl50kW" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter kW">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl50VoltsObserve" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter volts">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        -
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl50PF" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter P.F.">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl50Modulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter modulation">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl75kW" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter kW">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl75VoltsObserve" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter volts">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        -
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl75PF" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter P.F.">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl75Modulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter modulation">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl100kW" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter kW">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl100VoltsObserve" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter volts">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        -
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl100PF" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter P.F.">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageControl100Modulation" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter modulation">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Voltage Control Test Notes Section -->
+              <div class="note-section mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                  <li>Permitted voltage limits should not be less than ± 1% of rated voltage, either as per def stan or technical manuals for commissioned ships.</li>
+                  <li>The load to be gradually reduced in say quarter load steps from full load to no load and increased in the same manner up to full load. When the voltage has stabilised after each load change the steady state voltage to be recorded. (Set voltage to Nominal value when at 50% load).</li>
+                  <li>Voltage Modulation. Voltage Modulation is the periodic variation of single line to line user voltage. The periodicity of Voltage modulation should be considered to be longer than 1 cycle time at nominal frequency and less than 10 seconds. The voltage used in the equation is RMS voltage.</li>
+                </ol>
+                <p class="text-sm text-gray-700 mt-4">
+                  Voltage Modulation (Percent) = <span class="font-mono bg-gray-100 px-1 rounded">100 x (Vmax - Vmin) / (2 x Vnominal)</span>
+                </p>
+              </div>
+    
+              <!-- Sub-section: (b) Transient Test -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(b) Transient Test</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Load %</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Initial Voltage (V)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Momentary Voltage (V)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" rowspan="2">Final Voltage (V)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">% Peak</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Time of Recovery to Within ± 1% of Final Value</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Initial</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">To</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Observed</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Permissible Limits</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Observed (Sec)</th>
+                      <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Permissible Limits (Sec)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to25InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to25MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to25FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to25PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to25RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25to0InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25to0MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25to0FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to50InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to50MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to50FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to50PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">+ 13% to - 10%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to50RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">0.5</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50to0InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50to0MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50to0FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to75InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to75MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to75FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to75PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to75RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">Not specified</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75to0InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75to0MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75to0FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to100InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to100MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to100FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to100PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">+ 22% to</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0to100RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">0.8</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient100to0InitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient100to0MomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient100to0FinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient100to0PeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">- 20%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient100to0RecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">0.8</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">+ M</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0plusMInitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0plusMMomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0plusMFinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0plusMPeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient0plusMRecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">25</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">+ M</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25plusMInitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25plusMMomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25plusMFinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25plusMPeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">15%</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient25plusMRecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">1</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">50</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">+ M</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50plusMInitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50plusMMomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50plusMFinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50plusMPeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient50plusMRecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">75</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">+ M</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75plusMInitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75plusMMomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75plusMFinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75plusMPeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient75plusMRecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">85</td>
+                      <td class="border border-gray-400 px-2 py-2 text-center font-medium">+ M</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient85plusMInitialVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient85plusMMomentaryVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient85plusMFinalVoltage" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient85plusMPeakObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                      <td class="border border-gray-400 px-2 py-2">
+                        <input type="text" formControlName="voltageTransient85plusMRecoveryObserved" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                      <td class="border border-gray-400 px-2 py-2">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Voltage Transient Test Notes Section -->
+              <div class="note-section mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                  <li>M-Load is an additional load equal to 50% rated kVA at zero to 0.4 PF lagging, typically for starting an induction motor. The chosen motor kVA based on starting current/voltage input equal to 50% of alternator's rated kVA and should have a DOL starter.</li>
+                  <li>Formula for % peak - <span class="font-mono bg-gray-100 px-1 rounded">(Initial voltage – Momentary voltage) / Nominal voltage * 100</span></li>
+                  <li>Formula for Nominal voltage - <span class="font-mono bg-gray-100 px-1 rounded">(No load voltage + Full load voltage) / 2</span></li>
+                </ol>
+              </div>
+    
+              <!-- Sub-section: (c) Voltage Balance -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(c) Voltage Balance</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold" colspan="3">Line Voltages</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Difference (Between Max & Min of Three Values)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Permissible Limit (1% of the Average of Three Line Voltages)</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">R-Y</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Y-B</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">B-R</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">V</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">V</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">0</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageBalance0RY" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageBalance0YB" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageBalance0BR" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">100</td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageBalance100RY" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageBalance100YB" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <input type="text" formControlName="voltageBalance100BR" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Sub-section: (d) Voltage Range -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(d) Voltage Range</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold" colspan="2">Voltage Measured on Switchboard (Volts)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Permissible Limit (5% of Rated Voltage)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Status (Sat/Unsat)</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Remarks</th>
+                    </tr>
+                    <tr class="bg-gray-100">
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">At Lowest Limit of Trimmer</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">At Highest Limit of Trimmer</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold">V</th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                      <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">A.V.R.<br>Control</td>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">
+                        <div class="border-b border-gray-400 pb-1">0</div>
+                        <div class="pt-1">100</div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <input type="text" formControlName="voltageRangeAVR0Lowest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                        <div class="pt-1">
+                          <input type="text" formControlName="voltageRangeControl100Lowest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <input type="text" formControlName="voltageRangeAVR0Highest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                        <div class="pt-1">
+                          <input type="text" formControlName="voltageRangeControl100Highest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        V
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <select formControlName="voltageRangeAVR0Status" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select</option>
+                            <option value="Sat">Sat</option>
+                            <option value="Unsat">Unsat</option>
+                          </select>
+                        </div>
+                        <div class="pt-1">
+                          <select formControlName="voltageRangeControl100Status" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select</option>
+                            <option value="Sat">Sat</option>
+                            <option value="Unsat">Unsat</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <input type="text" formControlName="voltageRangeAVR0Remarks" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter remarks">
+                        </div>
+                        <div class="pt-1">
+                          <input type="text" formControlName="voltageRangeControl100Remarks" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter remarks">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">Hand<br>Control</td>
+                      <td class="border border-gray-400 px-4 py-2 text-center font-medium">
+                        <div class="border-b border-gray-400 pb-1">0</div>
+                        <div class="pt-1">100</div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <input type="text" formControlName="voltageRangeHand0Lowest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                        <div class="pt-1">
+                          <input type="text" formControlName="voltageRangeHandControl100Lowest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <input type="text" formControlName="voltageRangeHand0Highest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                        <div class="pt-1">
+                          <input type="text" formControlName="voltageRangeHandControl100Highest" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter voltage">
+                        </div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2 text-center text-gray-600">
+                        V
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <select formControlName="voltageRangeHand0Status" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select</option>
+                            <option value="Sat">Sat</option>
+                            <option value="Unsat">Unsat</option>
+                          </select>
+                        </div>
+                        <div class="pt-1">
+                          <select formControlName="voltageRangeHandControl100Status" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select</option>
+                            <option value="Sat">Sat</option>
+                            <option value="Unsat">Unsat</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td class="border border-gray-400 px-4 py-2">
+                        <div class="border-b border-gray-400 pb-1">
+                          <input type="text" formControlName="voltageRangeHand0Remarks" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter remarks">
+                        </div>
+                        <div class="pt-1">
+                          <input type="text" formControlName="voltageRangeHandControl100Remarks" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter remarks">
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <!-- Voltage Range Notes Section -->
+              <div class="note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
+                <p class="text-sm text-gray-700">This test is undertaken by varying the voltage trimmer (Hand/Auto as applicable) from lowest limit to the highest limit.</p>
+              </div>
+    
+              <!-- Sub-section: (e) Voltage Waveform Harmonic Content -->
+              <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(e) Voltage Waveform Harmonic Content</h3>
+              <div class="overflow-x-auto mb-8">
+                <table class="w-full border-collapse border border-gray-400 bg-amber-50">
+                  <tbody>
+                    <tr>
+                      <td class="border border-gray-400 px-4 py-3 bg-amber-50 text-sm text-gray-700 w-3/4">
+                        Maximum total harmonic content of waveform at no load (not to exceed 2 % of the amplitude of fundamental)
+                      </td>
+                      <td class="border border-gray-400 px-4 py-3 w-1/4">
+                        <input type="text" formControlName="voltageHarmonicContent" class="w-full px-2 py-1 border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter value">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+
+    </div>
+
+   
+  </div>
+</div>
+
