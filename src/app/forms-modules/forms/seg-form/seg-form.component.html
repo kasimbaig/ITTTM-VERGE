@@ -71,7 +71,9 @@
     </div>
 
     <form [formGroup]="segForm" (ngSubmit)="onSubmitReport()" class="w-full space-y-4">
+            <div id="printContainer">
 
+            
                 <!-- REQUEST FOR DI/ DR -->
                 <div class="w-full p-6 bg-white rounded-lg shadow-lg border border-gray-200" *ngIf="showDiDrForm">
                     <h1
@@ -87,7 +89,7 @@
                                     1. System Details
                                 </p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Ship:</label>
                                         <select formControlName="ship" (change)="onShipChange($event)"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -99,7 +101,7 @@
                                         <div *ngIf="isLoadingShips" class="text-xs text-gray-500 mt-1">Loading ships...
                                         </div>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">System:</label>
                                         <select formControlName="sd_system" (change)="onSystemChange($event)"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -111,12 +113,12 @@
                                         <div *ngIf="isLoadingSystems" class="text-xs text-gray-500 mt-1">Loading
                                             systems...</div>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Sub System:</label>
                                         <input type="text" formControlName="sd_sub_system"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Sub Sub System:</label>
                                         <input type="text" formControlName="sd_sub_sub_system"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -129,25 +131,25 @@
                                     2. Processing Element Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm  font-medium text-gray-700 mb-1">Serial No:</label>
                                         <input type="text" formControlName="ped_sr_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Make/OEM of
                                                 Module:</label>
                                             <input type="text" formControlName="ped_make_or_oem_module"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">OEM Part No of
                                                 Motherboard/SBC:</label>
                                             <input type="text" formControlName="ped_oem_part_no_motherboard_or_sbd"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Patt No:</label>
                                             <input type="text" formControlName="ped_patt_no"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -163,12 +165,12 @@
                                 <div class="space-y-4">
                                     <!-- First Row: Media Type, Size, Interface -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Media Type:</label>
                                             <input type="text" formControlName="mmd_media_type"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Size:</label>
                                             <div class="flex">
                                                 <input type="text" formControlName="mmd_size"
@@ -177,7 +179,7 @@
                                                     class="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-600">KB/MB/GB/TB</span>
                                             </div>
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Interface:</label>
                                             <select formControlName="mmd_interface"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -192,12 +194,12 @@
                                     </div>
                                     <!-- Second Row: SCSI, OS -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">SCSI:</label>
                                             <input type="text" formControlName="mmd_scsi"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">OS:</label>
                                             <input type="text" formControlName="mmd_os"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -220,7 +222,7 @@
                                 <p class="text-sm text-gray-600 mb-4">(Include CMMS RA details having DART No., the data
                                     should be fed back to INSMA for defect summary)</p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-2">Upload File:</label>
                                         <div
                                             class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
@@ -275,12 +277,12 @@
                                     Submission Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Submitted By:</label>
                                         <input type="text" formControlName="didr_ds_submitted_by"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Status:</label>
                                         <select formControlName="didr_ds_status"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -297,7 +299,7 @@
                                     Verification Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Verified By: (By
                                             CO/HOD)</label>
                                         <input type="text" formControlName="didr_ds_verified_by"
@@ -325,14 +327,14 @@
                                     ESS Repair/Restoration Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">5. Job Ref No:</span>
                                         </label>
                                         <input type="text" formControlName="didr_ess_repair_or_restoration_job_ref_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">Job Assigned To:</span>
                                         </label>
@@ -340,7 +342,7 @@
                                             formControlName="didr_ess_repair_or_restoration_job_assign_to"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">6. Remarks:</span>
                                         </label>
@@ -348,7 +350,7 @@
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
                                     </div>
                                     <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">
                                                 <span class="font-bold underline">Status (visible to SS):</span>
                                             </label>
@@ -433,7 +435,7 @@
                                     <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
                                     8. Handed over to (if applicable)
                                 </p>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Handed over to:</label>
                                     <input type="text" formControlName="didr_handed_over_to"
                                         class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -445,7 +447,7 @@
                                     <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
                                     9. Ship's Feedback
                                 </p>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Ship's Feedback:</label>
                                     <input type="text" formControlName="didr_ship_feedback"
                                         class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -471,12 +473,19 @@
                                     class="px-6 py-2 bg-orange-500 text-white font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
                                     {{ isEditMode ? 'Update Draft' : 'Save Draft' }}
                                 </button>
-                                <!-- <button 
-                    type="button"
-                    (click)="onSubmitReport()"
-                    class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded-md">
-                    {{ isEditMode ? 'Update' : 'Submit Report' }}
-                </button> -->
+                                <button  
+                                printSectionId="printContainer"	[openNewTab]="true"
+                                ngxPrint  styleSheetFile="assets/print.css"
+                                class="px-4 py-2 bg-red-600 text-white rounded  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+                                >
+                                <i class="pi pi-file-pdf"></i>
+                                PDF
+                              </button>
+                                <button (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-blue-600 text-white rounded  hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+                                >
+                                <i class="pi pi-save"></i>
+                                Save Version
+                              </button>
                             </div>
                         </div>
                     </div>
@@ -500,7 +509,7 @@
                                     10. System Details (auto fill from extraction form, if it exist)
                                 </p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Ship:</label>
                                         <select formControlName="ship" (change)="onShipChange($event)"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -512,7 +521,7 @@
                                         <div *ngIf="isLoadingShips" class="text-xs text-gray-500 mt-1">Loading ships...
                                         </div>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">System:</label>
                                         <select formControlName="sd_system" (change)="onSystemChange($event)"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -524,12 +533,12 @@
                                         <div *ngIf="isLoadingSystems" class="text-xs text-gray-500 mt-1">Loading
                                             systems...</div>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Sub System:</label>
                                         <input type="text" formControlName="sd_sub_system"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Device:</label>
                                         <input type="text" formControlName="sd_sub_sub_system"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -542,24 +551,24 @@
                                     11. Processing Element Details (auto fill from extraction form, if it exist)
                                 </p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Make/OEM of
                                             Module:</label>
                                         <input type="text" formControlName="ped_make_or_oem_module"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col  space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">OEM Part No of
                                             Motherboard/SBC:</label>
                                         <input type="text" formControlName="ped_oem_part_no_motherboard_or_sbd"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Patt No:</label>
                                         <input type="text" formControlName="ped_patt_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Serial No:</label>
                                         <input type="text" formControlName="ped_sr_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -574,12 +583,12 @@
                                 <div class="space-y-4">
                                     <!-- First Row: Media Type, Size, Interface -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Media Type:</label>
                                             <input type="text" formControlName="mmd_media_type"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Size:</label>
                                             <div class="flex">
                                                 <input type="text" formControlName="mmd_size"
@@ -588,7 +597,7 @@
                                                     class="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-600">KB/MB/GB/TB</span>
                                             </div>
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Interface:</label>
                                             <select formControlName="mmd_interface"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -603,12 +612,12 @@
                                     </div>
                                     <!-- Second Row: SCSI, OS -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">SCSI:</label>
                                             <input type="text" formControlName="mmd_scsi"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">OS:</label>
                                             <input type="text" formControlName="mmd_os"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -631,7 +640,7 @@
                                 <p class="text-sm text-gray-600 mb-4">(Include CMMS RA details having DART No., the data
                                     should be fed back to INSMA for defect summary)</p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-2">Upload File:</label>
                                         <div
                                             class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
@@ -686,12 +695,12 @@
                                     Submission Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Submitted By:</label>
                                         <input type="text" formControlName="esr_ro_submitted_by"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Status:</label>
                                         <select formControlName="esr_ro_status"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -708,7 +717,7 @@
                                     14. Verification Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Verified By: (By
                                             CO/HOD)</label>
                                         <input type="text" formControlName="esr_ro_verified_by"
@@ -736,21 +745,21 @@
                                     ESS Repair/Restoration Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">15. Job Ref No:</span>
                                         </label>
                                         <input type="text" formControlName="esr_ess_repair_or_restoration_job_ref_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">Job Assigned To:</span>
                                         </label>
                                         <input type="text" formControlName="esr_ess_repair_or_restoration_job_assign_to"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">16. Remarks:</span>
                                         </label>
@@ -758,7 +767,7 @@
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
                                     </div>
                                     <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">
                                                 <span class="font-bold underline">Status (visible to SS):</span>
                                             </label>
@@ -840,7 +849,7 @@
                             </h3>
                             <div class="space-y-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Tool Used:</label>
                                         <select formControlName="esr_dc_tool_used"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -850,7 +859,7 @@
                                             <option value="Acronis">Acronis</option>
                                         </select>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Clone Disk Name:</label>
                                         <input type="text" formControlName="esr_dc_clone_disk_name"
                                             placeholder="Enter clone disk name"
@@ -863,7 +872,7 @@
                                         SHIPNAME_SYSTEM_SUBSYSTEM_SUB_SUBSYTES_TYPEofMMD_TYPEofINTERFACE_MMDSIZE_OS_CT_AppVersion_DATE
                                     </p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File (md5sum stored
                                         in a file):</label>
                                     <div
@@ -926,7 +935,7 @@
                                 Disk Mounting
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Verification of Partition
                                         Structure (fdisk):</label>
                                     <select formControlName="esr_dm_verification_of_partion_structre"
@@ -938,7 +947,7 @@
                                     </select>
                                     <p class="text-xs text-gray-500 mt-1">(Dropdown with 3 options)</p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Verification of File
                                         System:</label>
                                     <select formControlName="esr_dm_verification_of_file_system"
@@ -963,7 +972,7 @@
                                 20. Boot Trials
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Boot Trial Remarks:</label>
                                     <textarea rows="3" formControlName="esr_boot_trial_remarks"
                                         placeholder="Enter boot trial remarks"
@@ -982,7 +991,7 @@
                                 Repository Details
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Nomenclature of Root
                                         Folder:</label>
                                     <input type="text" formControlName="esr_rd_nomenclature_of_root_folder"
@@ -992,7 +1001,7 @@
                                         Example: SHIPNAME_SYSTEM_SUBSYSTEM_MMDSIZE_TYPEofMMD
                                     </p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Stored In:</label>
                                     <select formControlName="esr_rd_stored_in"
                                         class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -1002,7 +1011,7 @@
                                         <option value="/other/storage">Other</option>
                                     </select>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-2">Disk Info File:</label>
                                     <div
                                         class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
@@ -1048,7 +1057,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File:</label>
                                     <div
                                         class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
@@ -1096,7 +1105,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Cloned Disk or Image:</label>
                                     <input type="text" formControlName="esr_rd_cloned_disk_or_image"
                                         placeholder="Enter cloned disk or image name"
@@ -1133,7 +1142,7 @@
                                 22. Image/Clone Restored From
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Image or Clone Restored
                                         From:</label>
                                     <input type="text" formControlName="esr_image_or_clone_restored_from"
@@ -1152,7 +1161,7 @@
                                 <span class="w-2 h-2 bg-orange-500 rounded-full mr-3"></span>
                                 23. Remarks by SEG
                             </h3>
-                            <div class="flex flex-col">
+                            <div class="flex flex-col space-y-1">
                                 <label class="text-sm font-medium text-gray-700 mb-1">SEG Remarks:</label>
                                 <textarea rows="4" formControlName="esr_remarks_by_seg"
                                     placeholder="Enter remarks from SEG"
@@ -1170,7 +1179,7 @@
                                 24. Handed over to
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Handed over to:</label>
                                     <input type="text" formControlName="esr_handed_over_to"
                                         class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -1188,7 +1197,7 @@
                                 25. Feedback of SS
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Feedback:</label>
                                     <input type="text" formControlName="esr_feedback_of_ss"
                                         class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -1247,7 +1256,7 @@
                                     26. System Details
                                 </p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Ship:</label>
                                         <select formControlName="ship" (change)="onShipChange($event)"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -1259,7 +1268,7 @@
                                         <div *ngIf="isLoadingShips" class="text-xs text-gray-500 mt-1">Loading ships...
                                         </div>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">System:</label>
                                         <select formControlName="sd_system" (change)="onSystemChange($event)"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -1271,12 +1280,12 @@
                                         <div *ngIf="isLoadingSystems" class="text-xs text-gray-500 mt-1">Loading
                                             systems...</div>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Sub System:</label>
                                         <input type="text" formControlName="sd_sub_system"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1 ">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Sub-Sub-System:</label>
                                         <input type="text" formControlName="sd_sub_sub_system"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -1289,25 +1298,25 @@
                                     27. Processing Element Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Serial No:</label>
                                         <input type="text" formControlName="ped_sr_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Make/OEM of
                                                 Module:</label>
                                             <input type="text" formControlName="ped_make_or_oem_module"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">OEM Part No of
                                                 Motherboard/SBC:</label>
                                             <input type="text" formControlName="ped_oem_part_no_motherboard_or_sbd"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Patt No:</label>
                                             <input type="text" formControlName="ped_patt_no"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -1322,12 +1331,12 @@
                                 </p>
                                 <div class="space-y-4">
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Media Type:</label>
                                             <input type="text" formControlName="mmd_media_type"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Interface:</label>
                                             <select formControlName="mmd_interface"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -1339,12 +1348,12 @@
                                                 <option value="SCSI">SCSI</option>
                                             </select>
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">SCSI:</label>
                                             <input type="text" formControlName="mmd_scsi"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Size:</label>
                                             <div class="flex">
                                                 <input type="text" formControlName="mmd_size"
@@ -1353,21 +1362,21 @@
                                                     class="px-3 py-2 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md text-sm text-gray-600">KB/MB/GB/TB</span>
                                             </div>
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">OS:</label>
                                             <input type="text" formControlName="mmd_os"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Application
                                                 Name:</label>
                                             <input type="text" formControlName="mmd_ap_application_name"
                                                 placeholder="Enter application name"
                                                 class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                         </div>
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1">
                                             <label class="text-sm font-medium text-gray-700 mb-1">Application
                                                 Version:</label>
                                             <input type="text" formControlName="mmd_ap_application_version"
@@ -1391,21 +1400,21 @@
                                     ESS Repair/Restoration Details
                                 </p>
                                 <div class="space-y-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1 ">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">28. Job Ref No:</span>
                                         </label>
                                         <input type="text" formControlName="esb_ess_extraction_job_ref_no"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1 ">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">Job Assigned To:</span>
                                         </label>
                                         <input type="text" formControlName="esb_ess_extraction_job_assign_to"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1 ">
                                         <label class="text-sm font-medium text-gray-700 mb-1">
                                             <span class="font-bold">29. Remarks:</span>
                                         </label>
@@ -1413,7 +1422,10 @@
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"></textarea>
                                     </div>
                                     <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                                        <div class="flex flex-col">
+                                        <div class="flex flex-col space-y-1 ">
+                                            <label class="text-sm font-medium text-gray-700 mb-1">
+                                                <span class="font-bold underline">Status (visible to SS):</span>
+                                            </label>
                                             <div class="flex items-center space-x-2">
                                                 <span class="text-gray-700">Job ref no:</span>
                                                 <input type="text" formControlName="esb_ess_extraction_status"
@@ -1436,13 +1448,13 @@
                             </h3>
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-4">
-                                    <div class="flex space-x-2">
-                                        <label class="flex items-center">
+                                    <div class="flex space-x-2 space-y-1">
+                                        <label class="flex items-center space-y-1">
                                             <input type="radio" formControlName="esb_disk_info_captured" value="Yes"
                                                 class="mr-2 text-blue-600 focus:ring-blue-500" />
                                             <span class="text-sm text-gray-700">YES</span>
                                         </label>
-                                        <label class="flex items-center">
+                                        <label class="flex items-center space-y-1">
                                             <input type="radio" formControlName="esb_disk_info_captured" value="No"
                                                 class="mr-2 text-blue-600 focus:ring-blue-500" />
                                             <span class="text-sm text-gray-700">NO</span>
@@ -1451,7 +1463,7 @@
                                 </div>
                                 <div class="space-y-3">
                                     <!-- Show MMD Health Prediction when YES is selected -->
-                                    <div class="flex flex-col" *ngIf="isDiskInfoCaptured()">
+                                    <div class="flex flex-col space-y-1" *ngIf="isDiskInfoCaptured()">
                                         <label class="text-sm font-medium text-gray-700 mb-1">MMD Health
                                             Prediction:</label>
                                         <div class="flex items-center space-x-4">
@@ -1467,7 +1479,7 @@
                                     </div>
 
                                     <!-- Show Remarks when NO is selected -->
-                                    <div class="flex flex-col" *ngIf="!isDiskInfoCaptured()">
+                                    <div class="flex flex-col space-y-1" *ngIf="!isDiskInfoCaptured()">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Remarks:</label>
                                         <div class="flex items-center space-x-4">
                                             <input type="text" formControlName="esb_mmd_health_prediction"
@@ -1490,7 +1502,7 @@
                             </h3>
                             <div class="space-y-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Tool Used:</label>
                                         <select formControlName="esb_dc_tool_used"
                                             class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -1500,7 +1512,7 @@
                                             <option value="Acronis">Acronis</option>
                                         </select>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col space-y-1">
                                         <label class="text-sm font-medium text-gray-700 mb-1">Clone Disk Name:</label>
                                         <input type="text" formControlName="esb_dc_clone_disk_name"
                                             placeholder="Enter clone disk name"
@@ -1513,7 +1525,7 @@
                                         SHIPNAME_SYSTEM_SUBSYSTEM_SUB_SUBSYTES_TYPEofMMD_TYPEofINTERFACE_MMDSIZE_OS_CT_AppVersion_DATE
                                     </p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File (md5sum stored
                                         in a file):</label>
                                     <div
@@ -1577,7 +1589,7 @@
                                 32. Disk Mounting
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Verification of Partition
                                         Structure (fdisk):</label>
                                     <select formControlName="esb_dm_verification_of_partion_structre"
@@ -1589,7 +1601,7 @@
                                     </select>
                                     <p class="text-xs text-gray-500 mt-1">(Dropdown with 3 options)</p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Verification of File
                                         System:</label>
                                     <select formControlName="esb_dm_verification_of_file_system"
@@ -1627,7 +1639,7 @@
                                 34. Repository Details (for Vzg Only)
                             </h3>
                             <div class="space-y-4">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Nomenclature of Root
                                         Folder:</label>
                                     <input type="text" formControlName="esb_rd_nomenclature_of_root_folder"
@@ -1637,7 +1649,7 @@
                                         Example: SHIPNAME_SYSTEM_SUBSYSTEM_MMDSIZE_TYPEofMMD
                                     </p>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Stored In:</label>
                                     <select formControlName="esb_rd_stored_in"
                                         class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -1694,7 +1706,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-2">Hash Value File:</label>
                                     <div
                                         class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors duration-200">
@@ -1743,7 +1755,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-col">
+                                <div class="flex flex-col space-y-1">
                                     <label class="text-sm font-medium text-gray-700 mb-1">Cloned Disk or Image:</label>
                                     <input type="text" formControlName="esb_rd_cloned_disk_or_image"
                                         placeholder="Enter cloned disk or image name"
@@ -1779,7 +1791,7 @@
                                 <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
                                 35. Status of Job
                             </h3>
-                            <div class="flex flex-col">
+                            <div class="flex flex-col space-y-1">
                                 <label class="text-sm font-medium text-gray-700 mb-1">Job Status:</label>
                                 <select formControlName="esb_status_of_job"
                                     class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
@@ -1799,7 +1811,7 @@
                                 <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
                                 36. Handed over to
                             </h3>
-                            <div class="flex flex-col">
+                            <div class="flex flex-col space-y-1">
                                 <label class="text-sm font-medium text-gray-700 mb-1">Handed over to:</label>
                                 <input type="text" formControlName="esb_handed_over_to"
                                     class="px-3 py-2 border border-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" />
@@ -1858,12 +1870,27 @@
                                             {{ isEditMode ? 'Update' : 'Submit Report' }}
                                         </button>
                                     </ng-container>
+                                    <button  
+                                    printSectionId="printContainer"	[openNewTab]="true"
+                                    ngxPrint  styleSheetFile="assets/print.css"
+                                    class="px-4 py-2 bg-red-600 text-white rounded  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+                                    >
+                                    <i class="pi pi-file-pdf"></i>
+                                    PDF
+                                  </button>
+                                    <button (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-blue-600 text-white rounded  hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+                                    >
+                                    <i class="pi pi-save"></i>
+                                    Save Version
+                                  </button>
 
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+            </div>
 
                 <!-- Navigation Buttons - Always visible for navigation between steps -->
                 <div class="bg-white shadow-sm border border-gray-200 mt-4">
@@ -1915,15 +1942,33 @@
 
     <!-- Route Config Modal Placeholder -->
     <div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
-            <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
-            <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
+        <div class="bg-white rounded-lg shadow-xl w-[450px] mx-4 mb-4">
+          <div class="flex items-center justify-between bg-[#04308f] text-white p-2 rounded-t-lg">
+            <h3 class="text-lg font-semibold mb-4">Save Report Version</h3>
             <button 
                 (click)="showRouteConfigModal = false"
                 class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                Close
+                <i class="pi pi-times"></i>
             </button>
+          </div>
+          <div class="m-4">
+            <div class="flex items-center justify-between p-4">
+              <input 
+                type="text" 
+                class="flex-grow px-3 py-2 border border-gray-400 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter Version Name Here"
+                [(ngModel)]="versionName"
+                name="versionName" />
+             
+            </div>
+            <button 
+            type="button"
+            class="px-6 py-2 mb-2 bg-blue-500 text-white font-medium float-end hover:bg-blue-600 transition-colors duration-200"
+            (click)="onSaveVersion()"
+            ><i class="pi pi-save"></i> Save Version</button>
+          </div>
+        
         </div>
-    </div>
+      </div>
   </div>
 </div>

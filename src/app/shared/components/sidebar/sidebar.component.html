@@ -1,135 +1,139 @@
-<aside [ngClass]="{
-    'modern-sidebar-expanded': expanded,
-    'modern-sidebar-collapsed': !expanded
-  }" class="sidebar modern-sidebar">
+<nav class="top-navbar bg-white shadow-md border-b border-gray-200">
+  <div class="navbar-container flex items-center justify-between px-6 py-3">
+    <!-- Logo/Brand -->
+    <div class="flex items-center gap-3">
+      <i class="fa-solid fa-ship text-blue-600 text-2xl"></i>
+      <span class="text-xl font-bold text-gray-800">ITTTM</span>
+    </div>
 
-  <div class="modern-sidebar-header">
-    <span class="modern-icon-text">
-      <i class="fa-solid fa-ship modern-icon"></i>
-      <span *ngIf="expanded" class="modern-cmms-text"> ITTTM </span>
-    </span>
-    <button class="modern-collapse-button" (click)="toggleSidebar()">
-      <span class="modern-collapse-icon" *ngIf="expanded">←</span>
-      <span class="modern-collapse-icon" *ngIf="!expanded">→</span>
+    <!-- Hamburger Menu Toggle -->
+    <button
+      class="hamburger-toggle md:hidden px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+      (click)="toggleSidebar()">
+      <i class="fa-solid" [ngClass]="expanded ? 'fa-times' : 'fa-bars'"></i>
     </button>
-  </div>
 
-  <div class="modern-sidebar-container">
-    <ng-container *ngFor="let item of menuItems">
-      <button (click)="item.hasChildren ? '' : (item.path && navigateTo(item.path))"
-        class="modern-menu-button" [class.active]="item.path && isActive(item.path)">
-        <span class="modern-menu-icon" *ngIf="item.icon">
-          <i [ngClass]="item.icon"></i>
-        </span>
-        <span *ngIf="expanded" class="modern-menu-label" [title]="item.label">
-          {{ item.label }}
-        </span>
+    <!-- Main Navigation (Desktop) -->
+    <div
+      class="nav-menu flex items-center gap-1 flex-1 justify-center"
+      [class.nav-menu-expanded]="expanded"
+      [class.nav-menu-collapsed]="!expanded">
+      <ng-container *ngFor="let item of menuItems">
+        <!-- Parent Menu Item without Children -->
+        <div class="relative" *ngIf="!item.hasChildren">
+          <button
+            (click)="item.path && navigateTo(item.path)"
+            class="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+            [class.bg-blue-50]="item.path && isActive(item.path)"
+            [class.text-blue-600]="item.path && isActive(item.path)"
+            [class.text-gray-700]="!(item.path && isActive(item.path))"
+            [class.hover:bg-gray-100]="!(item.path && isActive(item.path))">
+            <i [ngClass]="item.icon" class="text-sm"></i>
+            <span>{{ item.label }}</span>
+          </button>
+        </div>
 
-        <span *ngIf="item.hasChildren && expanded && item.path" class="modern-submenu-toggle" (click)="toggleSubMenu(item.path)">
-          {{ openSubMenus[item.path] ? "▲" : "▼" }}
-        </span>
-      </button>
+        <!-- Parent Menu Item with Dropdown -->
+        <div class="relative dropdown-container" *ngIf="item.hasChildren">
+          <button
+            (click)="toggleSubMenu(item.path!)"
+            class="px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+            [class.bg-blue-50]="item.path && openSubMenus[item.path]"
+            [class.text-blue-600]="item.path && openSubMenus[item.path]"
+            [class.text-gray-700]="!(item.path && openSubMenus[item.path])"
+            [class.hover:bg-gray-100]="!(item.path && openSubMenus[item.path])">
+            <i [ngClass]="item.icon" class="text-sm"></i>
+            <span>{{ item.label }}</span>
+            <i class="pi pi-angle-down text-xs transition-transform" [class.rotate-180]="item.path && openSubMenus[item.path]"></i>
+          </button>
 
-      <ng-container *ngIf="item.path && openSubMenus[item.path] && expanded">
-        <div class="modern-submenu-container">
-          <ng-container *ngFor="let subItem of item.children">
-            <button (click)="
-                subItem.hasChildren
-                  ? ''
-                  : (subItem.path && navigateTo(subItem.path)) 
-              " class="modern-submenu-button" [class.active]="subItem.path && isActive(subItem.path)">
-              <span class="modern-menu-icon" *ngIf="subItem.icon">
-                <i [ngClass]="subItem.icon"></i>
-              </span>
-              <span class="modern-menu-label">{{ subItem.label }}</span>
-              <span *ngIf="subItem.hasChildren && subItem.path" class="modern-submenu-toggle" (click)="toggleSubMenu(subItem.path)">
-                {{ openSubMenus[subItem.path] ? "▲" : "▼" }}
-              </span>
-            </button>
+          <!-- Dropdown Menu -->
+          <div
+            *ngIf="item.path && openSubMenus[item.path]"
+            class="dropdown-menu absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[200px] py-1 z-50">
+            <ng-container *ngFor="let subItem of item.children">
+              <!-- Submenu Item without Children -->
+              <button
+                *ngIf="!subItem.hasChildren"
+                (click)="subItem.path && navigateTo(subItem.path)"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2 transition-colors"
+                [class.bg-blue-50]="subItem.path && isActive(subItem.path)"
+                [class.text-blue-600]="subItem.path && isActive(subItem.path)">
+                <i [ngClass]="subItem.icon" class="text-xs"></i>
+                <span>{{ subItem.label }}</span>
+              </button>
 
-            <div *ngIf="subItem.hasChildren && subItem.path && openSubMenus[subItem.path]"
-              class="modern-nested-submenu-container">
-              <ng-container *ngFor="let nested of subItem.children">
-                <button (click)="nested.path && navigateTo(nested.path)"
-                  class="modern-submenu-button modern-nested-item" [class.active]="nested.path && isActive(nested.path)">
-                  <span class="modern-menu-icon" *ngIf="nested.icon">
-                    <i [ngClass]="nested.icon"></i>
-                  </span>
-                  <span class="modern-menu-label">{{ nested.label }}</span>
+              <!-- Submenu Item with Nested Children -->
+              <div *ngIf="subItem.hasChildren" class="relative">
+                <button
+                  (click)="toggleSubMenu(subItem.path!)"
+                  class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-between transition-colors">
+                  <div class="flex items-center gap-2">
+                    <i [ngClass]="subItem.icon" class="text-xs"></i>
+                    <span>{{ subItem.label }}</span>
+                  </div>
+                  <i class="pi pi-angle-right text-xs"></i>
                 </button>
-              </ng-container>
-            </div>
-          </ng-container>
+
+                <!-- Nested Submenu -->
+                <div
+                  *ngIf="subItem.path && openSubMenus[subItem.path]"
+                  class="pl-4 nested-submenu">
+                  <button
+                    *ngFor="let nested of subItem.children"
+                    (click)="nested.path && navigateTo(nested.path)"
+                    class="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 flex items-center gap-2 transition-colors"
+                    [class.bg-blue-50]="nested.path && isActive(nested.path)"
+                    [class.text-blue-600]="nested.path && isActive(nested.path)">
+                    <i [ngClass]="nested.icon" class="text-xs"></i>
+                    <span>{{ nested.label }}</span>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          </div>
         </div>
       </ng-container>
-    </ng-container>
-  </div>
+    </div>
 
-  <div class="modern-sidebar-footer absolute bottom-0 left-0 right-0">
-    <!-- Logout Button moved to top of footer -->
-    <button (click)="showLogoutDialog=true" class="modern-menu-button modern-logout-button mb-2">
-      <span class="modern-menu-icon">
+    <!-- Right Side: Logout -->
+    <div class="flex items-center gap-3">
+      <!-- Logout Button -->
+      <button
+        (click)="showLogoutDialog=true"
+        class="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center gap-2">
         <i class="fa-solid fa-sign-out-alt"></i>
-      </span>
-      <span *ngIf="expanded" class="modern-menu-label">
-        Logout
-      </span>
-    </button>
-    
-    <!-- User Information Section moved to bottom -->
-    <div  class="user-info-section border-t border-green-200 modern-menu-button">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
-          <i class="fa-solid fa-user text-white text-sm"></i>
-        </div>
-        <div *ngIf="expanded" class="mt-3">
-          <p class="text-sm font-medium text-white truncate">
-            {{ currentUser?.first_name || 'User' }} <br>
-            {{ currentUser?.user_roles?.[0]?.role || 'Admin' }}
-          </p>
-        </div>
-      </div>
+        <span class="hidden sm:inline">Logout</span>
+      </button>
     </div>
   </div>
-  <!-- <div class="modern-sidebar-footer absolute bottom-0 left-0 right-0">
-      <button (click)="logOut()" class="modern-menu-button modern-logout-button">
-      <span class="modern-menu-icon">
-        <i class="fa-solid fa-sign-out-alt"></i>
-      </span>
-      <span *ngIf="expanded" class="modern-menu-label">
-        Logout
-      </span>
-    </button>
-  </div> -->
-</aside>
+</nav>
 
 
 <!-- Logout Confirmation Dialog -->
-<div *ngIf="showLogoutDialog" class="fixed inset-0   flex items-center justify-center z-50 bg-gray-100/70">
-  <div class="bg-green-50 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-100 ">
-    <!-- Header Section -->
+<div *ngIf="showLogoutDialog" class="fixed inset-0 flex items-center justify-center z-50 bg-gray-100/70">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
     <div class="mb-6 flex flex-col items-center">
-      <div class="w-16 h-16 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-        <i class="fa-solid fa-sign-out-alt text-emerald-700 text-2xl"></i>
+      <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+        <i class="fa-solid fa-sign-out-alt text-red-600 text-2xl"></i>
       </div>
       <h3 class="text-xl font-bold text-gray-900 mb-2">Confirm Logout</h3>
     </div>
-    <p class="text-gray-600 leading-relaxed">Are you sure you want to sign out of your account? You'll need to log in again to access your dashboard.</p>
-    
-    <!-- Action Buttons -->
-    <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
-      <span 
-        (click)="showLogoutDialog = false" 
-        class="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 cursor-pointer">
+    <p class="text-gray-600 leading-relaxed mb-6">Are you sure you want to sign out of your account? You'll need to log in again to access your dashboard.</p>
+
+    <div class="flex gap-3 justify-end">
+      <button
+        (click)="showLogoutDialog = false"
+        class="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all">
         <i class="fa-solid fa-times mr-2"></i>
         Cancel
-      </span>
-      <span 
-        (click)="logOut()" 
-        class="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 active:from-red-800 active:to-red-900 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-lg cursor-pointer">
+      </button>
+      <button
+        (click)="logOut()"
+        class="px-6 py-3 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all">
         <i class="fa-solid fa-sign-out-alt mr-2"></i>
         Logout
-      </span>
+      </button>
     </div>
   </div>
 </div>

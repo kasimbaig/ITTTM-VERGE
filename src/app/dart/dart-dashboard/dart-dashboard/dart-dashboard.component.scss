@@ -1,33 +1,12 @@
-/* ========================================
-   DART DASHBOARD - CYBER SECURITY THEME
-   Dark Mode with Neon Green/Cyan Accents
-   ======================================== */
-
 /* --- Base Container & Typography --- */
 .command-container {
-  background: linear-gradient(180deg, #0a0e1a 0%, #0f1419 100%);
-  font-family: 'Courier New', 'Roboto Mono', monospace;
+  background: var(--bg-secondary);
+  font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   padding: 1.5rem;
   min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.command-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    repeating-linear-gradient(90deg, rgba(0, 255, 133, 0.03) 0px, transparent 1px, transparent 40px),
-    repeating-linear-gradient(0deg, rgba(0, 255, 133, 0.03) 0px, transparent 1px, transparent 40px);
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* --- Header Styles --- */
@@ -37,33 +16,11 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  background: linear-gradient(135deg, #0f1a1f 0%, #1a2332 100%);
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
   padding: 1rem 1.5rem;
   border-radius: 12px;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.6),
-    0 0 40px rgba(0, 255, 133, 0.15),
-    inset 0 1px 0 rgba(0, 255, 133, 0.2);
-  border: 2px solid rgba(0, 255, 133, 0.3);
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.command-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 133, 0.1), transparent);
-  animation: scanline 3s infinite;
-}
-
-@keyframes scanline {
-  0% { left: -100%; }
-  100% { left: 200%; }
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
 }
 
 .command-title-block {
@@ -71,56 +28,26 @@
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
-  position: relative;
-  z-index: 2;
 }
 
 .command-title-block i {
   font-size: 1.5rem;
-  color: #00ff85;
-  text-shadow: 
-    0 0 10px #00ff85,
-    0 0 20px #00ff85,
-    0 0 30px rgba(0, 255, 133, 0.5);
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { 
-    opacity: 1;
-    text-shadow: 
-      0 0 10px #00ff85,
-      0 0 20px #00ff85,
-      0 0 30px rgba(0, 255, 133, 0.5);
-  }
-  50% { 
-    opacity: 0.8;
-    text-shadow: 
-      0 0 5px #00ff85,
-      0 0 10px #00ff85,
-      0 0 15px rgba(0, 255, 133, 0.3);
-  }
+  color: var(--text-white);
+  text-shadow: 0 2px 4px var(--shadow-dark);
 }
 
 .command-title-block h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: #00ff85;
-  font-weight: 700;
-  text-shadow: 
-    0 0 10px rgba(0, 255, 133, 0.6),
-    0 2px 4px rgba(0, 0, 0, 0.8);
-  letter-spacing: 1.5px;
-  font-family: 'Courier New', monospace;
-  text-transform: uppercase;
+  color: var(--text-white);
+  font-weight: 600;
+  text-shadow: 0 2px 4px var(--shadow-dark);
 }
 
 .command-title-block p {
   margin: 0;
   font-size: 0.75rem;
-  color: #00d9ff;
-  text-shadow: 0 0 5px rgba(0, 217, 255, 0.5);
-  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .command-actions {
@@ -128,85 +55,62 @@
   gap: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
-  position: relative;
-  z-index: 2;
 }
 
-/* --- Filter Dropdown Styling - CYBER THEME --- */
+/* --- Filter Dropdown Styling --- */
 :host ::ng-deep .filter-dropdown .p-dropdown {
   min-width: 200px;
-  background: rgba(15, 26, 31, 0.9);
-  border: 2px solid rgba(0, 255, 133, 0.3);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.6),
-    0 0 20px rgba(0, 255, 133, 0.1),
-    inset 0 1px 0 rgba(0, 255, 133, 0.1);
+  box-shadow: 0 2px 8px var(--shadow-light);
   transition: all 0.3s ease;
-  font-family: 'Courier New', monospace;
-  backdrop-filter: blur(10px);
+  font-family: 'Poppins', sans-serif;
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown:hover {
-  border-color: #00ff85;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.8),
-    0 0 30px rgba(0, 255, 133, 0.3);
-  background: rgba(15, 26, 31, 1);
+  border-color: var(--accent-blue);
+  box-shadow: 0 4px 12px var(--shadow-medium);
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-label {
-  color: #00ff85;
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 500;
   font-size: 0.9rem;
   padding: 0.75rem 1rem;
-  text-shadow: 0 0 5px rgba(0, 255, 133, 0.3);
-  letter-spacing: 0.5px;
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-label.p-placeholder {
-  color: #00d9ff;
-  text-shadow: 0 0 5px rgba(0, 217, 255, 0.3);
+  color: var(--text-secondary);
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-trigger {
-  color: #00ff85;
+  color: var(--text-secondary);
   padding: 0.75rem;
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-panel {
-  background: rgba(10, 14, 26, 0.98);
-  border: 2px solid rgba(0, 255, 133, 0.4);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.9),
-    0 0 40px rgba(0, 255, 133, 0.2);
+  box-shadow: 0 4px 20px var(--shadow-medium);
   z-index: 999999 !important;
-  backdrop-filter: blur(10px);
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-item {
-  color: #b0f0d0;
+  color: var(--text-primary);
   transition: all 0.3s ease;
   padding: 0.75rem 1rem;
   font-size: 0.9rem;
-  font-family: 'Courier New', monospace;
-  border-bottom: 1px solid rgba(0, 255, 133, 0.1);
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-item:hover {
-  background: rgba(0, 255, 133, 0.15);
-  color: #00ff85;
-  text-shadow: 0 0 5px rgba(0, 255, 133, 0.5);
-  border-left: 3px solid #00ff85;
+  background: var(--accent-light);
 }
 
 :host ::ng-deep .filter-dropdown .p-dropdown-item.p-highlight {
-  background: linear-gradient(135deg, rgba(0, 255, 133, 0.25) 0%, rgba(0, 217, 255, 0.25) 100%);
-  color: #00ff85;
-  text-shadow: 0 0 10px rgba(0, 255, 133, 0.6);
-  border-left: 3px solid #00ff85;
-  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  color: var(--text-white);
 }
 
 /* --- KPI Cards Grid --- */
@@ -214,84 +118,48 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
-  position: relative;
-  z-index: 1;
 }
 
-/* --- Charts Section - CYBER THEME --- */
+/* --- Charts Section --- */
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 1.75rem;
   margin-top: 0;
-  position: relative;
-  z-index: 1;
 }
 
 .chart-container {
-  background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 25, 35, 0.95) 100%);
+  background: var(--bg-primary);
   border-radius: 12px;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(0, 255, 133, 0.1),
-    inset 0 1px 0 rgba(0, 255, 133, 0.15);
-  border: 2px solid rgba(0, 255, 133, 0.25);
+  // box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
   padding: 1.75rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   min-height: 400px;
   position: relative;
-  backdrop-filter: blur(10px);
-  overflow: hidden;
-}
-
-.chart-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #00ff85, transparent);
-  animation: chart-glow 2s ease-in-out infinite;
-}
-
-@keyframes chart-glow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
 }
 
 .chart-container:hover {
-  transform: translateY(-3px);
-  box-shadow: 
-    0 8px 30px rgba(0, 0, 0, 0.9),
-    0 0 50px rgba(0, 255, 133, 0.3);
-  border-color: #00ff85;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px var(--shadow-medium);
 }
 
-/* Chart Header Layout - Cyber Theme */
+/* Chart Header Layout - EXTREMELY AGGRESSIVE FIX for overlapping */
 .chart-container h3 {
   font-size: 1.4rem;
-  color: #00ff85;
+  color: var(--text-primary);
   margin: 0 0 1rem 0;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   width: 100%;
-  padding-right: 220px;
+  padding-right: 220px; /* EXTREMELY large space for reset button */
   box-sizing: border-box;
   line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-shadow: 
-    0 0 10px rgba(0, 255, 133, 0.6),
-    0 2px 4px rgba(0, 0, 0, 0.8);
-  position: relative;
-  z-index: 2;
 }
 
 /* Chart Header with Button Layout - EXTREMELY FIXED */
@@ -351,7 +219,7 @@
   max-height: 500px;
 }
 
-/* Reset Zoom Button - Cyber Theme */
+/* Reset Zoom Button Positioning - EXTREMELY FIXED */
 .reset-zoom-button {
   position: absolute;
   top: 1.25rem;
@@ -359,128 +227,80 @@
   z-index: 10;
   font-size: 0.8rem;
   padding: 0.3rem 0.6rem;
-  background: rgba(0, 255, 133, 0.1) !important;
-  border: 2px solid rgba(0, 255, 133, 0.4) !important;
-  color: #00ff85 !important;
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--border-light) !important;
+  color: var(--text-primary) !important;
   border-radius: 6px !important;
   transition: all 0.3s ease;
-  min-width: 130px;
+  min-width: 130px; /* Larger button */
   white-space: nowrap;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.6),
-    0 0 15px rgba(0, 255, 133, 0.2);
-  font-family: 'Courier New', monospace;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 5px rgba(0, 255, 133, 0.5);
+  box-shadow: 0 2px 4px var(--shadow-light);
 }
 
 .reset-zoom-button:hover {
-  background: rgba(0, 255, 133, 0.25) !important;
-  border-color: #00ff85 !important;
-  box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.8),
-    0 0 25px rgba(0, 255, 133, 0.4) !important;
-  transform: translateY(-2px);
+  background: var(--accent-light) !important;
+  border-color: var(--accent-blue) !important;
+  box-shadow: 0 2px 8px var(--shadow-medium) !important;
 }
 
-/* --- Drill-down Dialog - Cyber Theme --- */
+/* --- Drill-down Dialog --- */
 :host ::ng-deep .p-dialog {
   border-radius: 12px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.9),
-    0 0 60px rgba(0, 255, 133, 0.3);
-  border: 2px solid rgba(0, 255, 133, 0.4);
-  background: rgba(10, 14, 26, 0.98);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px var(--shadow-medium);
 }
 
 :host ::ng-deep .p-dialog .p-dialog-header {
-  background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 25, 35, 0.95) 100%);
-  color: #00ff85;
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+  color: var(--text-white);
   padding: 1.25rem 2rem;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.1rem;
-  border-bottom: 2px solid rgba(0, 255, 133, 0.3);
-  font-family: 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-shadow: 0 0 10px rgba(0, 255, 133, 0.6);
 }
 
 :host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
   font-size: 1.35rem;
   font-weight: 700;
-  color: #00ff85;
 }
 
 :host ::ng-deep .p-dialog .p-dialog-content {
   padding: 1.5rem 2rem;
-  background: rgba(10, 14, 26, 0.95);
 }
 
 :host ::ng-deep .p-table {
   font-size: 0.95rem;
-  font-family: 'Courier New', monospace;
-  background: transparent;
 }
 
 :host ::ng-deep .p-table .p-sortable-column {
-  font-weight: 700;
-  color: #00ff85;
-  background: rgba(15, 25, 35, 0.8);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
   padding: 1rem 1.25rem;
-  border-bottom: 2px solid rgba(0, 255, 133, 0.4);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 0 0 5px rgba(0, 255, 133, 0.4);
+  border-bottom: 2px solid var(--primary-gradient-start);
 }
 
 :host ::ng-deep .p-table .p-sortable-column:hover {
-  background: rgba(0, 255, 133, 0.15);
-  color: #00ff85;
+  background: var(--accent-light);
 }
 
 :host ::ng-deep .p-table .p-datatable-tbody>tr>td {
   padding: 0.9rem 1.25rem;
-  border-bottom: 1px solid rgba(0, 255, 133, 0.15);
-  color: #b0f0d0;
+  border-bottom: 1px solid var(--border-light);
 }
 
 :host ::ng-deep .p-table .p-datatable-tbody>tr:nth-child(even) {
-  background: rgba(15, 25, 35, 0.5);
-}
-
-:host ::ng-deep .p-table .p-datatable-tbody>tr:hover {
-  background: rgba(0, 255, 133, 0.1);
-  border-left: 3px solid #00ff85;
+  background: var(--bg-tertiary);
 }
 
 :host ::ng-deep .p-table .p-paginator {
-  background: rgba(15, 25, 35, 0.8);
-  border-top: 2px solid rgba(0, 255, 133, 0.3);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
   padding: 0.75rem 1.25rem;
-  color: #00ff85;
-}
-
-:host ::ng-deep .p-button-secondary {
-  background: rgba(0, 255, 133, 0.1) !important;
-  border: 2px solid rgba(0, 255, 133, 0.4) !important;
-  color: #00ff85 !important;
-  text-shadow: 0 0 5px rgba(0, 255, 133, 0.5);
-  font-family: 'Courier New', monospace;
-  font-weight: 600;
-}
-
-:host ::ng-deep .p-button-secondary:hover {
-  background: rgba(0, 255, 133, 0.25) !important;
-  box-shadow: 0 0 20px rgba(0, 255, 133, 0.4) !important;
 }
 
 /* --- Responsive Adjustments --- */

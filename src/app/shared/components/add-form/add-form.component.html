@@ -72,6 +72,7 @@
                 <input
                   [id]="field.key"
                   type="checkbox"
+                  (change)="handleCheckboxChange($event, field.key)"
                   [formControlName]="field.key"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 rounded focus:ring-blue-500"
                 />
@@ -232,6 +233,7 @@
                 <input
                   [id]="field.key"
                   type="checkbox"
+                  (change)="handleCheckboxChange($event, field.key)"
                   [formControlName]="field.key"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-500 rounded focus:ring-blue-500"
                 />

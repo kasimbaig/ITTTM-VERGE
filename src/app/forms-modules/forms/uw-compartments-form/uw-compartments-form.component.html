@@ -56,58 +56,59 @@
           </div>
         </div>
         
-        <div class="p-6">
-          <!-- Inspection Details in Single Row -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
-                U/W COMPARTMENTS INSPECTION REPORT - INS <span class="text-red-500">*</span>
-              </label>
-              <select 
-                formControlName="inspectionReport"
-                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                [class.border-red-500]="uwCompartmentsForm.get('inspectionReport')?.invalid && uwCompartmentsForm.get('inspectionReport')?.touched"
-                [disabled]="loading">
-                <option value="">--Select Ship--</option>
-                <option *ngFor="let ship of ships" [value]="ship.id">
-                  {{ ship.name }}
-                </option>
-              </select>
-              <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
-            </div>
-            
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
-                DATE OF INSPECTION <span class="text-red-500">*</span>
-              </label>
-              <input 
-                type="date"
-                formControlName="dateOfInspection"
-                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                [class.border-red-500]="uwCompartmentsForm.get('dateOfInspection')?.invalid && uwCompartmentsForm.get('dateOfInspection')?.touched">
-            </div>
+      </div>
+      <div id="printContainer">
+      <div class="p-6 bg-white shadow-sm border border-gray-200">
+        <!-- Inspection Details in Single Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">
+              U/W COMPARTMENTS INSPECTION REPORT - INS <span class="text-red-500">*</span>
+            </label>
+            <select 
+              formControlName="inspectionReport"
+              class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="uwCompartmentsForm.get('inspectionReport')?.invalid && uwCompartmentsForm.get('inspectionReport')?.touched"
+              [disabled]="loading">
+              <option value="">--Select Ship--</option>
+              <option *ngFor="let ship of ships" [value]="ship.id">
+                {{ ship.name }}
+              </option>
+            </select>
+            <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
           </div>
+          
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">
+              DATE OF INSPECTION <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="date"
+              formControlName="dateOfInspection"
+              class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="uwCompartmentsForm.get('dateOfInspection')?.invalid && uwCompartmentsForm.get('dateOfInspection')?.touched">
+          </div>
+        </div>
 
-          <!-- Main Inspection Table -->
-          <div class="mb-4">
-            <app-dynamic-table
-              title=""
-              [columns]="inspectionColumns"
-              [formArray]="inspectionObservations"
-              [minRows]="0"
-              [maxRows]="20"
-              [showRowCounter]="true"
-              [showLabel]="false"
-              [createRowFunction]="createInspectionRow.bind(this)"
-              (rowCountChange)="updateInspectionRows($event)">
-            </app-dynamic-table>
-          </div>
+        <!-- Main Inspection Table -->
+        <div class="mb-4">
+          <app-dynamic-table
+            title=""
+            [columns]="inspectionColumns"
+            [formArray]="inspectionObservations"
+            [minRows]="0"
+            [maxRows]="20"
+            [showRowCounter]="true"
+            [showLabel]="false"
+            [createRowFunction]="createInspectionRow.bind(this)"
+            (rowCountChange)="updateInspectionRows($event)">
+          </app-dynamic-table>
         </div>
       </div>
 
       <!-- Summary of Inspection Section -->
-      <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+      <div class="bg-white shadow-sm border border-gray-200 ">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue heading">
           <h2 class="text-lg font-semibold text-white">SUMMARY OF INSPECTION OF U/W COMPARTMENTS AND TANKS</h2>
         </div>
         
@@ -117,7 +118,7 @@
             <h3 class="text-lg font-semibold text-black mb-4">INTERNAL U/W COMPARTMENTS</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (a) Total Number of U/W Compartments <span class="text-red-500">*</span>
                 </label>
@@ -128,7 +129,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('totalUwCompartments')?.invalid && uwCompartmentsForm.get('totalUwCompartments')?.touched">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (b) No. of U/W Compartments offered <span class="text-red-500">*</span>
                 </label>
@@ -139,7 +140,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('offeredUwCompartments')?.invalid && uwCompartmentsForm.get('offeredUwCompartments')?.touched">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (c) No. of Compartments inspected <span class="text-red-500">*</span>
                 </label>
@@ -150,7 +151,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('inspectedUwCompartments')?.invalid && uwCompartmentsForm.get('inspectedUwCompartments')?.touched ? '#ef4444' : '#9ca3af'">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (d) Total number of Compartments-SAT/ SAT <span class="text-red-500">**</span>
                 </label>
@@ -160,7 +161,7 @@
                   class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (e) Total number of Compartments-UNSAT <span class="text-red-500">*</span>
                 </label>
@@ -178,7 +179,7 @@
             <h3 class="text-lg font-semibold text-black mb-4">TANKS</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (a) Total Number of tanks <span class="text-red-500">*</span>
                 </label>
@@ -189,7 +190,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('totalTanks')?.invalid && uwCompartmentsForm.get('totalTanks')?.touched ? '#ef4444' : '#9ca3af'">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (b) No. of tanks offered <span class="text-red-500">*</span>
                 </label>
@@ -200,7 +201,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('offeredTanks')?.invalid && uwCompartmentsForm.get('offeredTanks')?.touched ? '#ef4444' : '#9ca3af'">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (c) No. of tanks inspected <span class="text-red-500">*</span>
                 </label>
@@ -211,7 +212,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('inspectedTanks')?.invalid && uwCompartmentsForm.get('inspectedTanks')?.touched ? '#ef4444' : '#9ca3af'">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (d) Total number of tanks-SAT/ SAT <span class="text-red-500">**</span>
                 </label>
@@ -221,7 +222,7 @@
                   class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
               </div>
               
-              <div class="space-y-2">
+                <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (e) Total number of tanks-UNSAT <span class="text-red-500">*</span>
                 </label>
@@ -232,7 +233,7 @@
                   [class.border-red-500]="uwCompartmentsForm.get('unsatTanks')?.invalid && uwCompartmentsForm.get('unsatTanks')?.touched ? '#ef4444' : '#9ca3af'">
               </div>
               
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-sm font-medium text-gray-700">
                   (f) Total number of tanks-SAT <span class="text-red-500">**</span>
                 </label>
@@ -245,7 +246,7 @@
           </div>
         </div>
       </div>
-
+      </div>
       <!-- Approves Checkbox Section -->
   
 
@@ -277,6 +278,19 @@
               class="px-4 py-2 bg-green-500 text-white font-medium rounded border-none cursor-pointer hover:bg-green-600 transition-colors duration-200">
               <i class="pi pi-check mr-2"></i> Save
             </button>
+            <button  
+            printSectionId="printContainer"	[openNewTab]="true"
+            ngxPrint  styleSheetFile="assets/print.css"
+            class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+            >
+            <i class="pi pi-file-pdf"></i>
+            PDF
+          </button>
+            <button (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-blue-600 text-white  hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+            >
+            <i class="pi pi-save"></i>
+            Save Version
+          </button>
           </div>
         </div>
       </div>
@@ -304,13 +318,31 @@
 
 <!-- Route Config Modal Placeholder -->
 <div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
-    <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
-    <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
-    <button 
-      (click)="showRouteConfigModal = false"
-      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-      Close
-    </button>
+  <div class="bg-white rounded-lg shadow-xl w-[450px] mx-4 mb-4">
+    <div class="flex items-center justify-between bg-[#04308f] text-white p-2 rounded-t-lg">
+      <h3 class="text-lg font-semibold mb-4">Save Report Version</h3>
+      <button 
+          (click)="showRouteConfigModal = false"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <i class="pi pi-times"></i>
+      </button>
+    </div>
+    <div class="m-4">
+      <div class="flex items-center justify-between p-4">
+        <input 
+          type="text" 
+          class="flex-grow px-3 py-2 border border-gray-400 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter Version Name Here"
+          [(ngModel)]="versionName"
+          name="versionName" />
+       
+      </div>
+      <button 
+      type="button"
+      class="px-6 py-2 mb-2 bg-blue-500 text-white font-medium float-end hover:bg-blue-600 transition-colors duration-200"
+      (click)="onSaveVersion()"
+      ><i class="pi pi-save"></i> Save Version</button>
+    </div>
+  
   </div>
 </div>

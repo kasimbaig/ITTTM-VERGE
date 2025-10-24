@@ -69,12 +69,12 @@ export class SidebarComponent implements OnChanges {
     //   path: '/sfd',
     //   hasChildren: false,
     // },
-    {
-      icon: 'fa-solid fa-anchor',
-      label: 'SRAR',
-      path: '/srar',
-      hasChildren: false,
-    },
+    // {
+    //   icon: 'fa-solid fa-anchor',
+    //   label: 'SRAR',
+    //   path: '/srar',
+    //   hasChildren: false,
+    // },
 
     // {
     //   icon: 'fa-solid fa-calendar',
@@ -83,13 +83,13 @@ export class SidebarComponent implements OnChanges {
     //   hasChildren: false,
     //  
     // },
-    {
-      icon: 'fa-solid fa-ship',
-      label: 'DART',
-      path: '/dart',
-      hasChildren: false,
+    // {
+    //   icon: 'fa-solid fa-ship',
+    //   label: 'DART',
+    //   path: '/dart',
+    //   hasChildren: false,
      
-    },
+    // },
     {
       icon: 'fa-solid fa-bolt', // Icon for ETMA
       label: 'ETMA',

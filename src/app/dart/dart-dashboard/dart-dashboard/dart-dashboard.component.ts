@@ -168,6 +168,26 @@ export class DartDashboardComponent implements OnInit {
   drilldownTableData: any[] = [];
   drilldownTableCols: any[] = [];
 
+  // --- SRAR KPI Data ---
+  // Mock data for SRAR KPI calculations
+  private srarShipData = [
+    { shipId: 'INS001', shipName: 'INS Vikrant', totalRHAtSea: 1250, avgRHAtSea: 24.5, maxRHAtSea: 28.0, operational: true },
+    { shipId: 'INS002', shipName: 'INS Delhi', totalRHAtSea: 1180, avgRHAtSea: 22.7, maxRHAtSea: 32.0, operational: true },
+    { shipId: 'INS003', shipName: 'INS Mumbai', totalRHAtSea: 1150, avgRHAtSea: 21.7, maxRHAtSea: 32.0, operational: true },
+    { shipId: 'INS004', shipName: 'INS Kolkata', totalRHAtSea: 1200, avgRHAtSea: 23.3, maxRHAtSea: 32.0, operational: true },
+    { shipId: 'INS005', shipName: 'INS Shivalik', totalRHAtSea: 980, avgRHAtSea: 19.3, maxRHAtSea: 30.0, operational: true },
+    { shipId: 'INS006', shipName: 'INS Satpura', totalRHAtSea: 1020, avgRHAtSea: 20.7, maxRHAtSea: 30.0, operational: true },
+    { shipId: 'INS007', shipName: 'INS Sahyadri', totalRHAtSea: 990, avgRHAtSea: 19.7, maxRHAtSea: 30.0, operational: true },
+    { shipId: 'INS008', shipName: 'INS Kamorta', totalRHAtSea: 820, avgRHAtSea: 17.3, maxRHAtSea: 25.0, operational: true },
+    { shipId: 'INS009', shipName: 'INS Kadmatt', totalRHAtSea: 840, avgRHAtSea: 18.0, maxRHAtSea: 25.0, operational: true },
+    { shipId: 'INS010', shipName: 'INS Kiltan', totalRHAtSea: 810, avgRHAtSea: 17.0, maxRHAtSea: 25.0, operational: true },
+    { shipId: 'INS011', shipName: 'INS Chennai', totalRHAtSea: 1100, avgRHAtSea: 21.2, maxRHAtSea: 30.0, operational: false },
+    { shipId: 'INS012', shipName: 'INS Delhi', totalRHAtSea: 1080, avgRHAtSea: 20.8, maxRHAtSea: 32.0, operational: false },
+    { shipId: 'INS013', shipName: 'INS Mumbai', totalRHAtSea: 1050, avgRHAtSea: 20.2, maxRHAtSea: 32.0, operational: false },
+    { shipId: 'INS014', shipName: 'INS Kolkata', totalRHAtSea: 1120, avgRHAtSea: 21.5, maxRHAtSea: 32.0, operational: false },
+    { shipId: 'INS015', shipName: 'INS Shivalik', totalRHAtSea: 920, avgRHAtSea: 17.7, maxRHAtSea: 30.0, operational: false }
+  ];
+
   // --- Mock Data Store for DART ---
   private mockDatabase: DartDataTypeMap = {
     defects: [
@@ -915,5 +935,29 @@ export class DartDashboardComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  // --- SRAR KPI Methods ---
+  getTotalShips(): number {
+    return this.srarShipData.length;
+  }
+
+  getTotalRHAtSea(): string {
+    const total = this.srarShipData.reduce((sum, ship) => sum + ship.totalRHAtSea, 0);
+    return total.toFixed(0);
+  }
+
+  getAvgRHAtSea(): string {
+    const totalAvg = this.srarShipData.reduce((sum, ship) => sum + ship.avgRHAtSea, 0);
+    return (totalAvg / this.srarShipData.length).toFixed(1);
+  }
+
+  getMaxRunningHours(): string {
+    const maxRh = Math.max(...this.srarShipData.map(ship => ship.maxRHAtSea));
+    return maxRh.toFixed(1);
+  }
+
+  getOperationalCount(): number {
+    return this.srarShipData.filter(ship => ship.operational).length;
   }
 }

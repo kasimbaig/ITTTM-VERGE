@@ -1,6 +1,6 @@
 <div class="setup-container">
   <!-- Header Section -->
-  <div class="setup-component-header">
+  <div class="setup-component-header mt-10">
     <div class="header-left">
       <div class="header-icon">
         <i class="pi pi-cog"></i>
@@ -19,31 +19,33 @@
     </div>
   </div>
 
-  <!-- Tiles Grid -->
-  <div class="tiles-grid">
-    <div 
-      *ngFor="let tile of setupTiles" 
-      class="setup-tile"
+  <!-- Tiles List -->
+  <div class="tiles-list">
+    <div
+      *ngFor="let tile of setupTiles"
+      class="setup-tile-list"
       [ngClass]="tile.borderColor"
     >
-      <div class="tile-icon">
-        <i [ngClass]="tile.icon"></i>
+      <div class="tile-left">
+        <div class="tile-icon">
+          <i [ngClass]="tile.icon"></i>
+        </div>
+        <div class="tile-content">
+          <h3 class="tile-title">{{ tile.title }}</h3>
+          <p class="tile-description">{{ tile.description }}</p>
+        </div>
       </div>
-      <div class="tile-content">
-        <h3 class="tile-title">{{ tile.title }}</h3>
-        <p class="tile-description">{{ tile.description }}</p>
-      </div>
-      
-      <!-- Hover Action Buttons -->
+
+      <!-- Action Buttons -->
       <div class="tile-actions">
-        <button 
+        <button
           class="action-btn view-btn"
           (click)="viewDetails(tile.route)"
           title="View Details">
           <i class="pi pi-eye"></i>
           <span>View Details</span>
         </button>
-        <button 
+        <button
           class="action-btn add-btn"
           (click)="addNew(tile.route)"
           title="Add New">

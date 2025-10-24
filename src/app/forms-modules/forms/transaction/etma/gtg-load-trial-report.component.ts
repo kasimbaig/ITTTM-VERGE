@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, FormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 
@@ -17,8 +17,8 @@ import { ToastComponent } from '../../../../shared/components/toast/toast.compon
 import { RouteConfigComponent } from '../../../../route-config/route-config.component';
 
 import { RouteConfigPopupComponent, RouteConfigData } from '../../../../shared/components/route-config-popup/route-config-popup.component';
-
-
+import { NgxPrintModule } from 'ngx-print';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 @Component({
 
@@ -26,7 +26,7 @@ import { RouteConfigPopupComponent, RouteConfigData } from '../../../../shared/c
 
   standalone: true,
 
-  imports: [CommonModule, ReactiveFormsModule, DialogModule, ToastComponent, RouteConfigComponent, RouteConfigPopupComponent],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule, DialogModule, ToastComponent, RouteConfigComponent, RouteConfigPopupComponent,NgxPrintModule,QRCodeComponent,FormsModule],
 
   templateUrl: './gtg-load-trial-report.component.html',
 
@@ -35,6 +35,7 @@ import { RouteConfigPopupComponent, RouteConfigData } from '../../../../shared/c
 })
 
 export class GtgLoadTrialReportComponent implements OnInit, OnChanges {
+  @ViewChild('printContainer', { static: false }) printContainer!: ElementRef;
 
   @Input() isEditMode: boolean = false;
   @Input() id: number | undefined = undefined;
@@ -68,7 +69,7 @@ export class GtgLoadTrialReportComponent implements OnInit, OnChanges {
   selectedShipId: number | null = null;
 
   isLoadingShips: boolean = false;
-
+  versionName='';
   
 
   // Equipment properties
@@ -92,14 +93,14 @@ export class GtgLoadTrialReportComponent implements OnInit, OnChanges {
   userInitiatedAction = false; // Track if user initiated the action
 
   isLoadingFormData = false; // Track if we're currently loading form data
-
+  signature: any = {};
 
 
   constructor(
 
     private fb: FormBuilder,
 
-    private apiService: ApiService,
+    public apiService: ApiService,
 
     private toastService: ToastService
 
@@ -115,8 +116,6 @@ export class GtgLoadTrialReportComponent implements OnInit, OnChanges {
 
     this.loadEquipments();
 
-    
-
     // Set isAddMode based on whether reportData exists
 
     this.isAddMode = !this.reportData || !this.reportData.id;
@@ -124,7 +123,8 @@ export class GtgLoadTrialReportComponent implements OnInit, OnChanges {
 
     this.gtgForm.patchValue(this.reportData);
 
-    
+    this.signature = this.apiService.getData();
+    console.log('🚀 GTG FORM SIGNATURE:', this.signature);
 
     // If reportData is already available (edit mode), populate the form
 
@@ -200,7 +200,64 @@ export class GtgLoadTrialReportComponent implements OnInit, OnChanges {
 
   }
 
+  onSaveVersion(){
+    const printContainer = document.getElementById('printContainer');
+    if (!printContainer) {
+      this.toastService.showError('Print container not found');
+      return;
+    }
 
+    const clonedContainer = printContainer.cloneNode(true) as HTMLElement;
+
+    clonedContainer.querySelectorAll('input, textarea, select').forEach((el: any) => {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        // For checkboxes and radio buttons, set the checked attribute
+        el.setAttribute('checked', el.checked);
+      } else if (el.tagName === 'SELECT') {
+        // For select elements, set the selected attribute on the correct option
+        console.log('Select element found:', el.name || el.id, 'Current value:', el.value);
+        el.setAttribute('value', el.value);
+        // Remove selected from all options first
+        el.querySelectorAll('option').forEach((option: any) => {
+          option.removeAttribute('selected');
+        });
+        // Set selected on the option that matches the current value
+        const selectedOption = el.querySelector(`option[value="${el.value}"]`);
+        if (selectedOption) {
+          selectedOption.setAttribute('selected', 'selected');
+          console.log('Selected option set:', selectedOption.textContent);
+        } else {
+          console.log('No matching option found for value:', el.value);
+        }
+      } else {
+        // For text inputs and textareas, set the value attribute
+        el.setAttribute('value', el.value);
+      }
+    });
+
+    const htmlData = clonedContainer.innerHTML;
+    console.log('Captured HTML with values:', htmlData);
+
+    const payload = {
+      version: this.versionName,
+      data: htmlData,
+      sub_module: 5,
+      draft_status: "save",
+    }
+
+    this.apiService.post('etma/version/', payload).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.toastService.showSuccess('Version saved successfully');
+        this.showRouteConfigModal = false;
+        this.versionName = '';
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.toastService.showError('Failed to save version');
+      }
+    });
+  }
 
   private initializeForm() {
 

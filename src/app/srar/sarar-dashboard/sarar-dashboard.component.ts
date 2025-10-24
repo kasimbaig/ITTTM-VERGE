@@ -1,13 +1,21 @@
 // cspell:ignore sarar
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Chart, ChartConfiguration, ChartType } from 'chart.js';
 import { registerables } from 'chart.js';
+import { DartDashboardComponent } from '../../dart/dart-dashboard/dart-dashboard/dart-dashboard.component';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-sarar-dashboard',
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    DartDashboardComponent
+  ],
   templateUrl: './sarar-dashboard.component.html',
   styleUrls: ['./sarar-dashboard.component.css']
 })
@@ -2223,23 +2231,46 @@ export class SararDashboardComponent implements OnInit {
   }
 
   initializeCharts() {
-    this.createAreaChart();
-    this.createBarChart();
-    this.createDonutChart();
-    this.createHorizontalBarChart();
-    this.createShipPerformanceChart();
-    this.createCommandShipsChart();
-    this.createOperationalReadinessChart();
-    this.createShipDetailsCharts();
-    this.createFullPowerTrialsChart();
-    this.createMaterialReadyDetailsChart();
-    this.createFuelConsumptionChart();
-    this.createEngineExploitationFactorChart();
-    this.createDieselGeneratorUtilisationFactorChart();
-    this.createTopRunningHoursChart();
-    this.createAverageRunningHoursChart();
+    // Only create charts for elements that exist in the DOM
+    try {
+      this.createBarChart();
+      this.createDonutChart();
+      this.createHorizontalBarChart();
+      this.createShipPerformanceChart();
+      this.createCommandShipsChart();
+      this.createTopRunningHoursChart();
+      this.createAverageRunningHoursChart();
+      
+      // Only create charts for commented sections if their canvas elements exist
+      if (this.areaChartCanvas?.nativeElement) {
+        this.createAreaChart();
+      }
+      if (this.operationalReadinessCanvas?.nativeElement) {
+        this.createOperationalReadinessChart();
+      }
+      if (this.operationalReadyCanvas?.nativeElement && this.maintenanceCanvas?.nativeElement && this.materialNotReadyCanvas?.nativeElement) {
+        this.createShipDetailsCharts();
+      }
+      if (this.fullPowerTrialsCanvas?.nativeElement) {
+        this.createFullPowerTrialsChart();
+      }
+      if (this.materialReadyDetailsCanvas?.nativeElement) {
+        this.createMaterialReadyDetailsChart();
+      }
+      if (this.fuelConsumptionCanvas?.nativeElement) {
+        this.createFuelConsumptionChart();
+      }
+      if (this.engineExploitationFactorCanvas?.nativeElement) {
+        this.createEngineExploitationFactorChart();
+      }
+      if (this.dieselGeneratorUtilisationFactorCanvas?.nativeElement) {
+        this.createDieselGeneratorUtilisationFactorChart();
+      }
+    } catch (error) {
+      console.warn('Some charts could not be initialized:', error);
+    }
     
-    // Set charts as loaded after all charts are created
+    // Set charts as loaded after all available charts are created
     setTimeout(() => {
       this.chartsLoaded = true;
     }, 200);
@@ -2579,14 +2610,20 @@ export class SararDashboardComponent implements OnInit {
     // Update command ships chart
     this.createCommandShipsChart();
     
-    // Update DGUF chart
-    this.createDieselGeneratorUtilisationFactorChart();
+    // Update DGUF chart only if element exists
+    if (this.dieselGeneratorUtilisationFactorCanvas?.nativeElement) {
+      this.createDieselGeneratorUtilisationFactorChart();
+    }
     
-    // Update operational readiness chart based on tab
-    this.updateOperationalReadinessForTab();
+    // Update operational readiness chart based on tab only if element exists
+    if (this.operationalReadinessCanvas?.nativeElement) {
+      this.updateOperationalReadinessForTab();
+    }
     
-    // Update ship details charts
-    this.createShipDetailsCharts();
+    // Update ship details charts only if elements exist
+    if (this.operationalReadyCanvas?.nativeElement && this.maintenanceCanvas?.nativeElement && this.materialNotReadyCanvas?.nativeElement) {
+      this.createShipDetailsCharts();
+    }
     
     // Update top running hours chart
     this.createTopRunningHoursChart();
@@ -2594,13 +2631,23 @@ export class SararDashboardComponent implements OnInit {
     // Update average running hours chart
     this.createAverageRunningHoursChart();
     
-    // Update all other charts
-    this.updateFleetCompositionForTab();
+    // Update all other charts only if elements exist
+    if (this.areaChartCanvas?.nativeElement) {
+      this.updateFleetCompositionForTab();
+    }
     this.updateShipPerformanceForTab();
-    this.updateFullPowerTrialsForTab();
-    this.updateMaterialReadyDetailsForTab();
-    this.updateFuelConsumptionForTab();
-    this.updateEngineExploitationFactorForTab();
+    if (this.fullPowerTrialsCanvas?.nativeElement) {
+      this.updateFullPowerTrialsForTab();
+    }
+    if (this.materialReadyDetailsCanvas?.nativeElement) {
+      this.updateMaterialReadyDetailsForTab();
+    }
+    if (this.fuelConsumptionCanvas?.nativeElement) {
+      this.updateFuelConsumptionForTab();
+    }
+    if (this.engineExploitationFactorCanvas?.nativeElement) {
+      this.updateEngineExploitationFactorForTab();
+    }
   }
 
   updateOperationalReadinessForTab() {
@@ -3023,13 +3070,17 @@ export class SararDashboardComponent implements OnInit {
   }
 
   onShipChange() {
-    this.createShipDetailsCharts();
+    if (this.operationalReadyCanvas?.nativeElement && this.maintenanceCanvas?.nativeElement && this.materialNotReadyCanvas?.nativeElement) {
+      this.createShipDetailsCharts();
+    }
   }
 
   onDateChange() {
     // In a real application, you would fetch new data based on the date range
     // For now, we'll just update the charts with existing data
-    this.createShipDetailsCharts();
+    if (this.operationalReadyCanvas?.nativeElement && this.maintenanceCanvas?.nativeElement && this.materialNotReadyCanvas?.nativeElement) {
+      this.createShipDetailsCharts();
+    }
   }
 
   createFullPowerTrialsChart() {

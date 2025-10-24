@@ -53,7 +53,8 @@ export class UsersComponent implements OnInit {
     rankName: '',
     first_name: '',
     hrcdf_designation: '',
-    ship: '',
+    vessel: '',
+    unit: '',
     password: '',
     confirm_password: '',
     employee_type: '',
@@ -161,6 +162,7 @@ getRequiredData(){
     establishment: this.apiService.get('master/establishments/?is_dropdown=true'),
     employeeType: this.apiService.get('master/employee-type/?is_dropdown=true'),
     ship: this.apiService.get('master/ship/'),
+    units: this.apiService.get('master/units/'),
     userType: this.apiService.get('access/processes/?is_dropdown=true')
   }).subscribe((data: any) => {
     //console.log('API Responses:', data);
@@ -170,7 +172,8 @@ getRequiredData(){
     this.setResponse(data.departments?.data || data.departments || [],'department');
     this.setResponse(data.establishment?.data || data.establishment || [],'establishment');
     this.setResponse(data.employeeType?.data || data.employeeType || [],'employee_type');
-    this.setResponse(data.ship?.data || data.ship || [],'ship');
+    this.setResponse(data.ship?.data || data.ship || [],'vessel');
+    this.setResponse(data.units?.data || data.units || [],'unit');
     this.setResponse(data.userType?.data || data.userType || [],'process');
     
     //console.log('Updated form config:', this.userFormConfig);
@@ -185,10 +188,11 @@ userFormConfig = [
   // { label: 'User Login', key: 'user_login', type: 'text', required: true, placeholder: 'Enter User Login' },
   { label: 'User Type', key: 'process', type: 'select', required: true, placeholder: 'Select User Type', options: [] },
   { label: 'Role', key: 'role', type: 'select', required: true, placeholder: 'Select Role', options: [] },
-  { label: 'Rank', key: 'rankName', type: 'text', required: false, placeholder: 'Enter Rank' },
+  { label: 'Rank', key: 'rankName', type: 'text', required: true, placeholder: 'Enter Rank' },
   { label: 'Name', key: 'first_name', type: 'text', required: true, placeholder: 'Enter Name' },
   { label: 'Designation', key: 'hrcdf_designation', type: 'text', required: true, placeholder: 'Enter Designation' },
-  { label: 'Ship', key: 'ship', type: 'select', required: false, placeholder: 'Select Ship', options: [] },
+  { label: 'Ship', key: 'vessel', type: 'select', required: false, placeholder: 'Select Ship', options: [] },
+  { label: 'Unit', key: 'unit', type: 'select', required: true, placeholder: 'Select Unit', options: [] },
   { label: 'Password', key: 'password', type: 'password', required: true, placeholder: 'Enter Password' },
   { label: 'Confirm Password', key: 'confirm_password', type: 'password', required: true, placeholder: 'Confirm Password' },
   { label: 'Employee Type', key: 'employee_type', type: 'select', required: true, placeholder: 'Select Employee Type', options: [] },
@@ -231,7 +235,8 @@ userFormConfig = [
       rankName: '',
       first_name: '',
       hrcdf_designation: '',
-      ship: '',
+      vessel: '',
+      unit: '',
       password: '',
       confirm_password: '',
       employee_type: '',
