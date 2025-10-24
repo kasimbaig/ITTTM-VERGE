@@ -52,7 +52,13 @@ export class HituMainComponentComponent implements OnInit {
       label: 'U/W Compartments',
       path: 'uw-compartments-form',
       id: 1,
-    }
+    },
+    // {
+    //   icon: 'fa-solid fa-water',
+    //   label: 'Dynamic Form',
+    //   path: 'dynmic-from',
+    //   id: 5,
+    // }
   ];
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private apiService: ApiService, private toastService: ToastService) {}

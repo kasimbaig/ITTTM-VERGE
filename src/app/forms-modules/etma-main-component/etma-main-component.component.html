@@ -1,5 +1,5 @@
 <!-- etma-main-component.component.html -->
-<div class="px-3 py-1 min-h-screen mt-20">
+<div class="px-3 py-1 min-h-screen">
     <!-- ETMA Sub-navigation (Same as Masters) -->
     <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
         <!-- Dashboard Button -->
@@ -31,16 +31,25 @@
                 <span>Report</span>
             </button>
         </div>
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'dynmic-from', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'dynmic-from'}"
+                (click)="navigateToEtma('dynmic-from')">
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <span>Dynamic Form</span>
+            </button>
+        </div>
     </div>
 
     <!-- Main Content Area -->
     <!-- Dashboard Content -->
-    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'dashboard'">
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'dashboard'">
         <app-etma-dashboard></app-etma-dashboard>
     </div>
 
     <!-- Transaction Content -->
-    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'transaction'">
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'transaction'">
         <!-- Status Tabs -->
         <app-status-tabs 
             [activeTab]="activeTab"
@@ -95,7 +104,7 @@
             (dataLoaded)="onDataLoaded($event)">
         </app-paginated-table>
     </div>
-    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'report'">
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'report'">
        
 
         <!-- GTG Load Trial Reports Table View -->
@@ -130,6 +139,10 @@
             (dataLoaded)="onDataLoaded($event)">
         </app-paginated-table>
     </div>
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'dynmic-from'">
+        <app-dynmic-from></app-dynmic-from>
+    </div>
+
 </div>
 
 <!-- Delete Confirmation Modal -->

@@ -1,5 +1,5 @@
 <!-- hitu-main-component.component.html -->
-<div class="hitu-main-container px-3 py-1 min-h-screen mt-20">
+<div class="hitu-main-container px-3 py-1 min-h-screen">
     <!-- HITU Header -->
     <div class="hitu-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
         <!-- Dashboard Button -->
@@ -27,7 +27,7 @@
 
             <!-- HITU Forms Dropdown Menu -->
             <div *ngIf="showHituDropdown"
-                class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none hitu-dropdown-menu h-96 overflow-y-auto overflow-x-hidden">
+                class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none hitu-dropdown-menu h-auto overflow-y-auto overflow-x-hidden">
                 <button *ngFor="let item of hituMenuItems"
                     class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center transition-colors duration-150 ease-in-out"
                     (click)="navigateToHituSubItem(item.path)">
@@ -41,7 +41,7 @@
                 class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out hitu-button"
                 [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'report', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'report'}"
                 (click)="navigateToHitu('report')">
-                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <i class="fa-solid fa-chart-line mr-2"></i>
                 <span>Report</span>
             </button>
         </div>
@@ -67,7 +67,7 @@
     </div> -->
     <!-- Reports configuration area -->
     <div *ngIf="activeSubPath === 'report'" class="max-w-screen-full mx-auto">
-        <div class="w-100 mx-auto" >
+        <div class="max-w-screen-xl mx-auto" >
             <!-- Reports Table Header and Tabs -->
             <div class="command-header">
                 <div class="command-title-block">
