@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MastersRoutingModule } from './masters-routing.module';
 import { MastersComponent } from './masters.component';
+import { FormBuildingComponent } from './form-building/form-building.component';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { MastersComponent } from './masters.component';
   ],
   imports: [
     CommonModule,
-    MastersRoutingModule
+    MastersRoutingModule,
+    FormBuildingComponent
   ]
 })
 export class MastersModule { }
