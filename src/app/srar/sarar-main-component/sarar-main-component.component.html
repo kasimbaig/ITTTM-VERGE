@@ -35,7 +35,7 @@
         </div> -->
 
         <!-- Transactions Button with Dropdown Toggle -->
-        <!-- <div class="relative transactions-dropdown-container">
+     <div class="relative transactions-dropdown-container">
             <button
                 class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out transactions-button"
                 [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'srar-transactions', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'srar-transactions'}"
@@ -44,10 +44,10 @@
                 <span>Transactions</span>
                 <i class="fa-solid ml-2 text-xs"
                     [ngClass]="showTransactionsDropdown ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-            </button> -->
+            </button> 
 
             <!-- Transactions Dropdown Menu -->
-            <!-- <div *ngIf="showTransactionsDropdown"
+             <div *ngIf="showTransactionsDropdown"
                 class="absolute z-20 bg-white rounded-xl shadow-lg py-2 mt-2 w-64 origin-top-right ring-1 ring-black ring-opacity-5 focus:outline-none transactions-dropdown-menu">
                 <button *ngFor="let item of transactionMenuItems"
                     class="block w-full text-left px-4 py-2 text-sm bg-white border-none flex items-center transition-colors duration-150 ease-in-out"
@@ -57,7 +57,7 @@
                 </button>
             </div>
         </div>
-        <div class="relative transactions-dropdown-container">
+      <!--  <div class="relative transactions-dropdown-container">
             <button
                 class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out transactions-button"
                 [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'reports', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'reports'}"

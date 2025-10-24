@@ -1,7 +1,17 @@
 <!-- seg-main-component.component.html -->
-<div class="px-3 py-1 min-h-screen">
+<div class="px-3 py-1 min-h-screen mt-20">
     <!-- SEG Sub-navigation (Same as Masters) -->
     <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <!-- Dashboard Button -->
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'dashboard', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'dashboard'}"
+                (click)="navigateToSeg('dashboard')">
+                <i class="fa-solid fa-chart-line mr-2"></i>
+                <span>Dashboard</span>
+            </button>
+        </div>
         <!-- Transaction Button -->
         <div class="relative masters-dropdown-container text-sm">
             <button
@@ -12,10 +22,25 @@
                 <span>Transaction</span>
             </button>
         </div>
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'Report', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'Report'}"
+                (click)="navigateToSeg('Report')">
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <span>Report</span>
+            </button>
+        </div>
     </div>
 
     <!-- Main Content Area -->
-    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'transaction'">
+    <!-- Dashboard Content -->
+    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'dashboard'">
+        <app-seg-dashboard></app-seg-dashboard>
+    </div>
+
+    <!-- Transaction Content -->
+    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'transaction'">
         <!-- Table View -->
         <div *ngIf="showTableView && !formOnlyMode">
             <app-seg-form-table
@@ -37,6 +62,69 @@
                 (refreshData)="refreshTableData()">
             </app-seg-form>
         </div>
+    </div>
+    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'Report'">
+        <div class="command-header">
+            <div class="command-title-block">
+                <i class="pi pi-file-alt"></i>
+                <div>
+                    <h2>SEG Reports Versions</h2>
+                    <p>View and manage all SEG Reports Versions in the system</p>
+                </div>
+            </div>
+
+            <div class="command-actions">
+                <button class="btn primary btn-sm" (click)="navigateToSeg('transaction')">
+                    <i class="pi pi-arrow-left"></i> Back
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Paginated Table -->
+        <app-paginated-table *ngIf="toggleTable"
+            #paginatedTable
+            [columns]="colReportVersions"
+            [apiUrl]="'etma/version/?sub_module_id=6'"
+            [totalCount]="reportVersions.length"
+            [data]="reportVersions"
+            [showEditAction]="false"
+            [showDeleteAction]="false"
+            [showEndActions]="true"
+            (viewEvent)="viewReportVersion($event)"
+            (dataLoaded)="onDataLoaded($event)">
+        </app-paginated-table>
+
+
+
+        <div  *ngIf="openFullPopup"  class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
+            <div class="w-screen h-screen bg-white flex flex-col rounded-none shadow-none overflow-hidden">
+              <!-- Header -->
+              <div class="flex items-center justify-between bg-blue-800 text-white px-3 py-6">
+                <h3 class="text-3xl font-bold">SEG Reports Versions</h3>
+                <div class="flex items-center gap-2">
+                  <button  
+                  printSectionId="printContainer"	[openNewTab]="true"
+                  ngxPrint  styleSheetFile="assets/print.css"
+                  class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+                  >
+                  <i class="pi pi-file-pdf"></i>
+                  PDF
+                </button>
+                    <button (click)="closeReportVersionPopup()" class="p-2 rounded-full hover:bg-blue-600 transition-colors"  aria-label="Close" > <i class="pi pi-times"></i>
+                    </button>
+          
+                </div>
+              </div>
+              <!-- Content/Table -->
+               <div class="flex-1 overflow-auto p-6">
+                  <div id="printContainer" class="report-version-container"></div>
+               </div>
+              
+            </div>
+          </div>
+
+        
     </div>
 </div>
 

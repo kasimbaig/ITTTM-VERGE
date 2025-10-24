@@ -74,51 +74,52 @@
       </div>
   
         
-        <div class="p-6 space-y-6">
-          <!-- Inspection Details in Single Row -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
-                INTERMEDIATE UNDERWATER HULL INSPECTION - INS <span class="text-red-500">*</span>
-              </label>
-              <select 
-                formControlName="ship_id"
-                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                [class.border-red-500]="intermediateForm.get('ship_id')?.invalid && intermediateForm.get('ship_id')?.touched"
-                [disabled]="loading">
-                <option value="">--Select Ship--</option>
-                <option *ngFor="let ship of ships" [value]="ship.id">
-                  {{ ship.name }}
-                </option>
-              </select>
-              <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
-            </div>
-            
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
-                Date of Inspection <span class="text-red-500">*</span>
-              </label>
-              <input 
-                type="date"
-                formControlName="inspectionDate"
-                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                [class.border-red-500]="intermediateForm.get('inspectionDate')?.invalid && intermediateForm.get('inspectionDate')?.touched">
-            </div>
-            
-            <div class="space-y-2">
-              <label class="block text-sm font-medium text-gray-700">
-                Authority for Inspection <span class="text-red-500">*</span>
-              </label>
-              <input 
-                type="text"
-                formControlName="inspectionAuthority"
-                class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                [class.border-red-500]="intermediateForm.get('inspectionAuthority')?.invalid && intermediateForm.get('inspectionAuthority')?.touched">
-            </div>
-          </div>
-
+    </div>
+    <div id="printContainer">
+    <div class="p-6 space-y-6 bg-white border border-gray-200">
+      <!-- Inspection Details in Single Row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            INTERMEDIATE UNDERWATER HULL INSPECTION - INS <span class="text-red-500">*</span>
+          </label>
+          <select 
+            formControlName="ship_id"
+            class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="intermediateForm.get('ship_id')?.invalid && intermediateForm.get('ship_id')?.touched"
+            [disabled]="loading">
+            <option value="">--Select Ship--</option>
+            <option *ngFor="let ship of ships" [value]="ship.id">
+              {{ ship.name }}
+            </option>
+          </select>
+          <div *ngIf="loading" class="text-sm text-gray-500">Loading ships...</div>
+        </div>
+        
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            Date of Inspection <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="date"
+            formControlName="inspectionDate"
+            class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="intermediateForm.get('inspectionDate')?.invalid && intermediateForm.get('inspectionDate')?.touched">
+        </div>
+        
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            Authority for Inspection <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="text"
+            formControlName="inspectionAuthority"
+            class="w-full px-3 py-2 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="intermediateForm.get('inspectionAuthority')?.invalid && intermediateForm.get('inspectionAuthority')?.touched">
         </div>
       </div>
+
+    </div>
       <!-- HULL SURVEY & REPAIRS Section -->
       <div class="bg-white shadow-sm border border-gray-200">
         <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
@@ -127,7 +128,7 @@
         
         <div class="p-6 space-y-6">
           <!-- Type of Survey -->
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-700">
               Type of Survey <span class="text-red-500">*</span>
             </label>
@@ -157,13 +158,13 @@
 
       <!-- TESTS UNDERTAKEN TO PROVE THE EFFICACY OF HULL REPAIRS Section -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue">
+        <div class="px-6 py-4 border-b border-gray-200 bg-primary-blue heading">
           <h2 class="text-lg font-semibold">TESTS UNDERTAKEN TO PROVE THE EFFICACY OF HULL REPAIRS</h2>
         </div>
         
         <div class="p-6 space-y-6">
           <!-- Test (a) -->
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-700">
               (a) Pressure testing of tanks in way of hot work <span class="text-red-500">*</span>
             </label>
@@ -175,7 +176,7 @@
           </div>
 
           <!-- Test (b) -->
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-700">
               (b) Pressure testing of sea tubes in way of hot work <span class="text-red-500">*</span>
             </label>
@@ -187,7 +188,7 @@
           </div>
 
           <!-- Test (c) -->
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label class="block text-sm font-medium text-gray-700">
               (c) NDT Undertaken in way of hot work locations <span class="text-red-500">*</span>
             </label>
@@ -241,33 +242,46 @@
           </app-dynamic-table>
         </div>
       </div>
-
+    </div>
 
 
       <!-- Action Buttons - Hide in view mode -->
-      <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+      <div   class="bg-white shadow-sm border border-gray-200">
         <div class="flex flex-wrap justify-center gap-4 py-6 px-6">
-          <button 
+          <button *ngIf="!isViewMode"
             type="button"
             class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded">
             <i class="pi pi-download mr-2"></i>Fetch Drafts
           </button>
-          <button 
+          <button *ngIf="!isViewMode"
             type="button"
             (click)="onSaveDraft()"
             class="px-6 py-2 bg-yellow-500 text-white font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors duration-200 rounded">
             <i class="pi pi-save mr-2"></i>SAVE DRAFT
           </button>
-          <button 
+          <button *ngIf="!isViewMode"
             type="button"
             class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded">
             <i class="pi pi-trash mr-2"></i>Clear
           </button>
-          <button 
+          <button *ngIf="!isViewMode"
             type="submit"
             class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded">
             <i class="pi pi-check mr-2"></i>Save
           </button>
+          <button  
+          printSectionId="printContainer"	[openNewTab]="true"
+          ngxPrint  styleSheetFile="assets/print.css"
+          class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+          >
+          <i class="pi pi-file-pdf"></i>
+          PDF
+        </button>
+          <button (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-blue-600 text-white  hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+          >
+          <i class="pi pi-save"></i>
+          Save Version
+        </button>
         </div>
       </div>
     </form>
@@ -293,7 +307,31 @@
 
 <!-- Route Configuration Modal (for Configure Route option) -->
 <div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
-    <!-- Modal Header -->
+  <div class="bg-white rounded-lg shadow-xl w-[450px] mx-4 mb-4">
+    <div class="flex items-center justify-between bg-[#04308f] text-white p-2 rounded-t-lg">
+      <h3 class="text-lg font-semibold mb-4">Save Report Version</h3>
+      <button 
+          (click)="showRouteConfigModal = false"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <i class="pi pi-times"></i>
+      </button>
+    </div>
+    <div class="m-4">
+      <div class="flex items-center justify-between p-4">
+        <input 
+          type="text" 
+          class="flex-grow px-3 py-2 border border-gray-400 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter Version Name Here"
+          [(ngModel)]="versionName"
+          name="versionName" />
+       
+      </div>
+      <button 
+      type="button"
+      class="px-6 py-2 mb-2 bg-blue-500 text-white font-medium float-end hover:bg-blue-600 transition-colors duration-200"
+      (click)="onSaveVersion()"
+      ><i class="pi pi-save"></i> Save Version</button>
+    </div>
+  
   </div>
 </div>

@@ -33,9 +33,9 @@ import { SararStatusComponent } from './SARARTRANSACTION/sarar-status/sarar-stat
 import { GraphQLComponent } from './SARARTRANSACTION/graph-ql/graph-ql.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { DartDashboardComponent } from '../dart/dart-dashboard/dart-dashboard/dart-dashboard.component';
 @NgModule({
   declarations: [
-    SararDashboardComponent,
     EquipmentComponent,
     FptCstFormComponent,  
     LinkedEquipmentComponent,
@@ -53,8 +53,10 @@ import { MessageService } from 'primeng/api';
   ],
 
   imports: [
+    SararDashboardComponent,
     ResuableTableComponent,
     DeleteConfirmationModalComponent,
+    DartDashboardComponent,
     CommonModule,
     SrarRoutingModule,
     ReactiveFormsModule,

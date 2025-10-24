@@ -260,6 +260,12 @@
   <i class="fa-solid fa-map-pin mr-2"></i>
   <span>Station</span>
 </button>
+  <button class="nav-item flex items-center px-2 py-2 rounded-lg transition-all duration-200 ease-in-out text-sm"
+  [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'GRAPHQL', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'GRAPHQL'}"
+  (click)="navigateTo('GRAPHQL')">
+  <i class="fa-solid fa-map-pin mr-2"></i>
+  <span>GRAPHQL</span>
+</button>
 </div>
 
 <!-- Router Outlet for SFD Sub-components -->

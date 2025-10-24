@@ -197,7 +197,7 @@ export class GraphQLComponent implements OnInit {
 
     }
 
-    this.apiService.post(`config/query-configs/`, payload).subscribe(res=>{
+    this.apiService.post1(`config/query-configs/`, payload).subscribe(res=>{
       
     })
 
@@ -245,12 +245,12 @@ export class GraphQLComponent implements OnInit {
   roles: any[] = [];
   loadRolesAndProcesses(): void {
     // Load roles
-    this.apiService.get('access/user-roles/').subscribe(res => {
+    this.apiService.get1('access/user-roles/').subscribe(res => {
       this.roles = res || [];
     });
 
     // Load processes
-    this.apiService.get('access/processes/').subscribe(res => {
+    this.apiService.get1('access/processes/').subscribe(res => {
       this.processes = res || [];
     });
   }
@@ -259,7 +259,7 @@ export class GraphQLComponent implements OnInit {
     const pro= localStorage.getItem('user_process')
     const role= localStorage.getItem('user_role')
     if(pro !="undefined" && role !="undefined"){
-    this.apiService.get('config/query-configs/?process='+pro+'&user_role__code='+role).subscribe(res => {
+    this.apiService.get1('config/query-configs/?process='+pro+'&user_role__code='+role).subscribe(res => {
       const queryDoc = gql`${res.results[0].query_text}`;
       this.apollo.watchQuery<{ allSfdDetails: any[] }>({ query: queryDoc })
         .valueChanges.subscribe(({ data }) => {
@@ -269,7 +269,7 @@ export class GraphQLComponent implements OnInit {
         });
     });
   } else{
-    this.apiService.get('config/query-configs/').subscribe(res => {
+    this.apiService.get1('config/query-configs/').subscribe(res => {
       const queryDoc = gql`${res.results.find((item:any)=> item.id == 10 ).query_text}`;
         //console.log(res.results.find((item:any)=> item.id == 10 ).query_text,"Identifier")
       this.apollo.watchQuery<{ allSfdDetails: any[] }>({ query: queryDoc })

@@ -73,7 +73,8 @@ const routes: Routes = [
         loadComponent: () =>
           import('./forms-modules/etma-main-component/etma-main-component.component').then((m) => m.EtmaMainComponentComponent),
         children: [
-          { path: '', redirectTo: 'gtg-load-trial-reports', pathMatch: 'full' },
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'dashboard', loadComponent: () => import('./forms-modules/etma-dashboard/etma-dashboard.component').then((m) => m.EtmaDashboardComponent) },
           { path: 'gtg-load-trial-reports', redirectTo: '', pathMatch: 'full' },
           { path: 'transaction/etma/gtg-load-trial-report', loadComponent: () => import('./forms-modules/forms/transaction/etma/gtg-load-trial-report.component').then((m) => m.GtgLoadTrialReportComponent) }
         ]
@@ -83,8 +84,9 @@ const routes: Routes = [
         loadComponent: () =>
           import('./forms-modules/seg-main-component/seg-main-component.component').then((m) => m.SegMainComponentComponent),
         children: [
-          { path: '', redirectTo: 'seg-form-reports', pathMatch: 'full' },
-          { path: 'seg-form-reports', redirectTo: '', pathMatch: 'full' },
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'dashboard', loadComponent: () => import('./forms-modules/seg-dashboard/seg-dashboard.component').then((m) => m.SegDashboardComponent) },
+          { path: 'transaction', redirectTo: '', pathMatch: 'full' },
           { path: 'transaction/seg/seg-form', loadComponent: () => import('./forms-modules/forms/seg-form/seg-form.component').then((m) => m.SegFormComponent) }
         ]
       },
@@ -93,7 +95,8 @@ const routes: Routes = [
         loadComponent: () =>
           import('./forms-modules/hitu-main-component/hitu-main-component.component').then((m) => m.HituMainComponentComponent),
         children: [
-          { path: '', redirectTo: 'preliminary-form', pathMatch: 'full' },
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'dashboard', loadComponent: () => import('./forms-modules/hitu-dashboard/hitu-dashboard.component').then((m) => m.HituDashboardComponent) },
           { path: 'preliminary-form', loadComponent: () => import('./forms-modules/forms/preliminary-form/etma-form.component').then((m) => m.EtmaFormComponent) },
           { path: 'intermediate-form', loadComponent: () => import('./forms-modules/forms/intermediate-form/intermediate-form.component').then((m) => m.IntermediateFormComponent) },
           { path: 'final-form', loadComponent: () => import('./forms-modules/forms/final-form/final-form.component').then((m) => m.FinalFormComponent) },

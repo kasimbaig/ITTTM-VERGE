@@ -15,7 +15,8 @@ export class ApiService {
   setData(data: any) { this.data = data; }
   getData() { return this.data; }
   private readonly apiUrl = environment.apiUrl;
-
+  private readonly apiUrl1 = environment.apiUrl1;
+  token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYxNDk5MzEwLCJpYXQiOjE3NjExOTkzMTAsImp0aSI6IjMwYTZjMWMwOTAyMjQ3NTY5NmNmYjEzMTZjNTExMTUxIiwidXNlcl9pZCI6MX0.IGXCqt8nKC6bUjBtXvkb1r8nNJ059wmI05Bn2eS7iD4'
   constructor(private http: HttpClient) {}
 
   private handleError(error: any): Observable<never> {
@@ -37,6 +38,7 @@ export class ApiService {
   /**
    * Generic GET method with optional type.
    */
+  
   get<T = any>(endpoint: string, params?: { [key: string]: any }): Observable<T> {
     let httpOptions: { params?: HttpParams, headers?: HttpHeaders } = {};
     if (params) {
@@ -65,10 +67,64 @@ export class ApiService {
       catchError(this.handleError)
     );
   }
-
+  get1<T = any>(endpoint: string, params?: { [key: string]: any }): Observable<T> {
+    let httpOptions: { params?: HttpParams, headers?: HttpHeaders } = {};
+    if (params) {
+      httpOptions.params = new HttpParams({ fromObject: params });
+    }
+    
+    // Set headers with user_role, user_process from localStorage and token manuallym
+    const userRole = localStorage.getItem('user_role');
+    const userProcess = localStorage.getItem('user_process');
+    
+    let headers = new HttpHeaders();
+    // Add Authorization header with token manually
+    headers = headers.set('Authorization', `Bearer ${this.token}`);
+    
+    if (userRole) {
+      headers = headers.set('Authorized-by', userRole);
+    }
+    if (userProcess) {
+      headers = headers.set('Process', userProcess);
+    }
+    
+    httpOptions.headers = headers;
+    
+    return this.http.get<T>(`${this.apiUrl1}${endpoint}`, httpOptions).pipe(
+      tap((data) => {
+        
+        return data;
+      }),
+      catchError(this.handleError)
+    );
+  }
+  /**
   /**
    * Generic POST method with optional type.
    */
+  post1<T = any>(endpoint: string, body: any): Observable<T> {
+    let httpOptions: { headers?: HttpHeaders } = {};
+
+    // Set headers with user_role, user_process from localStorage and token manually
+    const userRole = localStorage.getItem('user_role');
+    const userProcess = localStorage.getItem('user_process');
+    
+    let headers = new HttpHeaders();
+    // Add Authorization header with token manually
+    headers = headers.set('Authorization', `Bearer ${this.token}`);
+    
+    if (userRole) {
+      headers = headers.set('Authorized-by', userRole);
+    }
+    if (userProcess) {
+      headers = headers.set('Process', userProcess);
+    }
+    
+    httpOptions.headers = headers;
+    return this.http.post<T>(`${this.apiUrl1}${endpoint}`,body, httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
   post<T = any>(endpoint: string, body: any): Observable<T> {
     let httpOptions: { headers?: HttpHeaders } = {};
 

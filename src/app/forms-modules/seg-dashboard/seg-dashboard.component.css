@@ -1,0 +1,29 @@
+/* SEG Dashboard Component Styles */
+.currentDate {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.live-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #10b981;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -4,6 +4,7 @@ import { MastersComponent } from './masters.component';
 import { ShipComponent } from './ship/ship.component';
 import { EstablishmentComponent } from './establishment-master/establishment-master.component';
 import {  ManufacturerMasterComponent } from './manufacturer-master/manufacturer-master.component';
+import { GraphQLComponent } from '../srar/SARARTRANSACTION/graph-ql/graph-ql.component';
 
 const routes: Routes = [
   {
@@ -105,6 +106,10 @@ const routes: Routes = [
       {
         path: 'state',
         loadChildren: () => import('./state-master/state-master.module').then(m => m.StateMasterModule)
+      },
+      {
+        path: 'GRAPHQL',
+        loadChildren: () => import('../srar/SARARTRANSACTION/graph-ql/graph-ql.component').then(m => m.GraphQLComponent)
       },
       {
         path: 'station',

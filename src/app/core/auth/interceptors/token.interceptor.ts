@@ -19,6 +19,11 @@ export class TokenInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    // Skip interceptor for apiUrl1 requests (get1 and post1 functions)
+    if (request.url.includes('https://cmms-api.ilizien-projects-cdf.in/')) {
+      return next.handle(request);
+    }
+
     const currentUser = this.authService.currentUserValue;
 
     if (currentUser && currentUser.access) {

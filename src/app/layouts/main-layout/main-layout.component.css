@@ -177,7 +177,7 @@
   .search-container
   input[type="search"]:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #10b981;
+  box-shadow: 0 0 0 2px #3b82f6;
 }
 
 /* User menu wrapper adjustments */
@@ -208,9 +208,9 @@
   .right-header
   .user-menu-wrapper
   button:hover {
-  background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
 }
 
 .layout-container
@@ -259,7 +259,7 @@
   .user-menu-wrapper
   button:hover
   svg {
-  color: #d1fae5;
+  color: #e0f2fe;
   transform: scale(1.05);
 }
 
@@ -274,10 +274,10 @@
   right: 0;
   margin-top: 0.5rem;
   width: 14rem;
-  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.15);
   border-radius: 12px;
-  border: 1px solid #d1fae5;
+  border: 1px solid #e2e8f0;
   z-index: 40;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -304,8 +304,8 @@
   .title {
   padding: 0.75rem 1rem;
   font-weight: 600;
-  color: #047857;
-  background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+  color: #1e3a8a;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   color: white;
   font-size: 0.875rem;
   text-transform: uppercase;
@@ -337,8 +337,8 @@
   .user-menu-wrapper
   .dropdown
   button:hover {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  color: #047857;
+  background: linear-gradient(135deg, #e0f2fe 0%, #7dd3fc 100%);
+  color: #1e3a8a;
   font-weight: 600;
   transform: translateX(4px);
 }

@@ -1,7 +1,17 @@
 <!-- etma-main-component.component.html -->
-<div class="px-3 py-1 min-h-screen">
+<div class="px-3 py-1 min-h-screen mt-20">
     <!-- ETMA Sub-navigation (Same as Masters) -->
     <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <!-- Dashboard Button -->
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'dashboard', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'dashboard'}"
+                (click)="navigateToEtma('dashboard')">
+                <i class="fa-solid fa-chart-line mr-2"></i>
+                <span>Dashboard</span>
+            </button>
+        </div>
         <!-- Transaction Button -->
         <div class="relative masters-dropdown-container text-sm">
             <button
@@ -12,10 +22,25 @@
                 <span>Transaction</span>
             </button>
         </div>
+        <div class="relative masters-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out masters-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'report', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'report'}"
+                (click)="navigateToEtma('report')">
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <span>Report</span>
+            </button>
+        </div>
     </div>
 
     <!-- Main Content Area -->
-    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'transaction'">
+    <!-- Dashboard Content -->
+    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'dashboard'">
+        <app-etma-dashboard></app-etma-dashboard>
+    </div>
+
+    <!-- Transaction Content -->
+    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'transaction'">
         <!-- Status Tabs -->
         <app-status-tabs 
             [activeTab]="activeTab"
@@ -37,7 +62,7 @@
                     <i class="pi pi-arrow-left"></i> Back
                 </button>
 
-                <button class="btn primary btn-sm" (click)="openAddReport()">
+                <button *ngIf="activeTab !== 'approved'" class="btn primary btn-sm" (click)="openAddReport()">
                     <i class="pi pi-plus"></i> Add Report
                 </button>
 
@@ -61,10 +86,47 @@
             [apiUrl]="currentApiUrl"
             [totalCount]="totalCount"
             [data]="[]"
+            [showEditAction]="editAndDeleteAction"
+            [showDeleteAction]="editAndDeleteAction"
             [showEndActions]="true"
             (viewEvent)="viewDetails($event)"
             (editEvent)="editDetails($event)"
             (deleteEvent)="deleteReportDetails($event)"
+            (dataLoaded)="onDataLoaded($event)">
+        </app-paginated-table>
+    </div>
+    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'report'">
+       
+
+        <!-- GTG Load Trial Reports Table View -->
+        <div class="command-header">
+            <div class="command-title-block">
+                <i class="pi pi-file-alt"></i>
+                <div>
+                    <h2>GTG Load Trial Reports Versions</h2>
+                    <p>View and manage all GTG Load Trial Reports Versions in the system</p>
+                </div>
+            </div>
+
+            <div class="command-actions">
+                <button class="btn primary btn-sm" (click)="navigateToEtma('transaction')">
+                    <i class="pi pi-arrow-left"></i> Back
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Paginated Table -->
+        <app-paginated-table *ngIf="toggleTable"
+            #paginatedTable
+            [columns]="colReportVersions"
+            [apiUrl]="'etma/version/?sub_module_id=5'"
+            [totalCount]="reportVersions.length"
+            [data]="reportVersions"
+            [showEditAction]="false"
+            [showDeleteAction]="false"
+            [showEndActions]="true"
+            (viewEvent)="viewReportVersion($event)"
             (dataLoaded)="onDataLoaded($event)">
         </app-paginated-table>
     </div>
@@ -112,3 +174,33 @@
     (formSubmit)="onFormSubmit($event)"
     (formCancel)="closeDialog()">
 </app-gtg-load-trial-report>
+
+<!-- Full Screen Popup for Report Versions (Tailwind CSS) -->
+<div  *ngIf="openFullPopup"  class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
+  <div class="w-screen h-screen bg-white flex flex-col rounded-none shadow-none overflow-hidden">
+    <!-- Header -->
+    <div class="flex items-center justify-between bg-blue-800 text-white px-3 py-6">
+      <h3 class="text-3xl font-bold">GTG Load Trial Report Versions</h3>
+      <div>
+        <button  
+        printSectionId="printContainer"	[openNewTab]="true"
+        ngxPrint  styleSheetFile="assets/print.css"
+        class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+        >
+        <i class="pi pi-file-pdf"></i>
+        PDF
+      </button>
+          <button (click)="closeReportVersionPopup()" class="p-2 rounded-full hover:bg-blue-600 transition-colors"  aria-label="Close" > <i class="pi pi-times"></i>
+          </button>
+
+      </div>
+    </div>
+    <!-- Content/Table -->
+     <div class="flex-1 overflow-auto p-6">
+        <div id="printContainer" class="report-version-container"></div>
+     </div>
+    
+  </div>
+</div>
+
+

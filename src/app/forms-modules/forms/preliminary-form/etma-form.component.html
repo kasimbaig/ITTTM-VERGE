@@ -54,45 +54,46 @@
             </app-route-config>
           </div>
         </div>
-          
-          <div style="padding: 1.5rem;">
-            <!-- Single Row Layout for Inspection Details -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
-              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
-                  PRELIMINARY UNDERWATER HULL INSPECTION - INS <span style="color: #ef4444;">*</span>
-                </label>
-                <select 
-                  formControlName="inspectionType"
-                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
-                  <option value="">--Select Ship--</option>
-                  <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}</option>
-                </select>
-              </div>
+      
+      </div>
+      <div id="printContainer">
+      <div class="border border-gray-200 p-6 sai space-y-6 bg-white">
+        <!-- Single Row Layout for Inspection Details -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+              PRELIMINARY UNDERWATER HULL INSPECTION - INS <span style="color: #ef4444;">*</span>
+            </label>
+            <select 
+              formControlName="inspectionType"
+              style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+              <option value="">--Select Ship--</option>
+              <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}</option>
+            </select>
+          </div>
 
-              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
-                  Date of Inspection <span style="color: #ef4444;">*</span>
-                </label>
-                <input 
-                  type="date"
-                  formControlName="inspectionDate"
-                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
-              </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+              Date of Inspection <span style="color: #ef4444;">*</span>
+            </label>
+            <input 
+              type="date"
+              formControlName="inspectionDate"
+              style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
+          </div>
 
-              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
-                  Authority for Inspection <span style="color: #ef4444;">*</span>
-                </label>
-                <input 
-                  type="text"
-                  formControlName="inspectionAuthority"
-                  placeholder="Enter authority"
-                  style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
-              </div>
-            </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151;">
+              Authority for Inspection <span style="color: #ef4444;">*</span>
+            </label>
+            <input 
+              type="text"
+              formControlName="inspectionAuthority"
+              placeholder="Enter authority"
+              style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #9ca3af; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); outline: none;">
           </div>
         </div>
+      </div>
         <!-- Docking Section -->
         <div style="background-color: white; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
           <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background-color: #04308f;">
@@ -409,35 +410,48 @@
           </div>
         </div>
 
-
+      </div>
         <!-- Approves Checkbox Section -->
     
 
         <!-- Action Buttons - Hide in view mode -->
-        <div *ngIf="!isViewMode" class="bg-white shadow-sm border border-gray-200">
+        <div  class="bg-white shadow-sm border border-gray-200">
           <div class="flex flex-wrap justify-center gap-4 py-6 px-6">
-            <button 
+            <button *ngIf="!isViewMode" 
               type="button"
               class="px-6 py-2 bg-gray-500 text-white font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 rounded">
               <i class="pi pi-download mr-2"></i>Fetch Drafts
             </button>
-            <button 
+            <button *ngIf="!isViewMode"
               type="button"
               (click)="onSaveDraft()"
               class="px-6 py-2 bg-yellow-500 text-white font-medium hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors duration-200 rounded">
               <i class="pi pi-save mr-2"></i>SAVE DRAFT
             </button>
-            <button 
+            <button *ngIf="!isViewMode"
               type="button"
               class="px-6 py-2 bg-red-500 text-white font-medium hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 rounded">
               <i class="pi pi-trash mr-2"></i>Clear
             </button>
-            <button 
+            <button *ngIf="!isViewMode"
               type="button"
               (click)="onSubmit()"
               class="px-6 py-2 bg-green-500 text-white font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 rounded">
               <i class="pi pi-check mr-2"></i>Save
             </button>
+            <button  
+            printSectionId="printContainer"	[openNewTab]="true"
+            ngxPrint  styleSheetFile="assets/print.css"
+            class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+            >
+            <i class="pi pi-file-pdf"></i>
+            PDF
+          </button>
+            <button  (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-blue-600 text-white  hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+            >
+            <i class="pi pi-save"></i>
+            Save Version
+          </button>
           </div>
         </div>
     </form>
@@ -461,15 +475,32 @@
   (refreshTimeline)="onRefreshTimeline()">
 </app-route-config-popup>
 
-<!-- Route Config Modal Placeholder -->
 <div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
-    <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
-    <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
-    <button 
-      (click)="showRouteConfigModal = false"
-      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-      Close
-    </button>
+  <div class="bg-white rounded-lg shadow-xl w-[450px] mx-4 mb-4">
+    <div class="flex items-center justify-between bg-[#04308f] text-white p-2 rounded-t-lg">
+      <h3 class="text-lg font-semibold mb-4">Save Report Version</h3>
+      <button 
+          (click)="showRouteConfigModal = false"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <i class="pi pi-times"></i>
+      </button>
+    </div>
+    <div class="m-4">
+      <div class="flex items-center justify-between p-4">
+        <input 
+          type="text" 
+          class="flex-grow px-3 py-2 border border-gray-400 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter Version Name Here"
+          [(ngModel)]="versionName"
+          name="versionName" />
+       
+      </div>
+      <button 
+      type="button"
+      class="px-6 py-2 mb-2 bg-blue-500 text-white font-medium float-end hover:bg-blue-600 transition-colors duration-200"
+      (click)="onSaveVersion()"
+      ><i class="pi pi-save"></i> Save Version</button>
+    </div>
+  
   </div>
 </div>

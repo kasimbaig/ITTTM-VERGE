@@ -100,6 +100,11 @@ export class MastersComponent implements OnInit, AfterViewInit {
       this.equipmentDropdown();
     }else if(subPath === 'unit-group'){
       this.unitDropdown();
+      
+    }else if(subPath === 'GRAPHQL'){
+      this.showEquipmentDropdownDropdown = false;
+      this.activeSubPath = subPath;
+      this.router.navigate(['/srar/sarar-transaction/sarar/transaction-graphql']);
     }
     else {
       this.showShipDropdownDropdown = false;
@@ -107,7 +112,6 @@ export class MastersComponent implements OnInit, AfterViewInit {
       this.showEquipmentDropdownDropdown = false;
       this.activeSubPath = subPath;
      
-      this.router.navigate([subPath], { relativeTo: this.activatedRoute });
     }
   }
 

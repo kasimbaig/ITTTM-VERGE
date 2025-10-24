@@ -1,83 +1,67 @@
 <app-shared-layout>
   <div class="home-content">
-    <!-- Animated Background Particles -->
-    <div class="particles-bg">
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-    </div>
+    <!-- <div class="top-section"> -->
+      <!-- Mission Statement -->
+       <div class = "rows">
+      <!-- <div class="mission-statement">
+        <h2>MISSION STATEMENT</h2>
+        <p>To create a unified, secure, and intelligent digital platform that streamlines testing, tuning, and trial activities across all naval agencies — enabling real-time visibility, data-driven decision-making, and enhanced operational readiness throughout the warship life cycle</p>
+      </div> -->
 
-    <div class="modern-grid-container">
-      <!-- Mission Statement Card -->
-      <div class="glass-card mission-card">
-        <div class="card-glow"></div>
-        <div class="icon-wrapper">
-          <i class="fa-solid fa-bullseye"></i>
+      <!-- Search Bar -->
+      <!-- <div class="search-row">
+        <div class="search-input">
+          <input type="text" placeholder="Anwesh Search" [(ngModel)]="searchQuery" name="searchQuery">
         </div>
-        <h2 class="gradient-text">MISSION STATEMENT</h2>
-        <p>Provide Authoritative Decision Support towards Sustained Reliability & Combat Readiness of Indian Navy Platforms through Comprehensive Maintenance Management System.</p>
-        <div class="card-decoration"></div>
-      </div>
+        <button mat-mini-fab class="search-button" (click)="onSearch()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </div> -->
 
-      <!-- Search Bar Card -->
-      <div class="glass-card search-card">
-        <div class="card-glow"></div>
-        <div class="icon-wrapper">
-          <i class="fa-solid fa-magnifying-glass"></i>
+      <!-- Modern Login Card -->
+      <div class="login-card">
+        <div class="login-card-header">
+          <h2>Welcome Back</h2>
+          <p>Sign in to continue</p>
         </div>
-        <h3 class="gradient-text">Anwesh Search</h3>
-        <div class="modern-search-row">
-          <div class="search-input-wrapper">
-            <i class="fa-solid fa-robot search-icon"></i>
-            <input type="text" placeholder="Ask Anwesh anything..." [(ngModel)]="searchQuery" name="searchQuery">
-          </div>
-          <button class="search-button" (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-          </button>
-        </div>
-        <div class="card-decoration"></div>
-      </div>
 
-      <!-- Login Card -->
-      <div class="glass-card login-card-modern">
-        <div class="card-glow"></div>
-        <div class="icon-wrapper">
-          <i class="fa-solid fa-user-shield"></i>
-        </div>
-        <h2 class="gradient-text">SECURE LOGIN</h2>
-        
-        <div class="input-field-modern">
-          <div class="input-icon-wrapper">
-            <mat-icon class="input-icon">person</mat-icon>
+        <div class="login-card-body">
+          <div class="input-field">
+            <mat-icon class="input-icon">person_outline</mat-icon>
+            <input
+              type="text"
+              placeholder="Username"
+              [(ngModel)]="userLogin"
+              name="userLogin"
+              autocomplete="username"
+            >
           </div>
-          <input type="text" placeholder="User Login" [(ngModel)]="userLogin" name="userLogin">
-          <div class="input-underline"></div>
-        </div>
-        
-        <div class="input-field-modern">
-          <div class="input-icon-wrapper">
-            <mat-icon class="input-icon">lock</mat-icon>
+
+          <div class="input-field">
+            <mat-icon class="input-icon">lock_outline</mat-icon>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              [(ngModel)]="password"
+              name="password"
+              autocomplete="current-password"
+            >
+            <mat-icon class="password-toggle" (click)="togglePasswordVisibility()">
+              {{ showPassword ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
           </div>
-          <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" name="password">
-          <mat-icon class="password-toggle" (click)="togglePasswordVisibility()">
-            {{ showPassword ? 'visibility' : 'visibility_off' }}
-          </mat-icon>
-          <div class="input-underline"></div>
+
+          <div class="login-buttons">
+            <button class="login-btn" (click)="onLogin()">
+              <span>Sign In</span>
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+            <button class="new-user-btn" (click)="onNewUser()">
+              <mat-icon>person_add</mat-icon>
+              <span>Create Account</span>
+            </button>
+          </div>
         </div>
-        
-        <div class="login-buttons-modern">
-          <button class="btn-modern btn-primary" (click)="onLogin()">
-            <span>Login</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-          <button class="btn-modern btn-outline" (click)="onNewUser()">
-            <span>New User</span>
-            <i class="fa-solid fa-user-plus"></i>
-          </button>
-        </div>
-        <div class="card-decoration"></div>
       </div>
     </div>
 

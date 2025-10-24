@@ -2,51 +2,43 @@
   <!-- Header Banner -->
   <header class="header-banner">
     <div class="header-content">
-      <div class="navy-emblem">
-        <img
+      <!-- <div class="navy-emblem"> -->
+        <!-- <img
           src="assets/indian-navy-emblem.png"
           alt="Indian Navy Emblem"
           class="emblem-img"
-        />
-      </div>
+        /> -->
+      <!-- </div> -->
 
       <div class="header-text">
-        <h1 class="main-title">INDIAN NAVAL SHIP MAINTENANCE AUTHORITY</h1>
-        <p class="subtitle">CENTRE OF EXCELLENCE FOR DATA ANALYTICS</p>
+        <h1 class="main-title">Integrated Testing and
+          Tuning Trials Management(ITTTM)</h1>
       </div>
     </div>
 
     <!-- Navigation Bar -->
     <nav class="nav-bar">
-      <a
+      <!-- <a
         routerLink="/home"
         class="nav-item"
         [class.active]="isActiveRoute('/home') || isActiveRoute('/')"
       >
         <mat-icon>home</mat-icon>
         <span>HOME</span>
-      </a>
-      <a
-        routerLink="/about-us"
-        class="nav-item"
-        [class.active]="isActiveRoute('/about-us')"
-      >
+      </a> -->
+      <!-- <div class="nav-item">
         <mat-icon>person</mat-icon>
         <span>ABOUT US</span>
-      </a>
-      <a
-        routerLink="/contact-us"
-        class="nav-item"
-        [class.active]="isActiveRoute('/contact-us')"
-      >
+      </div>
+      <div class="nav-item">
         <mat-icon>phone</mat-icon>
         <span>CONTACT US</span>
-      </a>
+      </div> -->
       <div class="download-menu-container">
-        <button class="nav-item" (click)="toggleDownloadMenu()">
+        <!-- <button class="nav-item" (click)="toggleDownloadMenu()">
           <mat-icon>download</mat-icon>
           Export
-        </button>
+        </button> -->
 
         <!-- Popup Menu (side by side) -->
         <div class="download-popup" *ngIf="showDownloadMenu">
@@ -64,11 +56,11 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="visitor-count">
+    <!-- <div class="visitor-count">
       <p>Total Visitor Count : {{ visitorCount.total }}</p>
       <p>Since 01-Jan-25 : {{ visitorCount.sinceJan25 }}</p>
       <p>Today's Count : {{ visitorCount.today }}</p>
-    </div>
+    </div> -->
     <div class="copyright">
       <p>ITTTM © COPYRIGHT 2025</p>
     </div>

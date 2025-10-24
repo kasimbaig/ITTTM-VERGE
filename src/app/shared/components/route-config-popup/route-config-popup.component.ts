@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnIni
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
-
+import { CheckboxModule } from 'primeng/checkbox';
 export interface RouteConfigData {
   routeType: 'internal' | 'external' | null;
   user: any;
@@ -29,7 +29,7 @@ export interface RouteConfigApiPayload {
 @Component({
   selector: 'app-route-config-popup',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,CheckboxModule],
   templateUrl: './route-config-popup.component.html',
   styleUrls: ['./route-config-popup.component.css']
 })
