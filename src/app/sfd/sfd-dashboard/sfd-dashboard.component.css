@@ -1,68 +1,16 @@
-/* ========================================
-   SFD DASHBOARD - DOCUMENT MANAGEMENT THEME
-   Clean White/Blue Professional Style
-   ======================================== */
-
-.dashboard-container {
-    background: linear-gradient(135deg, #F7F9FC 0%, #E8EAF6 100%);
-    min-height: 100vh;
-    position: relative;
-}
-
-.dashboard-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        repeating-linear-gradient(0deg, rgba(84, 110, 122, 0.02) 0px, transparent 1px, transparent 30px),
-        repeating-linear-gradient(90deg, rgba(84, 110, 122, 0.02) 0px, transparent 1px, transparent 30px);
-    pointer-events: none;
-}
-
-/* --- Header Styles - DOCUMENT THEME --- */
+/* --- Header Styles - Matching Naval Fleet Maintenance Dashboard Exactly --- */
 .command-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  background: linear-gradient(135deg, #546E7A 0%, #607D8B 100%);
+  background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
   padding: 1rem 1.5rem;
   border-radius: 12px;
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.15),
-    0 4px 10px rgba(84, 110, 122, 0.2);
-  border: 2px solid rgba(96, 125, 139, 0.3);
+  box-shadow: 0 4px 20px var(--shadow-light);
+  border: 1px solid var(--border-light);
   margin-bottom: 2rem;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.command-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
-    pointer-events: none;
-}
-
-.command-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #00897B 0%, #26A69A 50%, #00897B 100%);
-    box-shadow: 0 0 10px rgba(0, 137, 123, 0.5);
 }
 
 .command-title-block {
@@ -70,34 +18,26 @@
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
-  position: relative;
-  z-index: 2;
 }
 
 .command-title-block i {
   font-size: 1.5rem;
-  color: #26A69A;
-  text-shadow: 
-    0 0 10px rgba(38, 166, 154, 0.6),
-    0 2px 4px rgba(0, 0, 0, 0.3);
-  filter: drop-shadow(0 0 5px #26A69A);
+  color: var(--text-white);
+  text-shadow: 0 2px 4px var(--shadow-dark);
 }
 
 .command-title-block h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: #ffffff;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  letter-spacing: 0.5px;
+  color: var(--text-white);
+  font-weight: 600;
+  text-shadow: 0 2px 4px var(--shadow-dark);
 }
 
 .command-title-block p {
   margin: 0;
   font-size: 0.75rem;
-  color: #B2DFDB;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* .dashboard-container {
@@ -110,7 +50,7 @@
 } */
   
   .dashboard-title {
-    color: #37474F;
+    color: var(--text-primary);
     font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 2rem;
@@ -122,10 +62,9 @@
     display: block;
     width: 60px;
     height: 4px;
-    background: linear-gradient(to right, #00897B, #26A69A);
+    background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
     margin: 0.5rem auto 0;
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(38, 166, 154, 0.4);
   }
   
   /* --- KPI Grid --- */
@@ -137,44 +76,23 @@
   }
   
   .kpi-card {
-    background: #ffffff;
-    border: 2px solid rgba(84, 110, 122, 0.15);
-    border-radius: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
     padding: 1.5rem;
-    box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.08),
-        0 1px 3px rgba(84, 110, 122, 0.1);
+    box-shadow: 0 4px 8px var(--shadow-light);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     position: relative;
     overflow: hidden;
   }
 
-  .kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #00897B, #26A69A, #00897B);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
   .kpi-card:hover {
     transform: translateY(-5px);
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.12),
-        0 4px 10px rgba(0, 137, 123, 0.15);
-    border-color: rgba(38, 166, 154, 0.3);
-  }
-
-  .kpi-card:hover::before {
-    opacity: 1;
+    box-shadow: 0 6px 12px var(--shadow-medium);
   }
   
   .dark-mode .kpi-card {
@@ -186,7 +104,7 @@
   .kpi-value-main {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #00897B;
+    color: var(--primary-gradient-start);
     line-height: 1;
   }
   
@@ -196,11 +114,10 @@
   
   .kpi-label {
     font-size: 0.9rem;
-    color: #546E7A;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-top: 0.5rem;
-    font-weight: 600;
   }
   
   .dark-mode .kpi-label {
@@ -273,15 +190,14 @@
   .kpi-icon {
     width: 3rem;
     height: 3rem;
-    border-radius: 12px;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #00897B 0%, #26A69A 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+    color: var(--text-white);
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 137, 123, 0.25);
   }
   
   .dark-mode .kpi-icon {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { RouteConfigComponent } from '../../../route-config/route-config.compone
 import { RouteConfigPopupComponent } from '../../../shared/components/route-config-popup/route-config-popup.component';
 import { ApiService } from '../../../services/api.service';
 import { ToastService } from '../../../services/toast.service';
+import { NgxPrintModule } from 'ngx-print';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 interface Ship {
   id: number;
@@ -33,7 +35,7 @@ interface TableColumn {
 @Component({
   selector: 'app-uw-compartments-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DynamicTableComponent, UwCompartmentsFormTableComponent, RouteConfigComponent, RouteConfigPopupComponent],
+  imports: [CommonModule, ReactiveFormsModule,FormsModule, DynamicTableComponent, UwCompartmentsFormTableComponent, RouteConfigComponent, RouteConfigPopupComponent,NgxPrintModule,QRCodeComponent],
   templateUrl: './uw-compartments-form.component.html',
   styleUrls: ['./uw-compartments-form.component.css']
 })
@@ -742,5 +744,65 @@ export class UwCompartmentsFormComponent implements OnInit {
     }
     
     console.log('🔍 Form array loaded with', formArray.length, 'items');
+  }
+  
+  versionName=''
+  onSaveVersion(){
+    const printContainer = document.getElementById('printContainer');
+    if (!printContainer) {
+      this.toastService.showError('Print container not found');
+      return;
+    }
+
+    const clonedContainer = printContainer.cloneNode(true) as HTMLElement;
+
+    clonedContainer.querySelectorAll('input, textarea, select').forEach((el: any) => {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        // For checkboxes and radio buttons, set the checked attribute
+        el.setAttribute('checked', el.checked);
+      } else if (el.tagName === 'SELECT') {
+        // For select elements, set the selected attribute on the correct option
+        console.log('Select element found:', el.name || el.id, 'Current value:', el.value);
+        el.setAttribute('value', el.value);
+        // Remove selected from all options first
+        el.querySelectorAll('option').forEach((option: any) => {
+          option.removeAttribute('selected');
+        });
+        // Set selected on the option that matches the current value
+        const selectedOption = el.querySelector(`option[value="${el.value}"]`);
+        if (selectedOption) {
+          selectedOption.setAttribute('selected', 'selected');
+          console.log('Selected option set:', selectedOption.textContent);
+        } else {
+          console.log('No matching option found for value:', el.value);
+        }
+      } else {
+        // For text inputs and textareas, set the value attribute
+        el.setAttribute('value', el.value);
+      }
+    });
+
+    const htmlData = clonedContainer.innerHTML;
+    console.log('Captured HTML with values:', htmlData);
+
+    const payload = {
+      version: this.versionName,
+      data: htmlData,
+      sub_module: 1,
+      draft_status: "save",
+    }
+
+    this.apiService.post('etma/version/', payload).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.toastService.showSuccess('Version saved successfully');
+        this.showRouteConfigModal = false;
+        this.versionName = '';
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.toastService.showError('Failed to save version');
+      }
+    });
   }
 }

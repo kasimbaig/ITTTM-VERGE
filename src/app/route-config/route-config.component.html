@@ -255,8 +255,9 @@
     [fromTitle]="'Add Route Config'"
     [submitLabel]="'Save'"
     [isEditMode]="false"
+    [isSingleColumn]="true"
     [formData]="routeConfigFormData" 
-    [formConfig]="visibleFormConfig"
+    [formConfig]="routeConfigFormConfig"
     (onOpenChange)="handleFormOpenChange($event)"
     (onSubmit)="handleFormSubmit($event)"
     (onSelectChange)="handleSelectChange($event)">

@@ -1,7 +1,18 @@
 <!-- hitu-main-component.component.html -->
-<div class="hitu-main-container px-3 py-1 min-h-screen">
+<div class="hitu-main-container px-3 py-1 min-h-screen mt-20">
     <!-- HITU Header -->
     <div class="hitu-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+        <!-- Dashboard Button -->
+        <div class="relative hitu-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out hitu-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'dashboard', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'dashboard'}"
+                (click)="navigateToHitu('dashboard')">
+                <i class="fa-solid fa-chart-line mr-2"></i>
+                <span>Dashboard</span>
+            </button>
+        </div>
+        
         <!-- HITU Forms Button with Dropdown Toggle -->
         <div class="relative hitu-dropdown-container">
             <button
@@ -25,11 +36,120 @@
                 </button>
             </div>
         </div>
-
+        <div class="relative hitu-dropdown-container text-sm">
+            <button
+                class="nav-item flex items-center px-4 py-2 rounded-lg transition-all duration-200 ease-in-out hitu-button"
+                [ngClass]="{'active bg-blue-600 text-white shadow-lg': activeSubPath === 'report', 'text-gray-700 hover:bg-blue-600 -50': activeSubPath !== 'report'}"
+                (click)="navigateToHitu('report')">
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                <span>Report</span>
+            </button>
+        </div>
     </div>
 
     <!-- Router Outlet for HITU Sub-components -->
     <div class="max-w-screen-full mx-auto">
+        <!-- Dashboard Content -->
+        <div *ngIf="activeSubPath === 'dashboard'">
+            <app-hitu-dashboard></app-hitu-dashboard>
+        </div>
+        
+        <!-- HITU Forms Content -->
+        <div *ngIf="activeSubPath !== 'dashboard' && activeSubPath !== 'report'">
+            <router-outlet></router-outlet>
+        </div>
+
+    </div>
+
+    <!-- Only show router outlet if not report -->
+    <!-- <div *ngIf="activeSubPath !== 'report'" class="max-w-screen-full mx-auto">
         <router-outlet></router-outlet>
+    </div> -->
+    <!-- Reports configuration area -->
+    <div *ngIf="activeSubPath === 'report'" class="max-w-screen-full mx-auto">
+        <div class="w-100 mx-auto" >
+            <!-- Reports Table Header and Tabs -->
+            <div class="command-header">
+                <div class="command-title-block">
+                    <i class="pi pi-file-alt"></i>
+                    <div>
+                        <h2>{{activeTab.label}} Reports Versions</h2>
+                        <p>View and manage all {{activeTab.label}} Reports Versions in the system</p>
+                    </div>
+                </div>
+                <div class="command-actions">
+                    <button class=" px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-200" (click)="navigateToHitu('hitu')">
+                        <i class="pi pi-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Navigation (for sub-module report versions)-->
+            <div class="w-full flex border-b border-gray-200 mb-6 mt-4 bg-white p-2">
+                <ng-container *ngFor="let item of hituMenuItems">
+                    <button
+                        (click)="tabChange(item)"
+                        class="flex-1 px-6 py-3 rounded-t-lg focus:outline-none font-semibold transition-all duration-200 ease-in text-center relative"
+                        [ngClass]="{
+                          'bg-blue-600 text-white shadow-lg z-10': activeTab.id === item.id,
+                          'bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-700 z-0': activeTab.id !== item.id
+                        }">
+                        <span class="flex items-center justify-center gap-2">
+                            <i [ngClass]="item.icon"
+                               [class.text-white]="activeTab.id === item.id"
+                               [class.text-blue-600]="activeTab.id !== item.id"
+                               class="transition-colors duration-200"></i>
+                            {{ item.label }}
+                        </span>
+                        <span 
+                          *ngIf="activeTab.id === item.id"
+                          class="absolute left-0 right-0 -bottom-1 h-1 bg-blue-700 rounded-b transition-all duration-200"
+                        ></span>
+                    </button>
+                </ng-container>
+            </div>
+
+            <!-- Paginated Table - Reports Versions Table -->
+            <app-paginated-table
+                #paginatedTable
+                [columns]="colReportVersions"
+                [apiUrl]="'etma/version/?sub_module_id=' + activeTab.id"
+                [totalCount]="reportVersions.length"
+                [data]="reportVersions"
+                [showEditAction]="false"
+                [showDeleteAction]="false"
+                [showEndActions]="true"
+                (viewEvent)="viewReportVersion($event)"
+                (dataLoaded)="onDataLoaded($event)">
+            </app-paginated-table>
+
+            <!-- Add report configuration and viewer below if an individual report version is open -->
+            <div  *ngIf="openFullPopup"  class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
+                <div class="w-screen h-screen bg-white flex flex-col rounded-none shadow-none overflow-hidden">
+                  <!-- Header -->
+                  <div class="flex items-center justify-between bg-blue-800 text-white px-3 py-6">
+                    <h3 class="text-3xl font-bold">{{activeTab.label}} Report Versions</h3>
+                    <div class="flex items-center gap-2">
+                      <button  
+                      printSectionId="printContainer"	[openNewTab]="true"
+                      ngxPrint  styleSheetFile="assets/print.css"
+                      class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+                      >
+                      <i class="pi pi-file-pdf"></i>
+                      PDF
+                    </button>
+                        <button (click)="closeReportVersionPopup()" class="p-2 rounded-full hover:bg-blue-600 transition-colors"  aria-label="Close" > <i class="pi pi-times"></i>
+                        </button>
+              
+                    </div>
+                  </div>
+                  <!-- Content/Table -->
+                   <div class="flex-1 overflow-auto p-6">
+                      <div id="printContainer" class="report-version-container"></div>
+                   </div>
+                  
+                </div>
+              </div>
+        </div>
     </div>
 </div>

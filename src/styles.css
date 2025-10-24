@@ -1,166 +1,7 @@
 @import "tailwindcss";
 @plugin "tailwindcss-primeui";
 @import "primeicons/primeicons.css";
-@import "./green-gradient-theme.css";
-
-/* ========================================
-   MODERN DESIGN SYSTEM - CSS VARIABLES
-   ======================================== */
-:root {
-  /* Primary Theme Colors */
-  --primary-purple: #6C63FF;
-  --primary-pink: #FF6584;
-  --primary-teal: #00D9A3;
-  --primary-blue: #00f2fe;
-  --primary-neon-pink: #f093fb;
-  --primary-orange: #FF6B35;
-  --primary-steel: #004E89;
-  
-  /* Dashboard Specific Colors */
-  --dashboard-primary: #6C63FF;
-  --dashboard-secondary: #FF6584;
-  --dart-neon-teal: #00FFE9;
-  --dart-neon-green: #00FF87;
-  --dart-purple: #7B2FF7;
-  --maintop-orange: #FF6B35;
-  --maintop-steel: #004E89;
-  --sfd-blue-gray: #546E7A;
-  --sfd-teal: #00897B;
-  
-  /* Status Colors */
-  --status-success: #00D9A3;
-  --status-warning: #FFC107;
-  --status-danger: #FF5252;
-  --status-info: #00f2fe;
-  
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-neon: linear-gradient(135deg, #00f2fe 0%, #f093fb 100%);
-  --gradient-sunset: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
-  --gradient-ocean: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #2980b9 100%);
-  --gradient-dashboard: linear-gradient(135deg, #6C63FF 0%, #FF6584 100%);
-  --gradient-dart: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-  --gradient-maintop: linear-gradient(135deg, #FF6B35 0%, #FFD23F 100%);
-  --gradient-sfd: linear-gradient(135deg, #546E7A 0%, #00897B 100%);
-  
-  /* Glass Effects */
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-blur: blur(20px);
-  --glass-dark-bg: rgba(0, 0, 0, 0.3);
-  --glass-dark-border: rgba(255, 255, 255, 0.1);
-  
-  /* Neumorphic Shadows */
-  --neomorph-shadow-light: 20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
-  --neomorph-shadow-hover: 25px 25px 75px #bebebe, -25px -25px 75px #ffffff;
-  --neomorph-bg: linear-gradient(145deg, #ffffff, #f0f0f0);
-  
-  /* Standard Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.2);
-  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.3);
-  --shadow-neon-cyan: 0 0 20px rgba(0, 242, 254, 0.5);
-  --shadow-neon-pink: 0 0 20px rgba(240, 147, 251, 0.5);
-  --shadow-neon-purple: 0 0 20px rgba(108, 99, 255, 0.5);
-  
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
-  --radius-full: 9999px;
-  
-  /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.6s ease;
-  --transition-bounce: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Typography */
-  --font-primary: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  --font-mono: 'Courier New', monospace;
-  
-  /* Z-Index Scale */
-  --z-base: 1;
-  --z-dropdown: 100;
-  --z-sticky: 200;
-  --z-fixed: 300;
-  --z-modal-backdrop: 400;
-  --z-modal: 500;
-  --z-popover: 600;
-  --z-tooltip: 700;
-  
-  /* Legacy Variables (Keep for compatibility) */
-  --primary-gradient-start: #059669;
-  --primary-gradient-end: #047857;
-  --secondary-gradient-start: #10b981;
-  --secondary-gradient-end: #059669;
-  --bg-primary: #ffffff;
-  --bg-secondary: rgba(255, 255, 255, 0.95);
-  --bg-tertiary: #f8fafc;
-  --text-primary: #1f2937;
-  --text-white: #ffffff;
-  --border-light: rgba(255, 255, 255, 0.2);
-  --border-medium: rgba(0, 0, 0, 0.1);
-  --card-border: #e5e7eb;
-  --shadow-light: rgba(0, 0, 0, 0.1);
-  --shadow-medium: rgba(0, 0, 0, 0.15);
-  --shadow-dark: rgba(0, 0, 0, 0.3);
-  --accent-light: #fbbf24;
-}
-
-/* Utility Classes */
-.glass-effect {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-}
-
-.neomorph-card {
-  background: var(--neomorph-bg);
-  box-shadow: var(--neomorph-shadow-light);
-  border-radius: var(--radius-2xl);
-  transition: all var(--transition-bounce);
-}
-
-.neomorph-card:hover {
-  box-shadow: var(--neomorph-shadow-hover);
-  transform: translateY(-4px);
-}
-
-.neon-glow-cyan {
-  box-shadow: var(--shadow-neon-cyan);
-}
-
-.neon-glow-pink {
-  box-shadow: var(--shadow-neon-pink);
-}
-
-.gradient-text {
-  background: var(--gradient-neon);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-border {
-  position: relative;
-  overflow: hidden;
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: var(--gradient-dashboard);
-}
+@import "./blue-gradient-theme.css";
 
 @font-face {
   font-family: "Poppins";
@@ -174,12 +15,12 @@
 }
 
 .bg-primary-blue {
-  background-color: #059669;
+  background-color: #04308f;
   color: white;
 }
 
 .bg-primary-blue-600 {
-  background-color: #047857;
+  background-color: #04308f;
   color: white;
 }
 
@@ -218,8 +59,8 @@ html {
 } */
 
 ::ng-deep .fancy-table .p-datatable-tbody>tr:nth-child(even) {
-  background-color: #f0fdf4 !important;
-  /* light green */
+  background-color: #f0f9ff !important;
+  /* light blue */
 }
 
 ::ng-deep .p-datatable-scrollable-wrapper {
@@ -227,8 +68,8 @@ html {
 }
 
 ::ng-deep .fancy-table .p-datatable-tbody>tr:hover {
-  background-color: #dcfce7 !important;
-  /* slightly darker green on hover */
+  background-color: #e0f2fe !important;
+  /* slightly darker on hover */
 }
 
 ::ng-deep .p-datatable-scrollable-wrapper {
@@ -309,6 +150,10 @@ aside {
   /* Track color */
 }
 
+input[type="file"] {
+  display: none;
+}
+
 /* Show scrollbar only when hovering */
 .sidebar-scroll:hover::-webkit-scrollbar {
   opacity: 1;
@@ -336,9 +181,9 @@ aside {
 
 .card .p-card .p-card-body .p-card-content .p-select {
   width: 100%;
-  background: #d1fae5;
+  background: #e1e7fd;
   font-size: 20px;
-  border: 1px solid #047857;
+  border: 1px solid #2f5079;
   font-size: 16px;
   text-align: left;
 }
@@ -404,12 +249,12 @@ aside {
 
 .frequency-dropdown .p-select,
 .p-focus {
-  border: 1px solid #047857;
+  border: 1px solid #2f5079;
   outline: none;
 }
 
 .p-select:not(.p-disabled):hover {
-  border: 1px solid #047857;
+  border: 1px solid #2f5079;
   outline: none;
 }
 
@@ -511,7 +356,7 @@ textarea {
   width: 100%;
   margin-bottom: 16px;
   outline: none;
-  border: 1px solid #047857;
+  border: 1px solid #2f5079;
   font-size: 14px;
 }
 
@@ -525,7 +370,7 @@ textarea {
 }
 
 .close-modal-btn {
-  color: #10b981 !important;
+  color: #027bd5 !important;
   font-size: 14px;
 }
 
@@ -534,7 +379,7 @@ textarea {
 }
 
 .p-button-text {
-  color: #047857;
+  color: #2f5079;
 }
 
 .view-dept-modal {
@@ -545,7 +390,7 @@ textarea {
 }
 
 .icon-wrapper {
-  background: #10b981;
+  background: #027bd5;
   padding: 10px;
   border-radius: 50%;
 }
@@ -571,7 +416,7 @@ textarea {
 }
 
 .border-line {
-  border-bottom: 2px solid #d1fae5;
+  border-bottom: 2px solid #e1e7fd;
 }
 
 .align-left {
@@ -584,7 +429,7 @@ textarea {
 
 .delete-dept-msg {
   font-size: 14px;
-  color: #047857;
+  color: #2f5079;
   font-weight: 500;
   text-align: center;
 }
@@ -628,7 +473,7 @@ textarea {
 .p-tab-active {
   background: #fff;
   color: #374151 !important;
-  border-color: #10b981 !important;
+  border-color: #027bd5 !important;
 }
 
 .p-tablist-active-bar {
@@ -641,7 +486,7 @@ textarea {
 }
 
 .p-button-icon-only.p-button-rounded {
-  background: #10b981;
+  background: #027bd5;
   border: none !important;
   color: #ffffff !important;
 
@@ -900,8 +745,8 @@ body {
   align-items: center;
   font-weight: 700;
   font-size: 1.375rem;
-  color: #047857;
-  /* Deep Green */
+  color: #1e3a8a;
+  /* Deep Navy */
   gap: 0.5rem;
 }
 
@@ -925,13 +770,13 @@ body {
 }
 
 .export-btn {
-  background-color: #d1fae5;
-  color: #047857;
+  background-color: #dbeafe;
+  color: #1d4ed8;
 }
 
 .add-btn {
-  background-color: #a7f3d0;
-  color: #065f46;
+  background-color: #dcfce7;
+  color: #15803d;
 }
 
 .btn:hover {
@@ -969,8 +814,8 @@ body {
 
 .search-dept-input:focus {
   outline: none;
-  border-color: #34d399;
-  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.3);
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3);
 }
 
 .search-icon-inside {
@@ -1073,7 +918,7 @@ body {
 
 .command-title-block i {
   font-size: 2rem;
-  color: #10b981;
+  color: #0ea5e9;
 }
 
 .command-title-block h2 {
@@ -1106,15 +951,15 @@ body {
 }
 
 .btn.primary {
-  background: #10b981;
+  background: #0ea5e9;
   color: white;
   border: none;
 }
 
 .btn.outlined {
   background: transparent;
-  color: #10b981;
-  border: 2px solid #10b981;
+  color: #0ea5e9;
+  border: 2px solid #0ea5e9;
 }
 
 .btn:hover {
@@ -1175,7 +1020,7 @@ body {
 }
 
 .heading {
-  color: #047857;
+  color: #4c215c;
   text-shadow: 1px 1px 0 #fff;
   display: flex;
   align-items: center;
@@ -1184,9 +1029,9 @@ body {
 }
 
 .filter-card {
-  background: #059669;
-  /* Dark green background for the filter bar */
-  border: 1px solid #059669;
+  background: #1e40af;
+  /* This is your dark purple background for the filter bar */
+  border: 1px solid #1e40af;
   border-radius: 0.75rem;
   padding: 1.25rem;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -1201,7 +1046,7 @@ body {
 .custom-navy-table .p-datatable-thead>tr>th,
 th {
   /* Combine these as they apply to table headers */
-  background-color: #059669 !important;
+  background-color: #1e40af !important;
   color: #ffffff;
   text-transform: uppercase;
   font-size: 0.9rem;
@@ -1213,8 +1058,8 @@ th {
   align-items: center;
   font-weight: 700;
   font-size: 1.375rem;
-  color: #047857;
-  /* Deep Green */
+  color: #1e3a8a;
+  /* Deep Navy */
   gap: 0.5rem;
 }
 
@@ -1245,11 +1090,11 @@ th {
 
 .add-btn {
   background-color: #f7fafc;
-  /* Light background to stand out on green */
-  color: #047857;
-  /* Dark green text */
-  border: 1px solid #047857;
-  /* Dark green border */
+  /* Light background to stand out on purple, or make it primary purple */
+  color: #1e40af;
+  /* Dark purple text */
+  border: 1px solid #1e40af;
+  /* Dark purple border */
 }
 
 /* Export button - making it look like an 'outlined' button from your other component */
@@ -1272,8 +1117,8 @@ th {
 .btn.reset-btn {
   background-color: #f7fafc;
   /* Light background */
-  color: #047857;
-  /* Dark green text */
+  color: #1e40af;
+  /* Dark purple text */
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -1362,8 +1207,8 @@ p-dropdown {
 }
 .add-btn {
     background-color: #f7fafc !important;
-    color: #047857 !important;
-    border: 1px solid #047857 !important;
+    color: #1e40af !important;
+    border: 1px solid #1e40af !important;
 }
 .btn {
     display: inline-flex !important;
@@ -1380,7 +1225,7 @@ p-dropdown {
 
 
 .p-dialog-header{
-  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  background: linear-gradient(135deg, #1e40af 0%, #1e40af 100%) !important;
   color: white !important;
   /* border-radius: 0.5rem 0.5rem 0 0 !important; */
   margin: 0 !important;
@@ -1397,13 +1242,13 @@ p-dropdown {
   height: auto;
   display: block;
   overflow-x: scroll;
-  scrollbar-color: #059669 #dee2e6 !important;
+  scrollbar-color: #1e40af #dee2e6 !important;
   background-color: white;
   margin: auto
 }
 
 button[mat-button] {
-  background-color: #059669;
+  background-color: #1e40af;
   color: #fff !important;
   border: none;
   padding: 0.5rem 1rem;
@@ -1462,7 +1307,7 @@ button[mat-button] {
 }
 
 ::ng-deep .p-dropdown:not(.p-disabled):hover {
-  border-color: #10b981;
+  border-color: #3b82f6;
 }
 
 ::ng-deep .p-dropdown-item {
@@ -1471,8 +1316,8 @@ button[mat-button] {
 }
 
 ::ng-deep .p-dropdown-item:hover {
-  background-color: #d1fae5;
-  color: #047857;
+  background-color: #eff6ff;
+  color: #1d4ed8;
 }
 
 .mat-mdc-menu-content {

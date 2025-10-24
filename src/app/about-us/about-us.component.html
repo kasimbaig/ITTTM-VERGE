@@ -1,128 +1,60 @@
 <app-shared-layout>
-  <div class="about-modern">
-    <!-- Animated Background Elements -->
-    <div class="bg-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-    </div>
-
-    <!-- Modern Header -->
-    <div class="org-header">
-      <div class="header-icon-circle">
-        <i class="fa-solid fa-sitemap"></i>
-      </div>
-      <h1 class="org-title">{{ organizationData.title }}</h1>
-      <div class="org-info">
-        <div class="info-badge">
-          <i class="fa-solid fa-calendar"></i>
-          <span>{{ organizationData.established }}</span>
-        </div>
-        <div class="info-badge">
-          <i class="fa-solid fa-file-contract"></i>
-          <span>{{ organizationData.charter }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modern Org Flow -->
-    <div class="org-flow">
-      <!-- Level 1: Top Level -->
-      <div class="org-level">
-        <div class="org-card level-1 animate-fade-in" data-level="1">
-          <div class="card-icon">
-            <i class="fa-solid fa-building"></i>
-          </div>
-          <div class="card-content">
-            <h3>{{ organizationData.topLevel }}</h3>
-            <div class="card-subtitle">Functional Control</div>
-          </div>
-          <div class="card-glow"></div>
+  <div class="about-content">
+    <div class="organization-chart">
+      <div class="chart-header">
+        <h2>{{ organizationData.title }}</h2>
+        <div class="chart-info">
+          <p>{{ organizationData.established }}</p>
+          <p>{{ organizationData.charter }}</p>
         </div>
       </div>
 
-      <!-- Connector -->
-      <div class="flow-connector vertical-connector">
-        <div class="connector-line"></div>
-        <div class="connector-dot"></div>
-      </div>
-
-      <!-- Level 2: Director -->
-      <div class="org-level">
-        <div class="org-card level-2 director-card animate-fade-in" data-level="2">
-          <div class="card-icon director-icon">
-            <i class="fa-solid fa-user-tie"></i>
-          </div>
-          <div class="card-content">
-            <h3>{{ organizationData.director }}</h3>
-            <div class="card-subtitle">Leadership</div>
-          </div>
-          <div class="card-badge">Director</div>
-          <div class="card-glow"></div>
+      <div class="chart-container">
+        <!-- Top Level -->
+        <div class="chart-level top-level">
+          <div class="chart-box grey-box">{{ organizationData.topLevel }}</div>
         </div>
-      </div>
 
-      <!-- Multi-branch Connector -->
-      <div class="flow-connector branch-connector">
-        <div class="connector-line vertical-short"></div>
-        <div class="branch-split">
-          <div class="branch-line left"></div>
-          <div class="branch-line right"></div>
+        <!-- Vertical line down -->
+        <div class="vertical-line"></div>
+
+        <!-- Director Level -->
+        <div class="chart-level director-level">
+          <div class="chart-box blue-box">{{ organizationData.director }}</div>
         </div>
-      </div>
 
-      <!-- Level 3: Admin Support & OIC -->
-      <div class="org-level multi-card-level">
-        <div class="left-group">
-          <div class="org-card level-3 animate-fade-in" *ngFor="let admin of organizationData.adminSupport; let i = index" [attr.data-level]="3">
-            <div class="card-icon small-icon">
-              <i class="fa-solid fa-headset"></i>
+        <!-- T-junction with horizontal line -->
+        <div class="connection-lines">
+          <div class="horizontal-line"></div>
+          <div class="vertical-branch left"></div>
+          <div class="vertical-branch right"></div>
+        </div>
+
+        <!-- Admin Support and OIC Level -->
+        <div class="chart-level admin-level">
+          <div class="admin-support">
+            <div class="chart-box grey-box" *ngFor="let admin of organizationData.adminSupport">
+              {{ admin }}
             </div>
-            <div class="card-content compact">
-              <h4>{{ admin }}</h4>
-            </div>
-            <div class="card-glow"></div>
+          </div>
+          <div class="oic-box">
+            <div class="chart-box grey-box">{{ organizationData.oic }}</div>
           </div>
         </div>
-        
-        <div class="right-group">
-          <div class="org-card level-3 oic-card animate-fade-in" data-level="3">
-            <div class="card-icon">
-              <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <div class="card-content">
-              <h3>{{ organizationData.oic }}</h3>
-              <div class="card-subtitle">Operations</div>
-            </div>
-            <div class="card-glow"></div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Connector from OIC -->
-      <div class="flow-connector vertical-connector centered">
-        <div class="connector-line"></div>
-        <div class="connector-dot"></div>
-      </div>
+        <!-- Vertical line from OIC down -->
+        <div class="vertical-line-center"></div>
 
-      <!-- Level 4: Functional Areas -->
-      <div class="org-level functional-level">
-        <div class="functional-grid">
-          <div class="functional-card animate-fade-in" *ngFor="let area of organizationData.functionalAreas; let i = index" [attr.data-level]="4">
-            <div class="func-header">
-              <div class="func-icon">
-                <i class="fa-solid fa-layer-group"></i>
+        <!-- Functional Areas Level -->
+        <div class="chart-level functional-level">
+          <div class="functional-areas">
+            <div class="functional-area" *ngFor="let area of organizationData.functionalAreas">
+              <div class="chart-box green-box">{{ area.name }}</div>
+              <div class="area-children">
+                <div class="child-item" *ngFor="let child of area.children">
+                  {{ child }}
+                </div>
               </div>
-              <h4>{{ area.name }}</h4>
-            </div>
-            <div class="func-children">
-              <div class="func-child" *ngFor="let child of area.children">
-                <i class="fa-solid fa-angle-right"></i>
-                <span>{{ child }}</span>
-              </div>
-            </div>
-            <div class="card-footer">
-              <span class="item-count">{{ area.children.length }} items</span>
             </div>
           </div>
         </div>

@@ -9,11 +9,19 @@
   /* Ensure proper page layout */
   body {
     margin: 0;
-    padding: 10mm;
+    padding: 0;
     font-size: 12pt;
     line-height: 1.4;
     font-family: Arial, sans-serif;
-    /* background-color: #f0f579; */
+  }
+
+  /* Page margin and border */
+  @page {
+    margin-top: 0.65in;
+    margin-bottom: 0.65in;
+    margin-left: 0.3in;
+    margin-right: 0.3in;
+    size: auto;
   }
 
   /* Table styles for printing */
@@ -22,14 +30,29 @@
     border-collapse: collapse !important;
     page-break-inside: avoid;
   }
+  
+  table thead tr th {
+    background-color: #1e40af !important;
+    color: white !important;
+  }
 
-  /* table, th, td {
+  table, th, td {
     border: 1px solid black !important;
-  } */
+  }
 
   th, td {
     padding: 4pt !important;
     font-size: 10pt !important;
+  }
+
+  table tbody tr:nth-child(even) {
+    background-color: #cdd0d6 !important;
+    color: rgb(16, 15, 15) !important;
+  }
+  
+  table tbody tr:nth-child(odd) {
+    background-color: #f9fafb !important;
+    color: rgb(17, 14, 14) !important;
   }
 
   /* Header styles */
@@ -56,9 +79,9 @@
   }
 
   /* Print-specific colors */
-  .bg-blue-600 -900,
-  .bg-blue-600 -700,
-  .bg-blue-600 -500 {
+  .bg-blue-600,
+  .bg-blue-600,
+  .bg-blue-600 {
     background-color: #e5e7eb !important;
     color: black !important;
   }
@@ -71,6 +94,12 @@
   * {
     box-shadow: none !important;
     border-radius: 0 !important;
+  }
+
+  /* Ensure content stays within page borders */
+  .print-content {
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -164,34 +193,50 @@
     border-color: #d1d5db;
   }
   
-  /* Grid layout for parameters */
-  .grid {
-    display: grid;
+
+ 
+
+  .space-y-1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9fafb;
+    border: 1px solid #d1d5db;
+    margin-bottom: 0.5rem;
+    
   }
-  .grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .space-y-1 label{
+    width: 50%;
+    padding-left: 0.5rem;
   }
-  .md\:grid-cols-6 {
-    /* Will work as 6 cols on medium screens and above */
-    @media (min-width: 480px) {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-    @media (min-width: 1024px) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-    @media (min-width: 1280px) {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
+  .space-y-1 input{
+    width: 50%;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    padding-left: 0.3rem;
   }
-  
+  input,select{
+    border: none;
+    background-color: transparent;
+  }
+  .heading {
+    background-color: #1e40af !important;
+    padding: 0.5rem 1rem;
+    margin-top: 2rem;
+  }
+  .heading h2{
+    color: white !important;
+  }
   /* Flex for label:value */
   .flex {
     display: flex;
   }
-  
+  .justify-end {
+    justify-content: flex-end;
+  }
+  .items-center {
+    align-items: center;
+  }
   /* Label styling */
   .text-blue-700 {
     color: #1d4ed8;
@@ -221,25 +266,23 @@
   .p-2 {
     padding: 0.5rem;
   }
-  
-  /* Header rows */
-  .bg-blue-600 -900 {
-    background-color: #1e3a8a;
-    color: #ffffff;
+  .bg-yellow-50 {
+    background-color: #fffbeb;
   }
-  .bg-blue-600 -700 {
-    background-color: #1d4ed8;
-    color: #ffffff;
+  .border-yellow-200 {
+    border-color: #fef08a;
   }
-  .bg-blue-600 -500 {
-    background-color: #3b82f6;
-    color: #ffffff;
+  .rounded-lg {
+    border-radius: 0.5rem;
   }
-  .text-white {
-    color: #ffffff;
+  .note-section {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #fef08a;
+    border-radius: 0.7rem;
+    margin-top: 1.4rem;
   }
-  
-  /* Header row font weights */
+
   .font-bold {
     font-weight: 700;
   }
@@ -256,7 +299,7 @@
   }
   
   /* Row hover */
-  .hover\:bg-blue-600 -50:hover {
+  .hover\:bg-blue-600 :hover {
     background-color: #eff6ff;
   }
   
@@ -266,4 +309,3 @@
     transition-duration: 150ms;
     transition-timing-function: ease-in-out;
   }
-  

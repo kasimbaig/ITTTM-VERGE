@@ -96,7 +96,7 @@ export class DrtChartComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {
         labels: this.defectsRaisedData.labels,
         datasets: [{
-          label: 'Total Dart',
+          label: 'Total Defects',
           data: this.defectsRaisedData.data,
           borderColor: '#2563eb',
           backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -274,7 +274,7 @@ export class DrtChartComponent implements OnInit, AfterViewInit, OnDestroy {
         plugins: {
           title: {
             display: true,
-            text: 'DAYS AT SEA VS AVERAGE NO. OF DEFECT DARTS',
+            text: 'DAYS AT SEA VS AVERAGE NO. OF DEFECTS',
             font: { size: 16, weight: 'bold', family: 'Segoe UI' },
             padding: { bottom: 15 },
             color: '#1e293b'
@@ -335,7 +335,7 @@ export class DrtChartComponent implements OnInit, AfterViewInit, OnDestroy {
           y: {
             title: {
               display: true,
-              text: 'Average No. of Defect Darts',
+              text: 'Average No. of Defects',
               font: { size: 13,  family: 'Segoe UI' },
               color: '#374151'
             },
@@ -404,7 +404,7 @@ export class DrtChartComponent implements OnInit, AfterViewInit, OnDestroy {
         plugins: {
           title: {
             display: true,
-            text: 'TOTAL DARTS SHIPWISE',
+            text: 'TOTAL DEFECTS SHIPWISE',
             font: { size: 16, weight: 'bold', family: 'Segoe UI' },
             padding: { bottom: 15 },
             color: '#1e293b'
@@ -467,7 +467,7 @@ export class DrtChartComponent implements OnInit, AfterViewInit, OnDestroy {
             stacked: true,
             title: {
               display: true,
-              text: 'Total Darts',
+              text: 'Total Defects',
               font: { size: 13, weight: 600, family: 'Segoe UI' },
               color: '#374151'
             },

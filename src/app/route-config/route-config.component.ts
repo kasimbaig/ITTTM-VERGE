@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddFormComponent } from '../shared/components/add-form/add-form.component';
 import { ApiService } from '../services/api.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, from, Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 interface TimelineItem {
@@ -50,29 +50,29 @@ interface Directorate {
   code?: string;
 }
 
-interface RouteConfigFormData {
-  id?: number;
-  routeType: 'internal' | 'external' | '';
-  userId?: number;
-  permissionType?: 'edit' | 'comment' | 'view';
-  isApprover?: boolean;
-  directorateId?: number;
-  vesselId?: string | number;
-  subModule?: string | number;
-  // permissions?: string[];
-}
+// interface RouteConfigFormData {
+//   id?: number;
+//   routeType: 'internal' | 'external' | '';
+//   userId?: number;
+//   permissionType?: 'edit' | 'comment' | 'view';
+//   isApprover?: boolean;
+//   directorateId?: number;
+//   vesselId?: string | number;
+//   subModule?: string | number;
+//   // permissions?: string[];
+// }
 
-interface RouteConfigApiPayload {
-  directorate?: number;
-  permission_type?: string;
-  is_granted?: boolean;
-  route_type: 'external' | 'internal';
-  sub_module: number;
-  transaction_id?: number | string;
-  user?: number | null;
-  vessel: number;
-  is_approver?: boolean;
-}
+// interface RouteConfigApiPayload {
+//   directorate?: number;
+//   permission_type?: string;
+//   is_granted?: boolean;
+//   route_type: 'external' | 'internal';
+//   sub_module: number;
+//   transaction_id?: number | string;
+//   user?: number | null;
+//   vessel: number;
+//   is_approver?: boolean;
+// }
 
 // Service classes for managing dropdown data (similar to ShipCategoryService)
 class UserService {
@@ -215,11 +215,21 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
   
   // Form properties
   isFormOpen = false;
-  routeConfigFormData: RouteConfigFormData = {
+  routeConfigFormData: {
+    routeType: any;
+    userId?: any;
+    permissionType?: any;
+    directorateId?: any;
+    isApprover: boolean;
+    vesselId?: any;
+    subModule?: any;
+    // permissions?: string[];
+  } = {
     routeType: '',
     userId: undefined,
     permissionType: undefined,
     directorateId: undefined,
+    isApprover: false,
     vesselId: undefined,
     subModule: undefined,
     // permissions: []
@@ -249,6 +259,7 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
   // Get visible fields only
   get visibleFormConfig(): any[] {
     const visible = this.routeConfigFormConfig.filter(field => !field.hide);
+    console.log("Visible Form Config:", visible);
     return visible;
   }
 
@@ -288,6 +299,7 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     // Set vessel and submodule from inputs
     this.routeConfigFormData.vesselId = this.vesselId;
     this.routeConfigFormData.subModule = this.submodule;
+    this.routeConfigFormData.isApprover = false;
   }
 
   ngOnDestroy(): void {
@@ -373,6 +385,8 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
         console.log('Timeline API response:', response);
         if (response && response.data && response.data.length > 0) {
           this.timelineData = this.transformApiData(response.data);
+          this.apiService.setData(response.data[0]);
+          console.log('🚀 GTG FORM SIGNATURE:', this.apiService.getData(),response.data,response.data[0] );
           this.loading = false;
           
           // Animate nodes after data is loaded
@@ -622,15 +636,15 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
   }
   
   private resetFormData(): void {
-    this.routeConfigFormData = {
-      routeType: '',
-      userId: undefined,
-      permissionType: undefined,
-      directorateId: undefined,
-      vesselId: this.vesselId,
-      subModule: this.submodule,
+    // this.routeConfigFormData = {
+    //   routeType: '',
+    //   userId: undefined,
+    //   permissionType: undefined,
+    //   directorateId: undefined,
+    //   vesselId: this.vesselId,
+    //   subModule: this.submodule,
      
-    };
+    // };
   }
   
   private resetFormVisibility(): void {
@@ -638,6 +652,14 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     this.routeConfigFormConfig = this.createFormConfig();
   }
   
+  rowdata={
+    routeType:'',
+    userId:'',
+    permissionType:'',
+    isApprover:true,
+    directorateId:''
+  }
+
   private createFormConfig(): any[] {
     return [
       { key: 'routeType', label: 'Route Type', type: 'radio', required: true, options: [
@@ -655,12 +677,12 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     ];
   }
   
-  handleFormSubmit(data: RouteConfigFormData): void {
+  handleFormSubmit(data: any): void {
  
     
     if (this.useApi && this.vesselId && this.submodule) {
       // Create API payload
-      const apiPayload: RouteConfigApiPayload = this.createApiPayload(data);
+      const apiPayload: any = this.createApiPayload(data);
       
       // Make API call
       this.saveRouteConfigToApi(apiPayload);
@@ -677,8 +699,8 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     this.isFormOpen = false;
   }
 
-  private createApiPayload(data: RouteConfigFormData): RouteConfigApiPayload {
-    const payload: RouteConfigApiPayload = {
+  private createApiPayload(data: any): any {
+    let payload: any = {
       route_type: data.routeType as 'external' | 'internal',
       sub_module: Number(this.submodule),
       vessel: Number(this.vesselId),
@@ -686,7 +708,7 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     };
 
     if (data.routeType === 'internal') {
-      payload.user = data.userId || null;
+      payload['user'] = data.userId || null;
       // Add directorate from localStorage for internal routes
       payload.directorate = localStorage.getItem('unit_id') ? Number(localStorage.getItem('unit_id')) : undefined;
       if (data.permissionType) {
@@ -707,7 +729,7 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     return payload;
   }
 
-  private saveRouteConfigToApi(payload: RouteConfigApiPayload): void {
+  private saveRouteConfigToApi(payload: any): void {
     this.loading = true;
     
     this.apiService.post('config/route-configs/', payload).subscribe({
@@ -760,13 +782,14 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
     if (event.key === 'routeType') {
       this.updateFormConfigVisibility(event.value);
     }
+    console.log('Select change event:', event,this.routeConfigFormData);
   }
   
   private updateFormConfigVisibility(routeType: 'internal' | 'external' | ''): void {    
     // Create a completely new array to trigger change detection
     this.routeConfigFormConfig = this.routeConfigFormConfig.map(field => {
       const updatedField = { ...field };
-      
+      console.log('Updating field visibility for', field, 'based on routeType:', routeType);
       if (field.key === 'userId') {
         // Show User field only when Internal is selected
         updatedField.hide = routeType !== 'internal';
@@ -792,10 +815,10 @@ export class RouteConfigComponent implements OnInit, OnDestroy, OnChanges {
           updatedField.required = false;
         }
       }
-      
+      // this.visibleFormConfig
       return updatedField;
     });
-    
+    console.log('Updated form config after routeType change:', this.routeConfigFormConfig);
     // Force change detection by creating a new reference
     this.routeConfigFormConfig = [...this.routeConfigFormConfig];
   }

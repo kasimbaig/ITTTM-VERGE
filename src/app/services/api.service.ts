@@ -15,7 +15,7 @@ export class ApiService {
   setData(data: any) { this.data = data; }
   getData() { return this.data; }
   private readonly apiUrl = environment.apiUrl;
-
+  private readonly apiUrl1 = environment.apiUrl1;
   constructor(private http: HttpClient) {}
 
   private handleError(error: any): Observable<never> {
@@ -37,6 +37,7 @@ export class ApiService {
   /**
    * Generic GET method with optional type.
    */
+  
   get<T = any>(endpoint: string, params?: { [key: string]: any }): Observable<T> {
     let httpOptions: { params?: HttpParams, headers?: HttpHeaders } = {};
     if (params) {
@@ -65,10 +66,58 @@ export class ApiService {
       catchError(this.handleError)
     );
   }
-
+  get1<T = any>(endpoint: string, params?: { [key: string]: any }): Observable<T> {
+    let httpOptions: { params?: HttpParams, headers?: HttpHeaders } = {};
+    if (params) {
+      httpOptions.params = new HttpParams({ fromObject: params });
+    }
+    
+    // Set headers with user_role and user_process from localStorage
+    const userRole = localStorage.getItem('user_role');
+    const userProcess = localStorage.getItem('user_process');
+    
+    let headers = new HttpHeaders();
+    if (userRole) {
+      headers = headers.set('Authorized-by', userRole);
+    }
+    if (userProcess) {
+      headers = headers.set('Process', userProcess);
+    }
+    
+    httpOptions.headers = headers;
+    
+    return this.http.get<T>(`${this.apiUrl1}${endpoint}`, httpOptions).pipe(
+      tap((data) => {
+        
+        return data;
+      }),
+      catchError(this.handleError)
+    );
+  }
+  /**
   /**
    * Generic POST method with optional type.
    */
+  post1<T = any>(endpoint: string, body: any): Observable<T> {
+    let httpOptions: { headers?: HttpHeaders } = {};
+
+    // Set headers with user_role and user_process from localStorage
+    const userRole = localStorage.getItem('user_role');
+    const userProcess = localStorage.getItem('user_process');
+    
+    let headers = new HttpHeaders();
+    if (userRole) {
+      headers = headers.set('Authorized-by', userRole);
+    }
+    if (userProcess) {
+      headers = headers.set('Process', userProcess);
+    }
+    
+    httpOptions.headers = headers;
+    return this.http.post<T>(`${this.apiUrl1}${endpoint}`,body, httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
   post<T = any>(endpoint: string, body: any): Observable<T> {
     let httpOptions: { headers?: HttpHeaders } = {};
 

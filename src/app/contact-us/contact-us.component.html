@@ -1,102 +1,69 @@
 <app-shared-layout>
-  <div class="contact-content-modern">
-    <!-- Animated Header -->
-    <div class="modern-header">
-      <div class="header-icon-wrapper">
-        <i class="fa-solid fa-address-book"></i>
-      </div>
-      <h1 class="modern-title">CONTACT DIRECTORY</h1>
-      <p class="modern-subtitle">Connect with our team across departments</p>
-    </div>
-
-    <!-- Director Card -->
-    <div class="director-card-modern">
-      <div class="card-header-accent"></div>
-      <div class="director-content">
-        <div class="director-avatar">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <div class="director-details">
-          <h3>{{ directorInfo.director }}</h3>
-          <div class="contact-info-grid">
-            <div class="info-item">
-              <i class="fa-solid fa-phone"></i>
-              <span>{{ directorInfo.pax }}</span>
-            </div>
-            <div class="info-item">
-              <i class="fa-solid fa-envelope"></i>
-              <span>{{ directorInfo.nud }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Contacts Grid -->
-    <div class="contacts-grid">
-      <div class="contact-card" *ngFor="let contact of contacts">
-        <div class="card-number">{{ contact.ser }}</div>
-        <div class="card-section">
-          <i class="fa-solid fa-building"></i>
-          <h4>{{ contact.section }}</h4>
-        </div>
-        
-        <div class="personnel-grid">
-          <div class="personnel-item">
-            <div class="personnel-label">System Controller</div>
-            <div class="personnel-info">
-              <div class="name">{{ contact.systemController.name }}</div>
-              <div class="contact-details-modern">
-                <span><i class="fa-solid fa-phone-volume"></i> {{ contact.systemController.pax }}</span>
-                <span><i class="fa-solid fa-at"></i> {{ contact.systemController.nuc }}</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="personnel-item">
-            <div class="personnel-label">Master Chief-in-Charge</div>
-            <div class="personnel-info">
-              <div class="name">{{ contact.masterChief.name }}</div>
-              <div class="contact-details-modern">
-                <span><i class="fa-solid fa-phone-volume"></i> {{ contact.masterChief.pax }}</span>
-                <span><i class="fa-solid fa-at"></i> {{ contact.masterChief.nud }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="contact-content">
+    <div class="contacts-container">
+      <h2 class="contacts-title">CONTACTS</h2>
       
-      <!-- Additional Contact Card -->
-      <div class="contact-card" *ngFor="let contact of additionalContacts">
-        <div class="card-section">
-          <i class="fa-solid fa-file-lines"></i>
-          <h4>Documentation</h4>
-        </div>
-        
-        <div class="personnel-grid">
-          <div class="personnel-item">
-            <div class="personnel-label">System Controller</div>
-            <div class="personnel-info">
-              <div class="name">{{ contact.systemController.name }}</div>
-              <div class="contact-details-modern">
-                <span><i class="fa-solid fa-phone-volume"></i> {{ contact.systemController.pax }}</span>
-                <span><i class="fa-solid fa-at"></i> {{ contact.systemController.nuc }}</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="personnel-item">
-            <div class="personnel-label">Master Chief-in-Charge</div>
-            <div class="personnel-info">
-              <div class="name">{{ contact.masterChief.name }}</div>
-              <div class="contact-details-modern">
-                <span><i class="fa-solid fa-phone-volume"></i> {{ contact.masterChief.pax }}</span>
-                <span><i class="fa-solid fa-at"></i> {{ contact.masterChief.nud }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Director Information -->
+      <div class="director-info">
+        <p>{{ directorInfo.director }}</p>
+        <p>{{ directorInfo.pax }}</p>
+        <p>{{ directorInfo.nud }}</p>
       </div>
+
+      <!-- Contacts Table -->
+      <div class="contacts-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Ser</th>
+              <th>Section</th>
+              <th>System Controller</th>
+              <th>Master Chief-in-Charge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contact of contacts">
+              <td>{{ contact.ser }}</td>
+              <td>{{ contact.section }}</td>
+              <td>
+                <div class="contact-details">
+                  <div class="name">{{ contact.systemController.name }}</div>
+                  <div class="pax">{{ contact.systemController.pax }}</div>
+                  <div class="nuc">{{ contact.systemController.nuc }}</div>
+                </div>
+              </td>
+              <td>
+                <div class="contact-details">
+                  <div class="name">{{ contact.masterChief.name }}</div>
+                  <div class="pax">{{ contact.masterChief.pax }}</div>
+                  <div class="nud">{{ contact.masterChief.nud }}</div>
+                </div>
+              </td>
+            </tr>
+            <!-- Additional Documentation contacts -->
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <div class="contact-details">
+                  <div class="name">{{ additionalContacts[0].systemController.name }}</div>
+                  <div class="pax">{{ additionalContacts[0].systemController.pax }}</div>
+                  <div class="nuc">{{ additionalContacts[0].systemController.nuc }}</div>
+                </div>
+              </td>
+              <td>
+                <div class="contact-details">
+                  <div class="name">{{ additionalContacts[0].masterChief.name }}</div>
+                  <div class="pax">{{ additionalContacts[0].masterChief.pax }}</div>
+                  <div class="nud">{{ additionalContacts[0].masterChief.nud }}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
     </div>
   </div>
 </app-shared-layout>

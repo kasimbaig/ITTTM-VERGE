@@ -26,6 +26,7 @@
     "@swimlane/ngx-charts": "^20.1.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/qrcode": "^1.5.5",
+    "angularx-qrcode": "^19.0.0",
     "apexcharts": "^4.5.0",
     "apollo-angular": "^11.0.0",
     "bootstrap": "^5.3.7",

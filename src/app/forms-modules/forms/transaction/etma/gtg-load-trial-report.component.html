@@ -1,7 +1,10 @@
+
+
 <p-dialog 
   [(visible)]="isFormOpen" 
   [modal]="true" 
   [closable]="true"
+  [maximizable]="true"
   [draggable]="false"
   [resizable]="true"
   [maximizable]="true"
@@ -79,10 +82,10 @@
           </app-route-config>
         </div>
       </div>
-      
+    <div id="printContainer" class="p-2" >
       <!-- Section 1: Trial Details -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af]">
+        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
           <h2 class="text-lg font-semibold text-white">1. Trial Details</h2>
         </div>
         
@@ -188,7 +191,7 @@
 
       <!-- Section 2: Test Equipment Used -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af]">
+        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
           <h2 class="text-lg font-semibold text-white">2. Test Equipment Used</h2>
         </div>
         
@@ -210,7 +213,7 @@
 
       <!-- Section 3: Equipment Details -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af]">
+        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
           <h2 class="text-lg font-semibold text-white">3. Equipment Details</h2>
         </div>
         
@@ -275,7 +278,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter governor make">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (b) Model & serial no.<span class="text-red-500">**</span>
                 </label>
@@ -287,7 +290,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (c) Type<span class="text-red-500">**</span>
                 </label>
@@ -306,7 +309,7 @@
           <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">Alternator</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (a) Make and rating<span class="text-red-500">**</span>
                 </label>
@@ -318,7 +321,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter make and rating">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (b) Model & serial no.<span class="text-red-500">**</span>
                 </label>
@@ -330,7 +333,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (c) Type<span class="text-red-500">**</span>
                 </label>
@@ -342,7 +345,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter alternator type">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (d) Rated voltage<span class="text-red-500">**</span>
                 </label>
@@ -354,7 +357,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter rated voltage">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (e) Rated frequency<span class="text-red-500">**</span>
                 </label>
@@ -366,7 +369,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter rated frequency">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (f) Rated kVA/ kW<span class="text-red-500">**</span>
                 </label>
@@ -378,7 +381,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter rated kVA/kW">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (g) Rated current<span class="text-red-500">**</span>
                 </label>
@@ -390,7 +393,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter rated current">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (h) Bearing number<span class="text-red-500">**</span>
                 </label>
@@ -409,7 +412,7 @@
           <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">AVR</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (a) Make and type<span class="text-red-500">**</span>
                 </label>
@@ -421,7 +424,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter make and type">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (b) Model & serial no.<span class="text-red-500">**</span>
                 </label>
@@ -440,7 +443,7 @@
           <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">Supply Breaker</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (a) Make<span class="text-red-500">**</span>
                 </label>
@@ -452,7 +455,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter supply breaker make">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (b) Model & serial no.<span class="text-red-500">**</span>
                 </label>
@@ -464,7 +467,7 @@
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
               </div>
-              <div class="space-y-2">
+              <div class="space-y-1">
                 <label class="block text-base font-medium text-gray-700">
                   (c) Rated capacity (Amps)<span class="text-red-500">**</span>
                 </label>
@@ -483,7 +486,7 @@
 
       <!-- Section 4: Insulation Resistance -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] -600">
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading ">
           <h2 class="text-lg font-semibold text-white">4. Insulation Resistance (iaw NES 511(Issue 2) and NES 502 issue 4)</h2>
         </div>
         
@@ -535,7 +538,7 @@
 
       <!-- Section 5: Protection Checks -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] -600">
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
           <h2 class="text-lg font-semibold text-white">5. Protection Checks</h2>
         </div>
         
@@ -556,7 +559,7 @@
               <tbody>
                 <!-- Breaker Protection -->
                 <tr class="bg-gray-50">
-                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] -100">Breaker Protection</td>
+                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] ">Breaker Protection</td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
@@ -636,7 +639,7 @@
                 
                 <!-- Generator/Switchboard Protection -->
                 <tr class="bg-gray-50">
-                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] -100">Generator/Switchboard Protection</td>
+                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] ">Generator/Switchboard Protection</td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
@@ -742,7 +745,7 @@
 
       <!-- Section 6: Instrumentation -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] -600">
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
           <h2 class="text-lg font-semibold text-white">6. Instrumentation</h2>
         </div>
         
@@ -908,7 +911,7 @@
 
       <!-- Section 7: Miscellaneous Checks -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] -600">
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
           <h2 class="text-lg font-semibold text-white">7. Miscellaneous Checks</h2>
         </div>
         
@@ -1124,10 +1127,10 @@
           </div>
           
           <!-- Note Section -->
-          <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div class="note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <p class="text-sm text-gray-700 mb-3">For Para 1 to 7, following to be followed while filling the details mentioned in sub serials:-</p>
-            <ul class="text-sm text-gray-700 space-y-1">
+            <ul class="text-sm text-gray-700 space-y-2">
               <li>(i) <span class="font-semibold">"*"</span> - To be checked/filled/measured by ETMA trial member.</li>
               <li>(ii) <span class="font-semibold">"**"</span> - To be provided by SS.</li>
               <li>(iii) <span class="font-semibold">"***"</span> - To be checked/provided by Yard.</li>
@@ -1138,7 +1141,7 @@
 
       <!-- Section 8: Speed Control Test -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] -600">
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
           <h2 class="text-lg font-semibold text-white">8. Speed Control Test</h2>
         </div>
         
@@ -1333,7 +1336,7 @@
               </tbody>
             </table>
              <!-- Steady State Test Notes Section -->
-          <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+          <div class="note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>The load to be gradually reduced in say quarter load steps from full load to no load and increased in the same manner up to full load. When the speed has stabilised after each load change the steady state frequency to be recorded. (Set frequency to rated value when at 50% load).</li>
@@ -1740,9 +1743,9 @@
           </div>
 
           <!-- Transient Test Notes Section -->
-          <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div class=" note-section mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
-            <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+            <ol class="text-sm text-gray-700 space-y-3 list-decimal list-inside">
               <li>Frequency deviation in the event of instantaneous load shedding and surge of 50% and 100% of rated active load should be recorded.</li>
               <li>Formula for % peak - <span class="font-mono bg-gray-100 px-1 rounded">(Initial frequency - Momentary frequency) / Nominal frequency * 100</span></li>
             </ol>
@@ -1791,7 +1794,7 @@
           </div>
 
           <!-- Governor Range Notes Section -->
-          <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+          <div class=" note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>Permitted limits for frequencies measured at 0% and 100% loads should not be less than ± 3% (as per def stan) and ± 1% of Nominal for mechanical governors and electronic governors respectively.</li>
@@ -1841,7 +1844,7 @@
           </div>
 
           <!-- Governor Rate Notes Section -->
-          <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+          <div class=" note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>Permitted limits for frequencies measured at 0% and 100% loads should not be less than ± 3% and ± 1% of Nominal for mechanical governors and electronic governors respectively.</li>
@@ -1853,7 +1856,7 @@
 
       <!-- Section 9: Voltage Control Test -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] -600">
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
           <h2 class="text-lg font-semibold text-white">9. Voltage Control Test</h2>
         </div>
         
@@ -1975,7 +1978,7 @@
           </div>
 
           <!-- Voltage Control Test Notes Section -->
-          <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+          <div class="note-section mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>Permitted voltage limits should not be less than ± 1% of rated voltage, either as per def stan or technical manuals for commissioned ships.</li>
@@ -2288,7 +2291,7 @@
           </div>
 
           <!-- Voltage Transient Test Notes Section -->
-          <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+          <div class="note-section mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
               <li>M-Load is an additional load equal to 50% rated kVA at zero to 0.4 PF lagging, typically for starting an induction motor. The chosen motor kVA based on starting current/voltage input equal to 50% of alternator's rated kVA and should have a DOL starter.</li>
@@ -2487,7 +2490,7 @@
           </div>
 
           <!-- Voltage Range Notes Section -->
-          <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
+          <div class="note-section mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-8">
             <h3 class="text-lg font-semibold text-gray-800 mb-3">Note:</h3>
             <p class="text-sm text-gray-700">This test is undertaken by varying the voltage trimmer (Hand/Auto as applicable) from lowest limit to the highest limit.</p>
           </div>
@@ -2510,7 +2513,22 @@
           </div>
         </div>
       </div>
-
+      <div class="p-2" *ngIf="apiService.getData()">
+        <div class="p-4 w-full bg-gray-50 flex justify-end items-center gap-2">
+          <qrcode [qrdata]="apiService.getData().internalUsers[0].name + ' - ' + apiService.getData().internalUsers[0].rankName + ' - ' + apiService.getData().internalUsers[0].unit + ' - ' + (apiService.getData().internalUsers[0].timestamp | date: 'd MMM y, h:mm:ss a')" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
+          <div class="text-left">
+            <span class="text-sm font-medium text-gray-600">{{ apiService.getData().internalUsers[0].rankName }}</span>-<span class=" text-sm font-medium text-gray-800">{{ apiService.getData().internalUsers[0].name }}</span>
+            <br>
+            <span class="text-xs text-gray-500 mt-2">
+              {{ apiService.getData().internalUsers[0].unit }}
+            </span> <br>
+            <div class="text-xs text-gray-400 mt-1">
+              {{ apiService.getData().internalUsers[0].timestamp | date: 'd MMM y, h:mm:ss a' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
       <!-- Action Buttons -->
       <div class="bg-white shadow-sm border border-gray-200">
         <div class="p-6">
@@ -2523,6 +2541,19 @@
                 (click)="onCancel()">
                 Close
               </button>
+              <button  
+              printSectionId="printContainer"	[openNewTab]="true"
+              ngxPrint  styleSheetFile="assets/print.css"
+              class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+              >
+              <i class="pi pi-file-pdf"></i>
+              PDF
+            </button>
+              <button (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+              >
+              <i class="pi pi-file-pdf"></i>
+              Save Version
+            </button>
             </ng-container>
             
             <!-- Edit/Add Mode - All Buttons -->
@@ -2551,6 +2582,19 @@
                 (click)="onSubmitReport()">
                 {{ isEditMode ? 'Update Report' : 'Submit Report' }}
               </button>
+              <button  
+              printSectionId="printContainer"	[openNewTab]="true"
+              ngxPrint  styleSheetFile="assets/print.css"
+              class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
+              >
+              <i class="pi pi-file-pdf"></i>
+              PDF
+            </button>
+              <button (click)="showRouteConfigModal=true"     class="px-4 py-2 bg-blue-600 text-white  hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2"
+              >
+              <i class="pi pi-save"></i>
+              Save Version
+            </button>
             </ng-container>
           </div>
         </div>
@@ -2578,17 +2622,36 @@
 
     <!-- Route Config Modal Placeholder -->
     <div *ngIf="showRouteConfigModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg max-w-4xl w-full mx-4">
-            <h3 class="text-lg font-semibold mb-4">Route Configuration</h3>
-            <p class="text-gray-600 mb-4">Full route configuration modal would be implemented here.</p>
+        <div class="bg-white rounded-lg shadow-xl w-[450px] mx-4 mb-4">
+          <div class="flex items-center justify-between bg-[#04308f] text-white p-2 rounded-t-lg">
+            <h3 class="text-lg font-semibold mb-4">Save Report Version</h3>
             <button 
                 (click)="showRouteConfigModal = false"
                 class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                Close
+                <i class="pi pi-times"></i>
             </button>
+          </div>
+          <div class="m-4">
+            <div class="flex items-center justify-between p-4">
+              <input 
+                type="text" 
+                class="flex-grow px-3 py-2 border border-gray-400 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter Version Name Here"
+                [(ngModel)]="versionName"
+                name="versionName" />
+             
+            </div>
+            <button 
+            type="button"
+            class="px-6 py-2 mb-2 bg-blue-500 text-white font-medium float-end hover:bg-blue-600 transition-colors duration-200"
+            (click)="onSaveVersion()"
+            ><i class="pi pi-save"></i> Save Version</button>
+          </div>
+        
         </div>
     </div>
 </p-dialog>
 
 <!-- Toast Component -->
 <app-toast></app-toast>
+

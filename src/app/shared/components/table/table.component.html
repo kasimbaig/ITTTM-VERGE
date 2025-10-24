@@ -5,7 +5,7 @@
   stripedRows
   scrollable="true"
   scrollHeight="62vh"
-  styleClass="rounded-lg shadow-md"
+  styleClass="modern-table rounded-lg shadow-md"
   [rows]="10"
   [tableStyle]="{ 'min-width': '50rem' }"
   [rowsPerPageOptions]="[10, 20, 50, 100, 200, 500]"
@@ -14,26 +14,20 @@
   <ng-template pTemplate="header">
     <tr>
       <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-        <p-sortIcon [field]="col.field"></p-sortIcon>
-        {{ col.header }}
-        
-        <span class="filter-icon" (click)="toggleFilter(col.field)">
+        <div class="flex items-center gap-2">
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+          {{ col.header }}
           <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter>
-        </span>
+        </div>
       </th>
-      <th *ngIf="showEndActions">{{ customHeaderNameEnd }}</th>
+      <th *ngIf="showEndActions" class="text-right">{{ customHeaderNameEnd }}</th>
     </tr>
-    <!-- <tr>
-      <th *ngFor="let col of columns">
-      </th>
-      <th *ngIf="showEndActions"></th>
-    </tr> -->
   </ng-template>
 
   <ng-template pTemplate="body" let-rowData>
     <tr>
       <td *ngFor="let col of columns">{{ rowData[col.field] }}</td>
-      <td *ngIf="showEndActions">
+      <td *ngIf="showEndActions" class="text-right">
         <ng-container
           *ngTemplateOutlet="actionsTemplate; context: { $implicit: rowData }"
         ></ng-container>

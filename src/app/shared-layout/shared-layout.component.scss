@@ -1,7 +1,7 @@
 
 .shared-container {
   min-height: 100vh;
-  background: url('/assets/background.jpg') center center/cover no-repeat;
+  background: url('/assets/high.jpg') center center/cover no-repeat;
   background-attachment: fixed;
   color: #fff;
   display: flex;
@@ -36,10 +36,10 @@
 
 // Header Banner
 .header-banner {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+  // background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
   color: #fbbf24;
   padding: 1rem 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -160,14 +160,15 @@
 
 // Footer
 .footer {
-  background-color: #1e3a8a;
+  // background-color: #1e3a8a;
   color: #fff;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
   font-size: 0.85rem;
-  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-top: auto;
 }
 
@@ -178,7 +179,8 @@
 }
 
 .copyright {
-  text-align: right;
+  text-align: center;
+  width: 100%;
 }
 
 .copyright p {

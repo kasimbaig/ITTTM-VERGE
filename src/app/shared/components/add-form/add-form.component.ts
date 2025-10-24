@@ -23,11 +23,11 @@ import { ApiService } from '../../../services/api.service';
 import { Observable, Subscription } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+import { CheckboxModule } from 'primeng/checkbox';
 @Component({
   selector: 'app-add-form',
   standalone: true, // Ensure standalone is true if it's a standalone component
-  imports: [ReactiveFormsModule, CommonModule, FormsModule, DialogModule, MultiSelectModule], // Add FormsModule for ngModel if used elsewhere
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, DialogModule, MultiSelectModule,CheckboxModule], // Add FormsModule for ngModel if used elsewhere
   templateUrl: './add-form.component.html',
   styleUrls: ['./add-form.component.css'],
 })
@@ -69,7 +69,7 @@ export class AddFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
  
-    //console.log("formConfig", this.formConfig);
+    console.log("formConfig", this.formConfig);
     // Delay form building to ensure formData is properly set
     setTimeout(() => {
       this.buildForm();
@@ -201,7 +201,7 @@ export class AddFormComponent implements OnInit, OnChanges, OnDestroy {
    
     // Update form value
     this.form.get(fieldKey)?.setValue(selectedValue);
-    
+    console.log("Selected Value:", selectedValue, this.formData, this.formConfig);
     // Emit the change event to parent component
     this.onSelectChange.emit({
       key: fieldKey,
@@ -297,6 +297,11 @@ export class AddFormComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  handleCheckboxChange(event: Event, fieldKey: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const isChecked = !inputElement.checked;
+    this.form.get(fieldKey)?.setValue(isChecked);
+  }
   patchFormValues() {
     const patchObj: { [key: string]: any } = {};
 
