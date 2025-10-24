@@ -16,6 +16,7 @@ import { EtmaDashboardComponent } from '../etma-dashboard/etma-dashboard.compone
 
 import { NgxPrintModule } from 'ngx-print';
 import { QRCodeComponent } from 'angularx-qrcode';
+import { DynmicFromComponent } from '../forms/dynmic-from/dynmic-from.component';
 interface GtgLoadTrialReport {
   id?: number;
   Presented_by: string;
@@ -68,7 +69,8 @@ interface GtgLoadTrialReport {
 
     EtmaDashboardComponent,
     NgxPrintModule,
-    QRCodeComponent
+    QRCodeComponent,
+    DynmicFromComponent
   ],
   templateUrl: './etma-main-component.component.html',
   styleUrls: ['./etma-main-component.component.css'],

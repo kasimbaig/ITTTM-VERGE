@@ -100,8 +100,8 @@ const routes: Routes = [
           { path: 'preliminary-form', loadComponent: () => import('./forms-modules/forms/preliminary-form/etma-form.component').then((m) => m.EtmaFormComponent) },
           { path: 'intermediate-form', loadComponent: () => import('./forms-modules/forms/intermediate-form/intermediate-form.component').then((m) => m.IntermediateFormComponent) },
           { path: 'final-form', loadComponent: () => import('./forms-modules/forms/final-form/final-form.component').then((m) => m.FinalFormComponent) },
-          { path: 'uw-compartments-form', loadComponent: () => import('./forms-modules/forms/uw-compartments-form/uw-compartments-form.component').then((m) => m.UwCompartmentsFormComponent) }
-        ]
+          { path: 'uw-compartments-form', loadComponent: () => import('./forms-modules/forms/uw-compartments-form/uw-compartments-form.component').then((m) => m.UwCompartmentsFormComponent) },
+          { path: 'dynmic-from', loadComponent: () => import('./forms-modules/forms/dynmic-from/dynmic-from.component').then((m) => m.DynmicFromComponent) }]
       },
       {
         path: 'route-config',

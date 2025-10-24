@@ -166,15 +166,19 @@ export class FormBuildingComponent implements OnInit {
     console.log('Form Preview:', this.fields);
     console.log('Selected sections:', this.view);
     
-    // Create a preview window or modal
-    const previewWindow = window.open('', '_blank', 'width=1000,height=800');
+    // Generate the HTML
+    const generatedHTML = this.generatePreviewHTML();
+    localStorage.setItem('form_data', generatedHTML);
+    const previewWindow = window.open('', '_blank', 'width=2000,height=800');
     if (previewWindow) {
-      previewWindow.document.write(this.generatePreviewHTML());
+      previewWindow.document.write(generatedHTML);
       previewWindow.document.close();
     }
   }
 
   private generatePreviewHTML(): string {
+
+
     let html = `
       <!DOCTYPE html>
       <html>
@@ -666,8 +670,10 @@ export class FormBuildingComponent implements OnInit {
     </html>
     `;
 
+
     return html;
   }
+
 
   exportFormConfig() {
     // Export form configuration as JSON
@@ -686,6 +692,13 @@ export class FormBuildingComponent implements OnInit {
     a.download = 'form-config.json';
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  clearFormData() {
+    // Clear the form data from localStorage
+    localStorage.removeItem('form_data');
+    console.log('Form data cleared from localStorage');
+    this.toastService.showSuccess('Form data cleared successfully');
   }
   gtgForm!: FormGroup;
 
