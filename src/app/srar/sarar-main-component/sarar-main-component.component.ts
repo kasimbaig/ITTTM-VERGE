@@ -71,21 +71,21 @@ export class SararMainComponentComponent implements OnInit {
   ];
 
   transactionMenuItems: MasterMenuItem[] = [
-    {
-      icon: 'fa-solid fa-paperclip',
-      label: 'Adjustment',
-      path: 'sarar-transaction/sarar/transaction-adjustment',
-    },
-    {
-      icon: 'fa-solid fa-list',
-      label: 'Monthly',
-      path: 'sarar-transaction/sarar/transaction-monthly',
-    },
-    {
-      icon: 'fa-solid fa-ship',
-      label: 'Status',
-      path: 'sarar-transaction/sarar/transaction-status',
-    },
+    // {
+    //   icon: 'fa-solid fa-paperclip',
+    //   label: 'Adjustment',
+    //   path: 'sarar-transaction/sarar/transaction-adjustment',
+    // },
+    // {
+    //   icon: 'fa-solid fa-list',
+    //   label: 'Monthly',
+    //   path: 'sarar-transaction/sarar/transaction-monthly',
+    // },
+    // {
+    //   icon: 'fa-solid fa-ship',
+    //   label: 'Status',
+    //   path: 'sarar-transaction/sarar/transaction-status',
+    // },
     {
       icon: 'fa-solid fa-chart-line',
       label: 'GraphQL',

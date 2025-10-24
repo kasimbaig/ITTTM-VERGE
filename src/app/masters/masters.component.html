@@ -177,6 +177,11 @@
         <i class="fa-solid fa-map-pin"></i>
         <span>Station</span>
       </button>
+      <!-- GraphQL Menu Item -->
+      <button class="menu-item" [ngClass]="{'active': activeSubPath === 'graphql'}" (click)="navigateTo('graphql')">
+        <i class="fa-solid fa-database"></i>
+        <span>GraphQL</span>
+      </button>
     </nav>
   </aside>
 

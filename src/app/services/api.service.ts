@@ -16,6 +16,7 @@ export class ApiService {
   getData() { return this.data; }
   private readonly apiUrl = environment.apiUrl;
   private readonly apiUrl1 = environment.apiUrl1;
+  token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYxNDk5MzEwLCJpYXQiOjE3NjExOTkzMTAsImp0aSI6IjMwYTZjMWMwOTAyMjQ3NTY5NmNmYjEzMTZjNTExMTUxIiwidXNlcl9pZCI6MX0.IGXCqt8nKC6bUjBtXvkb1r8nNJ059wmI05Bn2eS7iD4'
   constructor(private http: HttpClient) {}
 
   private handleError(error: any): Observable<never> {
@@ -72,11 +73,14 @@ export class ApiService {
       httpOptions.params = new HttpParams({ fromObject: params });
     }
     
-    // Set headers with user_role and user_process from localStorage
+    // Set headers with user_role, user_process from localStorage and token manuallym
     const userRole = localStorage.getItem('user_role');
     const userProcess = localStorage.getItem('user_process');
     
     let headers = new HttpHeaders();
+    // Add Authorization header with token manually
+    headers = headers.set('Authorization', `Bearer ${this.token}`);
+    
     if (userRole) {
       headers = headers.set('Authorized-by', userRole);
     }
@@ -101,11 +105,14 @@ export class ApiService {
   post1<T = any>(endpoint: string, body: any): Observable<T> {
     let httpOptions: { headers?: HttpHeaders } = {};
 
-    // Set headers with user_role and user_process from localStorage
+    // Set headers with user_role, user_process from localStorage and token manually
     const userRole = localStorage.getItem('user_role');
     const userProcess = localStorage.getItem('user_process');
     
     let headers = new HttpHeaders();
+    // Add Authorization header with token manually
+    headers = headers.set('Authorization', `Bearer ${this.token}`);
+    
     if (userRole) {
       headers = headers.set('Authorized-by', userRole);
     }

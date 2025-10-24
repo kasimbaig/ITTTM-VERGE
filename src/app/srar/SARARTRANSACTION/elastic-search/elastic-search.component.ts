@@ -49,7 +49,7 @@ export class ElasticSearchComponent {
       distinctUntilChanged(),
       switchMap(query => {
         this.loading = true;
-        return this.apiService.get('master/global-search/?q='+query);
+        return this.apiService.get1('master/global-search/?q='+query);
       })
     ).subscribe({
       next: (data) => {
