@@ -1,7 +1,7 @@
 <!-- seg-main-component.component.html -->
-<div class="px-3 py-1 min-h-screen mt-20">
+<div class="py-1 min-h-screen">
     <!-- SEG Sub-navigation (Same as Masters) -->
-    <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative">
+    <div class="sfd-sub-navigation flex bg-white rounded-xl shadow-md p-2 mb-6 relative mt-22 mx-4">
         <!-- Dashboard Button -->
         <div class="relative masters-dropdown-container text-sm">
             <button
@@ -35,12 +35,12 @@
 
     <!-- Main Content Area -->
     <!-- Dashboard Content -->
-    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'dashboard'">
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'dashboard'">
         <app-seg-dashboard></app-seg-dashboard>
     </div>
 
     <!-- Transaction Content -->
-    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'transaction'">
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'transaction'">
         <!-- Table View -->
         <div *ngIf="showTableView && !formOnlyMode">
             <app-seg-form-table
@@ -63,7 +63,7 @@
             </app-seg-form>
         </div>
     </div>
-    <div class="w-100 mx-auto" *ngIf="activeSubPath === 'Report'">
+    <div class="max-w-screen-xl mx-auto" *ngIf="activeSubPath === 'Report'">
         <div class="command-header">
             <div class="command-title-block">
                 <i class="pi pi-file-alt"></i>
@@ -104,16 +104,31 @@
                 <h3 class="text-3xl font-bold">SEG Reports Versions</h3>
                 <div class="flex items-center gap-2">
                   <button  
-                  printSectionId="printContainer"	[openNewTab]="true"
-                  ngxPrint  styleSheetFile="assets/print.css"
-                  class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
-                  >
-                  <i class="pi pi-file-pdf"></i>
-                  PDF
-                </button>
-                    <button (click)="closeReportVersionPopup()" class="p-2 rounded-full hover:bg-blue-600 transition-colors"  aria-label="Close" > <i class="pi pi-times"></i>
-                    </button>
-          
+                    printSectionId="printContainer"
+                    [openNewTab]="true"
+                    ngxPrint  
+                    styleSheetFile="assets/print.css"
+                    class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 flex items-center gap-2 rounded"
+                    >
+                    <i class="pi pi-file-pdf"></i>
+                    PDF
+                  </button>
+                  <button  
+                    (click)="downloadWord()"
+                    [disabled]="isDocLoading"
+                    class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2 rounded disabled:opacity-50"
+                    >
+                    <i class="pi pi-file" *ngIf="!isDocLoading"></i>
+                    <i class="pi pi-spin pi-spinner" *ngIf="isDocLoading"></i>
+                    {{ isDocLoading ? 'Generating...' : 'Word' }}
+                  </button>
+                  <button 
+                    (click)="closeReportVersionPopup()" 
+                    class="p-2 rounded-full hover:bg-blue-600 transition-colors"  
+                    aria-label="Close"
+                  > 
+                    <i class="pi pi-times"></i>
+                  </button>
                 </div>
               </div>
               <!-- Content/Table -->
@@ -124,6 +139,42 @@
             </div>
           </div>
 
+        <!-- Loading Overlay for Word Download -->
+        <div class="loading-overlay" *ngIf="isDocLoading">
+          <div class="loading-content">
+            <button class="close-btn" (click)="cancelLoading()" title="Cancel Loading">
+              <i class="pi pi-times"></i>
+            </button>
+            
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            
+            <div class="mt-4 text-center">
+              <h3 class="text-blue-700 font-semibold">Generating document...</h3>
+              <p class="text-gray-600 mt-2">Please wait while we process your request.</p>
+            </div>
+
+            <div class="progress-container mt-4">
+              <div class="progress">
+                <div class="progress-bar" 
+                     role="progressbar" 
+                     [style.width.%]="docProgress"
+                     [attr.aria-valuenow]="docProgress"
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                  {{ docProgress | number:'1.0-0' }}%
+                </div>
+              </div>
+              <div class="progress-text mt-2">
+                <span *ngIf="isDocLoading && docProgress < 30">Initializing document generation...</span>
+                <span *ngIf="isDocLoading && docProgress >= 30 && docProgress < 60">Processing document content...</span>
+                <span *ngIf="isDocLoading && docProgress >= 60 && docProgress < 90">Finalizing document...</span>
+                <span *ngIf="isDocLoading && docProgress >= 90">Preparing download...</span>
+              </div>
+            </div>
+          </div>
+        </div>
         
     </div>
 </div>

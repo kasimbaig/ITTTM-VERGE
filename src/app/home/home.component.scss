@@ -7,7 +7,6 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  margin-top: 4rem;
   min-height: 100%;
 }
 
@@ -616,7 +615,7 @@
   .mission-statement {
     width: 280px;
   }
-
+  
   .login-card {
     width: 360px;
   }
@@ -649,7 +648,7 @@
   
   .login-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 400px;
   }
   
   .video-link-button {
@@ -935,5 +934,158 @@
   .video-gallery-header .close-btn {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
+  }
+}
+
+/* ===========================================
+   LOGIN CARD INPUT ICONS RESPONSIVE FIXES
+   =========================================== */
+
+/* Tablet adjustments (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .login-card {
+    .input-field {
+      .input-icon {
+        left: 10px;
+        font-size: 1.1rem;
+        width: 1.1rem;
+        height: 1.1rem;
+      }
+      
+      .password-toggle {
+        right: 10px;
+        font-size: 1.1rem;
+        width: 1.1rem;
+        height: 1.1rem;
+      }
+      
+      input {
+        padding: 0.75rem 1rem 0.75rem 2.3rem;
+        
+        &[type="password"] {
+          padding-right: 2.3rem;
+        }
+      }
+    }
+  }
+}
+
+/* Mobile adjustments (max-width: 768px) */
+@media (max-width: 768px) {
+  .login-card {
+    .input-field {
+      margin-bottom: 0.875rem;
+      
+      .input-icon {
+        left: 10px;
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+      }
+      
+      .password-toggle {
+        right: 10px;
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+      }
+      
+      input {
+        padding: 0.7rem 0.9rem 0.7rem 2.2rem;
+        font-size: 0.85rem;
+        
+        &[type="password"] {
+          padding-right: 2.2rem;
+        }
+      }
+    }
+  }
+}
+
+/* Small mobile adjustments (max-width: 480px) */
+@media (max-width: 480px) {
+  .login-card {
+    .input-field {
+      margin-bottom: 0.75rem;
+      
+      .input-icon {
+        left: 8px;
+        font-size: 0.95rem;
+        width: 0.95rem;
+        height: 0.95rem;
+      }
+      
+      .password-toggle {
+        right: 8px;
+        font-size: 0.95rem;
+        width: 0.95rem;
+        height: 0.95rem;
+        
+        &:hover {
+          color: #fbbf24;
+        }
+      }
+      
+      input {
+        padding: 0.6rem 0.8rem 0.6rem 2rem;
+        font-size: 0.85rem;
+        
+        &[type="password"] {
+          padding-right: 2rem;
+        }
+      }
+    }
+  }
+}
+
+/* Very small mobile (max-width: 320px) */
+@media (max-width: 320px) {
+  .login-card {
+    .input-field {
+      margin-bottom: 0.625rem;
+      
+      .input-icon {
+        left: 6px;
+        font-size: 0.875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+      
+      .password-toggle {
+        right: 6px;
+        font-size: 0.875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+      
+      input {
+        padding: 0.55rem 0.7rem 0.55rem 1.75rem;
+        font-size: 0.8rem;
+        
+        &[type="password"] {
+          padding-right: 1.75rem;
+        }
+      }
+    }
+  }
+}
+
+/* Landscape adjustments for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .login-card {
+    .input-field {
+      input {
+        padding: 0.65rem 0.85rem 0.65rem 2.1rem;
+        
+        &[type="password"] {
+          padding-right: 2.1rem;
+        }
+      }
+      
+      .input-icon,
+      .password-toggle {
+        transform: translateY(-50%) scale(0.95);
+      }
+    }
   }
 }

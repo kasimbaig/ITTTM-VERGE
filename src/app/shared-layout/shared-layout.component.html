@@ -2,13 +2,13 @@
   <!-- Header Banner -->
   <header class="header-banner">
     <div class="header-content">
-      <!-- <div class="navy-emblem"> -->
-        <!-- <img
+      <!-- <div class="navy-emblem">
+        <img
           src="assets/indian-navy-emblem.png"
           alt="Indian Navy Emblem"
           class="emblem-img"
-        /> -->
-      <!-- </div> -->
+        />
+      </div> -->
 
       <div class="header-text">
         <h1 class="main-title">Integrated Testing and
@@ -17,37 +17,36 @@
     </div>
 
     <!-- Navigation Bar -->
-    <nav class="nav-bar">
-      <!-- <a
+    <!-- <nav class="nav-bar">
+      <a
         routerLink="/home"
         class="nav-item"
         [class.active]="isActiveRoute('/home') || isActiveRoute('/')"
       >
         <mat-icon>home</mat-icon>
         <span>HOME</span>
-      </a> -->
-      <!-- <div class="nav-item">
+      </a>
+      <div class="nav-item">
         <mat-icon>person</mat-icon>
         <span>ABOUT US</span>
       </div>
       <div class="nav-item">
         <mat-icon>phone</mat-icon>
         <span>CONTACT US</span>
-      </div> -->
+      </div>
       <div class="download-menu-container">
-        <!-- <button class="nav-item" (click)="toggleDownloadMenu()">
+        <button class="nav-item" (click)="toggleDownloadMenu()">
           <mat-icon>download</mat-icon>
           Export
-        </button> -->
+        </button> 
 
-        <!-- Popup Menu (side by side) -->
         <div class="download-popup" *ngIf="showDownloadMenu">
           <button (click)="downloadFile('pptx')">Export PPTX</button>
           <button (click)="downloadFile('pdf')">Export PDF</button>
         </div>
       </div>
-    </nav>
-  </header>
+    </nav>-->
+  </header> 
 
   <!-- Main Content Area - This will be replaced by each page -->
   <main class="main-content">
