@@ -167,7 +167,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   kpiMetrics = [
     {
       title: 'Total Equipment',
-      value: 245,
+      value: 360,
       description: 'Total equipment across all units.',
       iconClass: 'pi pi-cog',
       type: 'TOTAL_EQUIPMENT',
@@ -191,7 +191,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     {
       title: 'Open Defects',
-      value: 34,
+      value: 23,
       iconClass: 'pi pi-exclamation-triangle',
       type: 'OPEN_DEFECTS',
       backgroundColor: 'white',
@@ -202,7 +202,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     {
       title: 'Equipment Fit Progress',
-      value: '100%',
+      value: '98%',
       iconClass: 'pi pi-check-square',
       type: 'EQUIPMENT_FIT_PROGRESS',
       backgroundColor: 'white',
@@ -213,7 +213,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     {
       title: 'Task Completion Rate',
-      value: '92%',
+      value: '90%',
       iconClass: 'pi pi-chart-line',
       type: 'TASK_COMPLETION_RATE',
       backgroundColor: 'white',

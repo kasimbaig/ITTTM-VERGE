@@ -23,35 +23,44 @@
     
     <form [formGroup]="gtgForm" (ngSubmit)="onSubmit()" class="w-full space-y-4">
       <!-- Header Section -->
-      <div class="bg-white shadow-md rounded-lg border border-gray-200 mb-6">
-        <div class="p-6">
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm border border-gray-200 mb-4">
+        <div class="p-4">
           <!-- Top Title -->
-          <div class="text-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Load Trials - GTG</h1>
-            <p class="text-sm text-gray-500 mt-1">Gas Turbine Generator Load Trial Report</p>
+          <div class="text-center mb-4">
+            <h1 class="text-2xl font-bold text-gray-800 uppercase">LOAD TRIALS - GTG</h1>
           </div>
 
           <!-- Trial Information Fields -->
-          <div class="max-w-3xl mx-auto space-y-4">
-            <!-- Ship Selection -->
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-              <label class="text-sm font-medium text-gray-700 w-32">Ship:</label>
-              <select formControlName="ship" (change)="onShipChange($event)" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white" [disabled]="isReadonly">
-                <option value="">Select Ship</option>
-                <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}</option>
-              </select>
+          <div class="mb-4 space-y-3">
+            <div class="flex items-center justify-center">
+              <span class="text-lg font-semibold text-gray-700">SHIP</span>
+              <div class="border-b-2 border-gray-400 mx-2">
+                <select formControlName="ship" (change)="onShipChange($event)" class="w-32 px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500 text-center bg-transparent ship-dropdown" [disabled]="isReadonly" [class.disabled]="isReadonly">
+                  <option value="">Select Ship</option>
+                  <option *ngFor="let ship of ships" [value]="ship.id">{{ ship.name }}</option>
+                </select>
+              </div>
             </div>
-
-            <!-- Occasion of Trials -->
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-              <label class="text-sm font-medium text-gray-700 w-32">Occasion:</label>
-              <input type="text" formControlName="occasionOfTrials" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter occasion of trials" [readonly]="isReadonly">
+            <div class="flex items-center justify-center">
+              <span class="text-base font-medium text-gray-700 mr-4">OCCASION OF TRIALS -</span>
+              <div class="border-b-2 border-gray-400 flex-1 max-w-md">
+                <input type="text" formControlName="occasionOfTrials" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter occasion of trials" [readonly]="isReadonly">
+              </div>
             </div>
+            
+            <div class="flex items-center justify-center">
+              <span class="text-base font-medium text-gray-700 mr-4">TRIAL DATE -</span>
+              <div class="border-b-2 border-gray-400 flex-1 max-w-md">
+                <input type="date" formControlName="trial_date" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly">
+              </div>
+            </div>
+          </div>
 
-            <!-- Trial Date -->
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-              <label class="text-sm font-medium text-gray-700 w-32">Trial Date:</label>
-              <input type="date" formControlName="trial_date" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [readonly]="isReadonly">
+          <!-- Main Report Header -->
+          <div class="text-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800 uppercase mb-2">GAS TURBINE GENERATOR</h2>
+            <div class="flex items-center justify-center mb-2">
+              <span class="text-lg font-semibold text-gray-700">LOAD TRIAL REPORT - GTG</span>
             </div>
           </div>
         </div>
@@ -76,11 +85,11 @@
     <div id="printContainer" class="p-2" >
       <!-- Section 1: Trial Details -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600">
-          <h2 class="text-lg font-semibold text-gray-900">1. Trial Details</h2>
+        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+          <h2 class="text-lg font-semibold text-white">1. Trial Details</h2>
         </div>
         
-        <div class="p-4 bg-white">
+        <div class="p-4 bg-amber-50">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             
             <!-- Presented By -->
@@ -91,7 +100,7 @@
               <input 
                 type="text"
                 formControlName="presentedBy"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 [class.border-red-500]="isFieldInvalid('presentedBy')"
                 [readonly]="isReadonly"
                 placeholder="Enter presenter name">
@@ -105,7 +114,7 @@
               <input 
                 type="date"
                 formControlName="trialDate"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 [class.border-red-500]="isFieldInvalid('trialDate')"
                 [readonly]="isReadonly">
             </div>
@@ -118,7 +127,7 @@
               <input 
                 type="text"
                 formControlName="occasionOfCurrentTrial"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 [class.border-red-500]="isFieldInvalid('occasionOfCurrentTrial')"
                 [readonly]="isReadonly"
                 placeholder="Enter occasion">
@@ -132,7 +141,7 @@
               <input 
                 type="date"
                 formControlName="dateOfLastTrial"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 [class.border-red-500]="isFieldInvalid('dateOfLastTrial')"
                 [readonly]="isReadonly">
             </div>
@@ -145,7 +154,7 @@
               <input 
                 type="text"
                 formControlName="proposalReference"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 [class.border-red-500]="isFieldInvalid('proposalReference')"
                 [readonly]="isReadonly"
                 placeholder="Enter proposal reference">
@@ -159,7 +168,7 @@
               <input 
                 type="text"
                 formControlName="fileReference"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 [class.border-red-500]="isFieldInvalid('fileReference')"
                 [readonly]="isReadonly"
                 placeholder="Enter file reference">
@@ -173,7 +182,7 @@
               <input 
                 type="text"
                 formControlName="referenceDocument"
-                class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter reference document">
             </div>
           </div>
@@ -182,14 +191,14 @@
 
       <!-- Section 2: Test Equipment Used -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600">
-          <h2 class="text-lg font-semibold text-gray-900">2. Test Equipment Used</h2>
+        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+          <h2 class="text-lg font-semibold text-white">2. Test Equipment Used</h2>
         </div>
         
-        <div class="p-4 bg-white">
+        <div class="p-4 bg-amber-50">
           <select 
             formControlName="equipmentId"
-            class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             [disabled]="isReadonly || isLoadingEquipments">
             <option value="">Select Equipment</option>
             <option *ngFor="let equipment of equipments" [value]="equipment.id">
@@ -204,14 +213,14 @@
 
       <!-- Section 3: Equipment Details -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600">
-          <h2 class="text-lg font-semibold text-gray-900">3. Equipment Details</h2>
+        <div class="px-4 py-3 border-b border-gray-200 bg-[#1e40af] heading">
+          <h2 class="text-lg font-semibold text-white">3. Equipment Details</h2>
         </div>
         
         <div class="p-4 space-y-6">
           
           <!-- Engine Subsection -->
-          <div class="border border-gray-300 bg-white rounded-lg p-4">
+          <div class="border border-gray-300 bg-amber-50 rounded-lg p-4">
             <h3 class="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-300 pb-2">Engine</h3>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div class="space-y-1">
@@ -221,7 +230,7 @@
                 <input 
                   type="text"
                   formControlName="engineMake"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('engineMake')"
                   [readonly]="isReadonly"
                   placeholder="Enter engine make">
@@ -233,7 +242,7 @@
                 <input 
                   type="text"
                   formControlName="engineModelSerial"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('engineModelSerial')"
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
@@ -245,7 +254,7 @@
                 <input 
                   type="text"
                   formControlName="engineRpm"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('engineRpm')"
                   [readonly]="isReadonly"
                   placeholder="Enter RPM">
@@ -254,7 +263,7 @@
           </div>
 
           <!-- Governor Subsection -->
-          <div class="border border-gray-300 bg-white rounded-lg p-4">
+          <div class="border border-gray-300 bg-amber-50 rounded-lg p-4">
             <h3 class="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-300 pb-2">Governor</h3>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div class="space-y-1">
@@ -264,7 +273,7 @@
                 <input 
                   type="text"
                   formControlName="governorMake"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('governorMake')"
                   [readonly]="isReadonly"
                   placeholder="Enter governor make">
@@ -276,7 +285,7 @@
                 <input 
                   type="text"
                   formControlName="governorModelSerial"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('governorModelSerial')"
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
@@ -288,7 +297,7 @@
                 <input 
                   type="text"
                   formControlName="governorType"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('governorType')"
                   [readonly]="isReadonly"
                   placeholder="Enter governor type">
@@ -297,7 +306,7 @@
           </div>
 
           <!-- Alternator Subsection -->
-          <div class="border border-gray-300 bg-white rounded-lg p-6">
+          <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">Alternator</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div class="space-y-1">
@@ -307,7 +316,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorMakeRating"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorMakeRating')"
                   [readonly]="isReadonly"
                   placeholder="Enter make and rating">
@@ -319,7 +328,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorModelSerial"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorModelSerial')"
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
@@ -331,7 +340,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorType"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorType')"
                   [readonly]="isReadonly"
                   placeholder="Enter alternator type">
@@ -343,7 +352,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorRatedVoltage"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorRatedVoltage')"
                   [readonly]="isReadonly"
                   placeholder="Enter rated voltage">
@@ -355,7 +364,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorRatedFrequency"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorRatedFrequency')"
                   [readonly]="isReadonly"
                   placeholder="Enter rated frequency">
@@ -367,7 +376,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorRatedKvaKw"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorRatedKvaKw')"
                   [readonly]="isReadonly"
                   placeholder="Enter rated kVA/kW">
@@ -379,7 +388,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorRatedCurrent"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorRatedCurrent')"
                   [readonly]="isReadonly"
                   placeholder="Enter rated current">
@@ -391,7 +400,7 @@
                 <input 
                   type="text"
                   formControlName="alternatorBearingNumber"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('alternatorBearingNumber')"
                   [readonly]="isReadonly"
                   placeholder="Enter bearing number">
@@ -400,7 +409,7 @@
           </div>
 
           <!-- AVR Subsection -->
-          <div class="border border-gray-300 bg-white rounded-lg p-6">
+          <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">AVR</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="space-y-1">
@@ -410,7 +419,7 @@
                 <input 
                   type="text"
                   formControlName="avrMakeType"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('avrMakeType')"
                   [readonly]="isReadonly"
                   placeholder="Enter make and type">
@@ -422,7 +431,7 @@
                 <input 
                   type="text"
                   formControlName="avrModelSerial"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('avrModelSerial')"
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
@@ -431,7 +440,7 @@
           </div>
 
           <!-- Supply Breaker Subsection -->
-          <div class="border border-gray-300 bg-white rounded-lg p-6">
+          <div class="border border-gray-300 bg-amber-50 rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">Supply Breaker</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="space-y-1">
@@ -441,7 +450,7 @@
                 <input 
                   type="text"
                   formControlName="supplyBreakerMake"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('supplyBreakerMake')"
                   [readonly]="isReadonly"
                   placeholder="Enter supply breaker make">
@@ -453,7 +462,7 @@
                 <input 
                   type="text"
                   formControlName="supplyBreakerModelSerial"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('supplyBreakerModelSerial')"
                   [readonly]="isReadonly"
                   placeholder="Enter model and serial number">
@@ -465,7 +474,7 @@
                 <input 
                   type="text"
                   formControlName="supplyBreakerRatedCapacity"
-                  class="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-3 py-2 border border-black shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   [class.border-red-500]="isFieldInvalid('supplyBreakerRatedCapacity')"
                   [readonly]="isReadonly"
                   placeholder="Enter rated capacity in Amps">
@@ -477,13 +486,13 @@
 
       <!-- Section 4: Insulation Resistance -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600 ">
-          <h2 class="text-lg font-semibold text-gray-900">4. Insulation Resistance (iaw NES 511(Issue 2) and NES 502 issue 4)</h2>
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading ">
+          <h2 class="text-lg font-semibold text-white">4. Insulation Resistance (iaw NES 511(Issue 2) and NES 502 issue 4)</h2>
         </div>
         
         <div class="p-6">
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Item</th>
@@ -494,31 +503,31 @@
                 <tr>
                   <td class="border border-gray-400 px-4 py-2">(a) Generator hot (>1MΩ)<span class="text-red-500">*</span></td>
                   <td class="border border-gray-400 px-4 py-2">
-                    <input type="text" formControlName="generatorHot1" class="w-full px-2 py-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
+                    <input type="text" formControlName="generatorHot1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
                   </td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-4 py-2">(b) Generator cold (>1MΩ)<span class="text-red-500">*</span></td>
                   <td class="border border-gray-400 px-4 py-2">
-                    <input type="text" formControlName="generatorCold1" class="w-full px-2 py-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
+                    <input type="text" formControlName="generatorCold1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
                   </td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-4 py-2">(c) Switchboard (>2MΩ)<span class="text-red-500">*</span></td>
                   <td class="border border-gray-400 px-4 py-2">
-                    <input type="text" formControlName="switchboard1" class="w-full px-2 py-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
+                    <input type="text" formControlName="switchboard1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
                   </td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-4 py-2">(d) Generator to switchboard cable (>20MΩ)<span class="text-red-500">*</span></td>
                   <td class="border border-gray-400 px-4 py-2">
-                    <input type="text" formControlName="generatorCable1" class="w-full px-2 py-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
+                    <input type="text" formControlName="generatorCable1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
                   </td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-4 py-2">(e) Insulation breaker (>10MΩ)<span class="text-red-500">*</span></td>
                   <td class="border border-gray-400 px-4 py-2">
-                    <input type="text" formControlName="insulationBreaker1" class="w-full px-2 py-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
+                    <input type="text" formControlName="insulationBreaker1" class="w-full px-2 py-1 border border-black focus:outline-none focus:ring-2 focus:ring-blue-500" [readonly]="isReadonly" placeholder="Enter value">
                   </td>
                 </tr>
               </tbody>
@@ -529,13 +538,13 @@
 
       <!-- Section 5: Protection Checks -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600 -600">
-          <h2 class="text-lg font-semibold text-gray-900">5. Protection Checks</h2>
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+          <h2 class="text-lg font-semibold text-white">5. Protection Checks</h2>
         </div>
         
         <div class="p-6">
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Ser</th>
@@ -550,7 +559,7 @@
               <tbody>
                 <!-- Breaker Protection -->
                 <tr class="bg-gray-50">
-                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold bg-gray-100 text-gray-900 ">Breaker Protection</td>
+                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] ">Breaker Protection</td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
@@ -630,7 +639,7 @@
                 
                 <!-- Generator/Switchboard Protection -->
                 <tr class="bg-gray-50">
-                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold bg-gray-100 text-gray-900 ">Generator/Switchboard Protection</td>
+                  <td colspan="7" class="border border-gray-400 px-4 py-2 font-semibold text-white bg-[#1e40af] ">Generator/Switchboard Protection</td>
                 </tr>
                 <tr>
                   <td class="border border-gray-400 px-2 py-2 text-center">(a)</td>
@@ -736,13 +745,13 @@
 
       <!-- Section 6: Instrumentation -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600 -600">
-          <h2 class="text-lg font-semibold text-gray-900">6. Instrumentation</h2>
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+          <h2 class="text-lg font-semibold text-white">6. Instrumentation</h2>
         </div>
         
         <div class="p-6">
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Ser</th>
@@ -902,13 +911,13 @@
 
       <!-- Section 7: Miscellaneous Checks -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600 -600">
-          <h2 class="text-lg font-semibold text-gray-900">7. Miscellaneous Checks</h2>
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+          <h2 class="text-lg font-semibold text-white">7. Miscellaneous Checks</h2>
         </div>
         
         <div class="p-6">
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-2 py-2 text-center font-semibold">Ser</th>
@@ -1132,8 +1141,8 @@
 
       <!-- Section 8: Speed Control Test -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600 -600">
-          <h2 class="text-lg font-semibold text-gray-900">8. Speed Control Test</h2>
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+          <h2 class="text-lg font-semibold text-white">8. Speed Control Test</h2>
         </div>
         
         <div class="p-6">
@@ -1143,7 +1152,7 @@
           <!-- Sub-sub-section: WITH PYM (RCHM) 'ON' -->
           <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">WITH PYM (RCHM) 'ON'</h4>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Load (% of Rated Capacity)</th>
@@ -1226,7 +1235,7 @@
           <!-- Sub-sub-section: WITH PYM (RCHM) 'OFF' -->
           <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">WITH PYM (RCHM) 'OFF'</h4>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-left font-semibold">Load (% of Rated Capacity)</th>
@@ -1346,7 +1355,7 @@
           <!-- Sub-sub-section: PЧM (RChM) 'ON' -->
           <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">PЧM (RChM) 'ON'</h4>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Load %</th>
@@ -1541,7 +1550,7 @@
           <!-- Sub-sub-section: PЧM (RChM) 'OFF' -->
           <h4 class="text-md font-semibold text-gray-700 mb-4 ml-4">PЧM (RChM) 'OFF'</h4>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white ">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50 ">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Load %</th>
@@ -1745,7 +1754,7 @@
           <!-- Sub-section: (c) Governor Range -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(c) Governor Range</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
@@ -1796,7 +1805,7 @@
           <!-- Sub-section: (d) Rate Affected by Governor Motor -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(d) Rate Affected by Governor Motor</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
@@ -1847,15 +1856,15 @@
 
       <!-- Section 9: Voltage Control Test -->
       <div class="bg-white shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 border-l-4 border-blue-600 -600">
-          <h2 class="text-lg font-semibold text-gray-900">9. Voltage Control Test</h2>
+        <div class="px-6 py-4 border-b border-gray-200 bg-[#1e40af] heading -600">
+          <h2 class="text-lg font-semibold text-white">9. Voltage Control Test</h2>
         </div>
         
         <div class="p-6">
           <!-- Sub-section: (a) Steady State Test -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4">(a) Steady State Test</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
@@ -1984,7 +1993,7 @@
           <!-- Sub-section: (b) Transient Test -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(b) Transient Test</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-2 py-2 text-center font-semibold" colspan="2">Load %</th>
@@ -2294,7 +2303,7 @@
           <!-- Sub-section: (c) Voltage Balance -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(c) Voltage Balance</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-center font-semibold">Load %</th>
@@ -2355,7 +2364,7 @@
           <!-- Sub-section: (d) Voltage Range -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(d) Voltage Range</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <thead>
                 <tr class="bg-gray-100">
                   <th class="border border-gray-400 px-4 py-2 text-center font-semibold"></th>
@@ -2489,10 +2498,10 @@
           <!-- Sub-section: (e) Voltage Waveform Harmonic Content -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 mt-8">(e) Voltage Waveform Harmonic Content</h3>
           <div class="overflow-x-auto mb-8">
-            <table class="w-full border-collapse border border-gray-400 bg-white">
+            <table class="w-full border-collapse border border-gray-400 bg-amber-50">
               <tbody>
                 <tr>
-                  <td class="border border-gray-400 px-4 py-3 bg-white text-sm text-gray-700 w-3/4">
+                  <td class="border border-gray-400 px-4 py-3 bg-amber-50 text-sm text-gray-700 w-3/4">
                     Maximum total harmonic content of waveform at no load (not to exceed 2 % of the amplitude of fundamental)
                   </td>
                   <td class="border border-gray-400 px-4 py-3 w-1/4">

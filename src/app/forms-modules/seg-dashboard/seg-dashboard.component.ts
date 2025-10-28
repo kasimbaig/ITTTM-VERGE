@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SararDashboardComponent } from '../../srar/sarar-dashboard/sarar-dashboard.component';
+import { SararDashboardComponent } from '../seg-main-component/sarar-dashboard/sarar-dashboard.component';
 
 @Component({
   selector: 'app-seg-dashboard',

@@ -1,7 +1,7 @@
 <div class="chart-card">
   <div class="chart-header">
     <i class="pi pi-wrench"></i>
-    <span>Defect List / RA Projection</span>
+    <span>Defect List</span>
   </div>
 
   <div class="chart-content">
@@ -25,26 +25,95 @@
 
 
   <p-dialog
-    header="Defect Tracking"
+    header="Technical Issue Analysis"
     [(visible)]="dialogVisible"
-    modal
-    [style]="{ width: '40vw' }">
+    [modal]="true"
+    [resizable]="false"
+    [draggable]="false"
+    [style]="{width: '50vw'}"
+    styleClass="p-dialog-custom"
+    [contentStyle]="{'max-height': '70vh', 'overflow-y': 'auto'}"
+    [closeOnEscape]="true"
+    [dismissableMask]="true">
+    
+    <ng-template pTemplate="header">
+      <div class="flex items-center">
+        <i class="pi pi-exclamation-circle text-yellow-600 mr-2" style="font-size: 1.2rem;"></i>
+        <span class="text-lg font-semibold text-gray-800">Defect Details</span>
+      </div>
+    </ng-template>
 
-    <p-table [value]="details">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Ship</th>
-          <th>Status</th>
-          <th>Dept</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-row>
-        <tr>
-          <td>{{ row.ship }}</td>
-          <td>{{ row.status }}</td>
-          <td>{{ row.dept }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <div class="p-4">
+      <p-table 
+        [value]="details" 
+        [paginator]="true" 
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} defects"
+        [rowsPerPageOptions]="[5,10,20]"
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines"
+        responsiveLayout="scroll">
+        
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-50">
+            <th class="text-sm font-semibold text-gray-700 px-4 py-3">
+              <i class="pi pi-ship mr-2 text-blue-600"></i>Ship
+            </th>
+            <th class="text-sm font-semibold text-gray-700 px-4 py-3">
+              <i class="pi pi-flag mr-2 text-orange-600"></i>Status
+            </th>
+            <th class="text-sm font-semibold text-gray-700 px-4 py-3">
+              <i class="pi pi-building mr-2 text-green-600"></i>Department
+            </th>
+            <th class="text-sm font-semibold text-gray-700 px-4 py-3">
+              <i class="pi pi-calendar mr-2 text-purple-600"></i>Last Updated
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr class="hover:bg-blue-50 transition-colors duration-150">
+            <td class="px-4 py-2 text-sm">{{ row.ship }}</td>
+            <td class="px-4 py-2">
+              <span [class]="'status-badge text-xs px-2 py-1 rounded-full ' + getStatusClass(row.status)">
+                {{ row.status }}
+              </span>
+            </td>
+            <td class="px-4 py-2 text-sm">{{ row.dept }}</td>
+            <td class="px-4 py-2 text-sm text-gray-600">{{ row.lastUpdated | date:'mediumDate' }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center p-6">
+              <div class="flex flex-col items-center">
+                <i class="pi pi-folder-open text-gray-400 mb-2" style="font-size: 2rem;"></i>
+                <p class="text-gray-500">No defect records found</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <button 
+          pButton 
+          icon="pi pi-download" 
+          label="Export" 
+          class="p-button-secondary p-button-outlined"
+          (click)="exportData()">
+        </button>
+        <button 
+          pButton 
+          icon="pi pi-times" 
+          label="Close" 
+          class="p-button-outlined"
+          (click)="dialogVisible = false">
+        </button>
+      </div>
+    </ng-template>
   </p-dialog>
 </div>

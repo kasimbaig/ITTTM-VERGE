@@ -111,7 +111,7 @@ export class DartDashboardComponent implements OnInit {
       value: 0,
       description: 'Defects currently active, under verification, or approved.',
       iconClass: 'pi pi-exclamation-triangle',
-      type: 'TOTAL_OPEN_DEFECTS',
+      type: 'TOTAL_DEFECTS',
       color: '#ef4444' // Red for critical attention
     },
     {
@@ -119,7 +119,7 @@ export class DartDashboardComponent implements OnInit {
       value: 0,
       description: 'High-priority defects requiring immediate attention.',
       iconClass: 'pi pi-bolt',
-      type: 'CRITICAL_DEFECTS',
+      type: 'DEFECTS',
       color: '#dc2626' // Darker red for critical
     },
     {
@@ -171,21 +171,21 @@ export class DartDashboardComponent implements OnInit {
   // --- SRAR KPI Data ---
   // Mock data for SRAR KPI calculations
   private srarShipData = [
-    { shipId: 'INS001', shipName: 'INS Vikrant', totalRHAtSea: 1250, avgRHAtSea: 24.5, maxRHAtSea: 28.0, operational: true },
-    { shipId: 'INS002', shipName: 'INS Delhi', totalRHAtSea: 1180, avgRHAtSea: 22.7, maxRHAtSea: 32.0, operational: true },
-    { shipId: 'INS003', shipName: 'INS Mumbai', totalRHAtSea: 1150, avgRHAtSea: 21.7, maxRHAtSea: 32.0, operational: true },
-    { shipId: 'INS004', shipName: 'INS Kolkata', totalRHAtSea: 1200, avgRHAtSea: 23.3, maxRHAtSea: 32.0, operational: true },
-    { shipId: 'INS005', shipName: 'INS Shivalik', totalRHAtSea: 980, avgRHAtSea: 19.3, maxRHAtSea: 30.0, operational: true },
-    { shipId: 'INS006', shipName: 'INS Satpura', totalRHAtSea: 1020, avgRHAtSea: 20.7, maxRHAtSea: 30.0, operational: true },
-    { shipId: 'INS007', shipName: 'INS Sahyadri', totalRHAtSea: 990, avgRHAtSea: 19.7, maxRHAtSea: 30.0, operational: true },
-    { shipId: 'INS008', shipName: 'INS Kamorta', totalRHAtSea: 820, avgRHAtSea: 17.3, maxRHAtSea: 25.0, operational: true },
-    { shipId: 'INS009', shipName: 'INS Kadmatt', totalRHAtSea: 840, avgRHAtSea: 18.0, maxRHAtSea: 25.0, operational: true },
-    { shipId: 'INS010', shipName: 'INS Kiltan', totalRHAtSea: 810, avgRHAtSea: 17.0, maxRHAtSea: 25.0, operational: true },
-    { shipId: 'INS011', shipName: 'INS Chennai', totalRHAtSea: 1100, avgRHAtSea: 21.2, maxRHAtSea: 30.0, operational: false },
-    { shipId: 'INS012', shipName: 'INS Delhi', totalRHAtSea: 1080, avgRHAtSea: 20.8, maxRHAtSea: 32.0, operational: false },
-    { shipId: 'INS013', shipName: 'INS Mumbai', totalRHAtSea: 1050, avgRHAtSea: 20.2, maxRHAtSea: 32.0, operational: false },
-    { shipId: 'INS014', shipName: 'INS Kolkata', totalRHAtSea: 1120, avgRHAtSea: 21.5, maxRHAtSea: 32.0, operational: false },
-    { shipId: 'INS015', shipName: 'INS Shivalik', totalRHAtSea: 920, avgRHAtSea: 17.7, maxRHAtSea: 30.0, operational: false }
+    { shipId: 'INS001', shipName: 'INS Vikrant', totalRHAtSea: 1500, avgRHAtSea: 25.0, maxRHAtSea: 35.0, operational: true },
+    { shipId: 'INS002', shipName: 'INS Delhi', totalRHAtSea: 1450, avgRHAtSea: 24.5, maxRHAtSea: 35.0, operational: true },
+    { shipId: 'INS003', shipName: 'INS Mumbai', totalRHAtSea: 1400, avgRHAtSea: 23.5, maxRHAtSea: 35.0, operational: true },
+    { shipId: 'INS004', shipName: 'INS Kolkata', totalRHAtSea: 1350, avgRHAtSea: 22.8, maxRHAtSea: 35.0, operational: true },
+    { shipId: 'INS005', shipName: 'INS Shivalik', totalRHAtSea: 1200, avgRHAtSea: 20.5, maxRHAtSea: 32.0, operational: true },
+    { shipId: 'INS006', shipName: 'INS Satpura', totalRHAtSea: 1180, avgRHAtSea: 21.0, maxRHAtSea: 32.0, operational: true },
+    { shipId: 'INS007', shipName: 'INS Sahyadri', totalRHAtSea: 1150, avgRHAtSea: 20.0, maxRHAtSea: 32.0, operational: true },
+    { shipId: 'INS008', shipName: 'INS Kamorta', totalRHAtSea: 950, avgRHAtSea: 18.0, maxRHAtSea: 28.0, operational: true },
+    { shipId: 'INS009', shipName: 'INS Kadmatt', totalRHAtSea: 980, avgRHAtSea: 18.5, maxRHAtSea: 28.0, operational: true },
+    { shipId: 'INS010', shipName: 'INS Kiltan', totalRHAtSea: 920, avgRHAtSea: 17.5, maxRHAtSea: 28.0, operational: true },
+    { shipId: 'INS011', shipName: 'INS Chennai', totalRHAtSea: 1300, avgRHAtSea: 22.0, maxRHAtSea: 32.0, operational: false },
+    { shipId: 'INS012', shipName: 'INS Delhi', totalRHAtSea: 1280, avgRHAtSea: 21.5, maxRHAtSea: 35.0, operational: false },
+    { shipId: 'INS013', shipName: 'INS Mumbai', totalRHAtSea: 1250, avgRHAtSea: 21.0, maxRHAtSea: 35.0, operational: false },
+    { shipId: 'INS014', shipName: 'INS Kolkata', totalRHAtSea: 1320, avgRHAtSea: 22.5, maxRHAtSea: 35.0, operational: false },
+    { shipId: 'INS015', shipName: 'INS Shivalik', totalRHAtSea: 1100, avgRHAtSea: 18.5, maxRHAtSea: 32.0, operational: false }
   ];
 
   // --- Mock Data Store for DART ---

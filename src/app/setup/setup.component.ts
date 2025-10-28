@@ -25,44 +25,44 @@ export class SetupComponent {
   
   setupTiles: SetupTile[] = [
     {
-      title: 'Users',
-      description: 'Manage user accounts and profiles',
+      title: 'Personnel Management',
+      description: 'Oversee crew accounts, credentials, and personnel profiles',
       icon: 'pi pi-users',
       borderColor: 'border-blue-500',
       route: 'users'
     },
     {
-      title: 'Role',
-      description: 'Add Roles',
+      title: 'Authority Designation',
+      description: 'Define and assign organizational responsibilities',
       icon: 'pi pi-star',
       borderColor: 'border-orange-500',
       route: 'role'
     },
     {
-      title: 'Root Config',
-      description: 'Manage root configuration settings',
+      title: 'System Foundation',
+      description: 'Configure core system parameters and base settings',
       icon: 'pi pi-cog',
       borderColor: 'border-yellow-500',
       route: 'root-config'
     },
     {
-      title: 'Role Access',
-      description: 'Configure roles access levels',
+      title: 'Authorization Matrix',
+      description: 'Control functional permissions by designation',
       icon: 'pi pi-lock',
       borderColor: 'border-green-500',
       route: 'role-access'
     },
     {
-      title: 'User Access',
-      description: 'Configure user access levels',
+      title: 'Individual Permissions',
+      description: 'Grant specific capabilities to personnel',
       icon: 'pi pi-user',
       borderColor: 'border-purple-500',
       route: 'user-access'
     },
     {
-      title: 'Privileges',
-      description: 'Manage system-wide privileges',
-      icon: 'pi pi-cog',
+      title: 'Access Control',
+      description: 'Administer platform-wide security clearances',
+      icon: 'pi pi-shield',
       borderColor: 'border-red-500',
       route: 'privileges'
     }
