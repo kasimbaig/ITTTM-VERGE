@@ -1,13 +1,13 @@
 <div class="setup-container">
   <!-- Header Section -->
-  <div class="setup-component-header mt-10">
+  <div class="setup-component-header mt-14">
     <div class="header-left">
       <div class="header-icon">
         <i class="pi pi-cog"></i>
       </div>
-      <h1 class="setup-component-title">SYSTEM ADMINISTRATION</h1>
+      <h1 class="setup-component-title">ADMINISTRATION TOOL</h1>
     </div>
-    <div class="header-right">
+    <!-- <div class="header-right">
       <button 
         pButton 
         icon="pi pi-th-large" 
@@ -16,42 +16,54 @@
         (click)="openSwitchModeDialog()">
       </button>
       <p class="setup-subtitle">Manage users, projects, and system privileges.</p>
-    </div>
+    </div> -->
   </div>
 
-  <!-- Tiles List -->
-  <div class="tiles-list">
-    <div
-      *ngFor="let tile of setupTiles"
-      class="setup-tile-list"
-      [ngClass]="tile.borderColor"
-    >
-      <div class="tile-left">
-        <div class="tile-icon">
-          <i [ngClass]="tile.icon"></i>
+  <!-- Setup List -->
+  <div class="setup-list-container">
+    <div class="setup-list">
+      <div
+        *ngFor="let tile of setupTiles; let i = index"
+        class="setup-list-item"
+        [ngClass]="tile.borderColor"
+      >
+        <!-- Left Section: Icon & Content -->
+        <div class="list-item-left">
+          <div class="list-item-icon" [ngClass]="tile.borderColor">
+            <i [ngClass]="tile.icon"></i>
+          </div>
+          <div class="list-item-content">
+            <h3 class="list-item-title">{{ tile.title }}</h3>
+            <p class="list-item-description">{{ tile.description }}</p>
+          </div>
         </div>
-        <div class="tile-content">
-          <h3 class="tile-title">{{ tile.title }}</h3>
-          <p class="tile-description">{{ tile.description }}</p>
-        </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="tile-actions">
-        <button
-          class="action-btn view-btn"
-          (click)="viewDetails(tile.route)"
-          title="View Details">
-          <i class="pi pi-eye"></i>
-          <span>View Details</span>
-        </button>
-        <button
-          class="action-btn add-btn"
-          (click)="addNew(tile.route)"
-          title="Add New">
-          <i class="pi pi-plus"></i>
-          <span>Add New</span>
-        </button>
+        <!-- Right Section: Action Buttons -->
+        <div class="list-item-actions">
+          <button
+            class="action-btn view-btn"
+            (click)="viewDetails(tile.route)"
+            pTooltip="View Details"
+            tooltipPosition="top">
+            <i class="pi pi-eye"></i>
+            <span>View</span>
+          </button>
+          <button
+            class="action-btn add-btn"
+            (click)="addNew(tile.route)"
+            pTooltip="Add New"
+            tooltipPosition="top">
+            <i class="pi pi-plus"></i>
+            <span>Add</span>
+          </button>
+          <button
+            class="action-btn navigate-btn"
+            (click)="viewDetails(tile.route)"
+            pTooltip="Navigate"
+            tooltipPosition="top">
+            <i class="pi pi-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>

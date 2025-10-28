@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -7,8 +7,8 @@ import { HituDashboardComponent } from '../hitu-dashboard/hitu-dashboard.compone
 import { PaginatedTableComponent } from '../../shared/components/paginated-table/paginated-table.component';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
-import {NgxPrintModule} from 'ngx-print';
-import {QRCodeComponent} from 'angularx-qrcode';
+import { NgxPrintModule } from 'ngx-print';
+import { WordDownloadService } from '../../shared/services/word-download.service';
 
 interface HituMenuItem {
   label: string;
@@ -20,11 +20,12 @@ interface HituMenuItem {
 @Component({
   selector: 'app-hitu-main-component',
   standalone: true,
-  imports: [CommonModule, RouterOutlet,HituDashboardComponent, PaginatedTableComponent,NgxPrintModule,QRCodeComponent],
+  imports: [CommonModule, RouterOutlet, HituDashboardComponent, PaginatedTableComponent, NgxPrintModule],
+  providers: [WordDownloadService],
   templateUrl: './hitu-main-component.component.html',
   styleUrls: ['./hitu-main-component.component.css'],
 })
-export class HituMainComponentComponent implements OnInit {
+export class HituMainComponentComponent implements OnInit, OnDestroy {
   activeSubPath: string = 'dashboard';
   showHituDropdown: boolean = false;
 
@@ -61,7 +62,19 @@ export class HituMainComponentComponent implements OnInit {
     // }
   ];
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private apiService: ApiService, private toastService: ToastService) {}
+  // Loading states for Word download
+  isDocLoading: boolean = false;
+  docProgress: number = 0;
+  docProgressInterval: any;
+
+  constructor(
+    private router: Router, 
+    private activatedRoute: ActivatedRoute, 
+    private apiService: ApiService, 
+    private toastService: ToastService,
+    public elementRef: ElementRef,
+    private wordDownloadService: WordDownloadService
+  ) {}
 
   ngOnInit(): void {
     // Listen to route changes to update activeSubPath
@@ -203,6 +216,127 @@ export class HituMainComponentComponent implements OnInit {
   tabChange(item: any): void {
     this.activeTab = item;
     this.reportApicall();
+  }
+
+  // Word Download Functions
+  async downloadWord() {
+    this.isDocLoading = true;
+    this.startProgress('doc');
+    
+    const htmlContent = document.querySelector('.report-version-container');
+    
+    if (htmlContent) {
+      try {
+        const { asBlob } = await import('html-docx-js-typescript');
+        
+        let string = this.removeNgContentAttributes(htmlContent as HTMLElement);
+        const data: Blob = await asBlob(string) as Blob;
+        const url = URL.createObjectURL(data);
+        
+        // Generate filename based on activeTab
+        const formTypeMap: { [key: string]: string } = {
+          'Preliminary Form': 'PF',
+          'Intermediate Form': 'IF',
+          'Final Form': 'FF',
+          'U/W Compartments': 'UF'
+        };
+        const formCode = formTypeMap[this.activeTab?.label] || 'DOC';
+        const timestamp = new Date().toISOString().slice(0, 10);
+        const filename = `HITU_${formCode}_${timestamp}.docx`;
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the URL object after a short delay
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+        
+        this.completeProgress('doc');
+        setTimeout(() => {
+          this.isDocLoading = false;
+          this.docProgress = 0;
+        }, 1000);
+        this.toastService.showSuccess('Word document generated successfully');
+      } catch (error) {
+        this.completeProgress('doc');
+        setTimeout(() => {
+          this.isDocLoading = false;
+          this.docProgress = 0;
+        }, 1000);
+        this.toastService.showError('Failed to generate Word document');
+      }
+    } else {
+      this.completeProgress('doc');
+      setTimeout(() => {
+        this.isDocLoading = false;
+        this.docProgress = 0;
+      }, 1000);
+      this.toastService.showError('HTML content not found');
+    }
+  }
+
+  removeNgContentAttributes(element: HTMLElement): string {
+    if (element.attributes) {
+      for (let i = 0; i < element.attributes.length; i++) {
+        const attribute = element.attributes[i];
+        if (attribute.name.startsWith('_ngcontent')) {
+          element.removeAttribute(attribute.name);
+        }
+      }
+    }
+    if (element.children) {
+      for (let i = 0; i < element.children.length; i++) {
+        this.removeNgContentAttributes(element.children[i] as HTMLElement);
+      }
+    }
+    return element.outerHTML;
+  }
+
+  startProgress(type: 'doc') {
+    if (type === 'doc') {
+      this.docProgress = 0;
+      this.docProgressInterval = setInterval(() => {
+        if (this.docProgress < 90) {
+          this.docProgress += Math.random() * 15;
+        }
+      }, 500);
+    }
+  }
+
+  completeProgress(type: 'doc') {
+    if (type === 'doc') {
+      this.docProgress = 100;
+      if (this.docProgressInterval) {
+        clearInterval(this.docProgressInterval);
+        this.docProgressInterval = null;
+      }
+    }
+  }
+
+  clearProgressIntervals() {
+    if (this.docProgressInterval) {
+      clearInterval(this.docProgressInterval);
+      this.docProgressInterval = null;
+    }
+  }
+
+  resetProgress() {
+    this.docProgress = 0;
+    this.clearProgressIntervals();
+  }
+
+  cancelLoading() {
+    this.isDocLoading = false;
+    this.resetProgress();
+    this.toastService.showError('Loading cancelled by user');
+  }
+
+  ngOnDestroy(): void {
+    this.clearProgressIntervals();
   }
 
 }

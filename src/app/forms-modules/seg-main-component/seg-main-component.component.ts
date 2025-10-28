@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { SegFormTableComponent } from '../forms/seg-form/seg-form-table.componen
 import { SegDashboardComponent } from '../seg-dashboard/seg-dashboard.component';
 import { PaginatedTableComponent } from '../../shared/components/paginated-table/paginated-table.component';
 import { NgxPrintModule } from 'ngx-print';
-import { QRCodeComponent } from 'angularx-qrcode';
+import { WordDownloadService } from '../../shared/services/word-download.service';
 
 interface SegFormReport {
   id?: number;
@@ -157,13 +157,13 @@ interface SegFormReport {
     SegFormTableComponent,
     SegDashboardComponent,
     PaginatedTableComponent,
-    NgxPrintModule,
-    QRCodeComponent
+    NgxPrintModule
   ],
+  providers: [WordDownloadService],
   templateUrl: './seg-main-component.component.html',
   styleUrls: ['./seg-main-component.component.css'],
 })
-export class SegMainComponentComponent implements OnInit {
+export class SegMainComponentComponent implements OnInit, OnDestroy {
   activeSubPath: string = 'dashboard';
   searchText: string = '';
   
@@ -230,11 +230,18 @@ export class SegMainComponentComponent implements OnInit {
   ];
 
 
+  // Loading states for Word download
+  isDocLoading: boolean = false;
+  docProgress: number = 0;
+  docProgressInterval: any;
+
   constructor(
     private router: Router, 
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    public elementRef: ElementRef,
+    private wordDownloadService: WordDownloadService
   ) {}
 
   ngOnInit(): void {
@@ -541,5 +548,119 @@ export class SegMainComponentComponent implements OnInit {
     if (container) {
       container.innerHTML = '';
     }
+  }
+
+  // Word Download Functions
+  async downloadWord() {
+    this.isDocLoading = true;
+    this.startProgress('doc');
+    
+    const htmlContent = document.querySelector('.report-version-container');
+    
+    if (htmlContent) {
+      try {
+        const { asBlob } = await import('html-docx-js-typescript');
+        
+        let string = this.removeNgContentAttributes(htmlContent as HTMLElement);
+        const data: Blob = await asBlob(string) as Blob;
+        const url = URL.createObjectURL(data);
+        
+        // Generate filename
+        const timestamp = new Date().toISOString().slice(0, 10);
+        const filename = `SEG_${timestamp}.docx`;
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the URL object after a short delay
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+        
+        this.completeProgress('doc');
+        setTimeout(() => {
+          this.isDocLoading = false;
+          this.docProgress = 0;
+        }, 1000);
+        this.toastService.showSuccess('Word document generated successfully');
+      } catch (error) {
+        this.completeProgress('doc');
+        setTimeout(() => {
+          this.isDocLoading = false;
+          this.docProgress = 0;
+        }, 1000);
+        this.toastService.showError('Failed to generate Word document');
+      }
+    } else {
+      this.completeProgress('doc');
+      setTimeout(() => {
+        this.isDocLoading = false;
+        this.docProgress = 0;
+      }, 1000);
+      this.toastService.showError('HTML content not found');
+    }
+  }
+
+  removeNgContentAttributes(element: HTMLElement): string {
+    if (element.attributes) {
+      for (let i = 0; i < element.attributes.length; i++) {
+        const attribute = element.attributes[i];
+        if (attribute.name.startsWith('_ngcontent')) {
+          element.removeAttribute(attribute.name);
+        }
+      }
+    }
+    if (element.children) {
+      for (let i = 0; i < element.children.length; i++) {
+        this.removeNgContentAttributes(element.children[i] as HTMLElement);
+      }
+    }
+    return element.outerHTML;
+  }
+
+  startProgress(type: 'doc') {
+    if (type === 'doc') {
+      this.docProgress = 0;
+      this.docProgressInterval = setInterval(() => {
+        if (this.docProgress < 90) {
+          this.docProgress += Math.random() * 15;
+        }
+      }, 500);
+    }
+  }
+
+  completeProgress(type: 'doc') {
+    if (type === 'doc') {
+      this.docProgress = 100;
+      if (this.docProgressInterval) {
+        clearInterval(this.docProgressInterval);
+        this.docProgressInterval = null;
+      }
+    }
+  }
+
+  clearProgressIntervals() {
+    if (this.docProgressInterval) {
+      clearInterval(this.docProgressInterval);
+      this.docProgressInterval = null;
+    }
+  }
+
+  resetProgress() {
+    this.docProgress = 0;
+    this.clearProgressIntervals();
+  }
+
+  cancelLoading() {
+    this.isDocLoading = false;
+    this.resetProgress();
+    this.toastService.showError('Loading cancelled by user');
+  }
+
+  ngOnDestroy(): void {
+    this.clearProgressIntervals();
   }
 }

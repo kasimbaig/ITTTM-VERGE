@@ -1,10 +1,10 @@
-// cspell:ignore sarar
+// cspell:ignore sarar seg
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Chart, ChartConfiguration, ChartType } from 'chart.js';
 import { registerables } from 'chart.js';
-import { DartDashboardComponent } from '../../dart/dart-dashboard/dart-dashboard/dart-dashboard.component';
+import { DartDashboardComponent } from '../../../dart/dart-dashboard/dart-dashboard/dart-dashboard.component';
 
 Chart.register(...registerables);
 
