@@ -59,34 +59,34 @@ export class MastersComponent implements OnInit, AfterViewInit {
     // { label: 'Frequency Master', icon: 'fa-solid fa-clock', path: '/masters/unit-group/frequency' }
   ];
 
-  showShipDropdownDropdown: boolean = false;
-  showUnitDropdownDropdown: boolean = false;
-  showEquipmentDropdownDropdown: boolean = false;
+  showShipDropdown: boolean = false;
+  showUnitDropdown: boolean = false;
+  showEquipmentDropdown: boolean = false;
   activeSubPath: string = '';
 
   shipDropdown(){
-    const willOpen = !this.showShipDropdownDropdown;
-    this.showShipDropdownDropdown = willOpen;
-    this.showUnitDropdownDropdown = false;
-    this.showEquipmentDropdownDropdown = false;
+    const willOpen = !this.showShipDropdown;
+    this.showShipDropdown = willOpen;
+    this.showUnitDropdown = false;
+    this.showEquipmentDropdown = false;
     if (willOpen) {
       this.activeSubPath = 'ship-group';
     }
   }
   unitDropdown(){
-    const willOpen = !this.showUnitDropdownDropdown;
-    this.showShipDropdownDropdown = false;
-    this.showUnitDropdownDropdown = willOpen;
-    this.showEquipmentDropdownDropdown = false;
+    const willOpen = !this.showUnitDropdown;
+    this.showShipDropdown = false;
+    this.showUnitDropdown = willOpen;
+    this.showEquipmentDropdown = false;
     if (willOpen) {
       this.activeSubPath = 'unit-group';
     }
   }
   equipmentDropdown(){
-    const willOpen = !this.showEquipmentDropdownDropdown;
-    this.showShipDropdownDropdown = false;
-    this.showUnitDropdownDropdown = false;
-    this.showEquipmentDropdownDropdown = willOpen;
+    const willOpen = !this.showEquipmentDropdown;
+    this.showShipDropdown = false;
+    this.showUnitDropdown = false;
+    this.showEquipmentDropdown = willOpen;
     if (willOpen) {
       this.activeSubPath = 'equipment-group';
     }
@@ -100,29 +100,41 @@ export class MastersComponent implements OnInit, AfterViewInit {
       this.equipmentDropdown();
     }else if(subPath === 'unit-group'){
       this.unitDropdown();
+
+    }else if(subPath === 'GRAPHQL'){
+      this.showShipDropdown = false;
+      this.showUnitDropdown = false;
+      this.showEquipmentDropdown = false;
+      this.activeSubPath = subPath;
+      this.router.navigate(['/srar/sarar-transaction/sarar/transaction-graphql']);
+    }else if(subPath === 'form-builder'){
+      this.showShipDropdown = false;
+      this.showUnitDropdown = false;
+      this.showEquipmentDropdown = false;
+      this.activeSubPath = subPath;
+      this.router.navigate(['form-building'], { relativeTo: this.activatedRoute });
     }
     else {
-      this.showShipDropdownDropdown = false;
-      this.showUnitDropdownDropdown = false;
-      this.showEquipmentDropdownDropdown = false;
+      this.showShipDropdown = false;
+      this.showUnitDropdown = false;
+      this.showEquipmentDropdown = false;
       this.activeSubPath = subPath;
-     
       this.router.navigate([subPath], { relativeTo: this.activatedRoute });
     }
   }
 
   navigateToShipSubItem(subPath: string) {
-    this.showShipDropdownDropdown = false;
+    this.showShipDropdown = false;
     this.activeSubPath='ship-group';
     this.router.navigate([subPath],{ relativeTo: this.activatedRoute });
   }
   navigateToEquipmentSubItem(subPath: string) {
-    this.showEquipmentDropdownDropdown = false;
+    this.showEquipmentDropdown = false;
     this.activeSubPath='equipment-group';
     this.router.navigate([subPath],{ relativeTo: this.activatedRoute });
   }
   navigateToUnitSubItem(subPath: string) {
-    this.showUnitDropdownDropdown = false;
+    this.showUnitDropdown = false;
     this.activeSubPath='unit-group';
     this.router.navigate([subPath],{ relativeTo: this.activatedRoute });
   }
@@ -131,10 +143,10 @@ export class MastersComponent implements OnInit, AfterViewInit {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
-    if (!target.closest('.masters-dropdown-container') && !target.closest('.transactions-dropdown-container')) {
-      this.showShipDropdownDropdown = false;
-      this.showUnitDropdownDropdown = false;
-      this.showEquipmentDropdownDropdown = false;
+    if (!target.closest('.menu-item-group') && !target.closest('.menu-item')) {
+      this.showShipDropdown = false;
+      this.showUnitDropdown = false;
+      this.showEquipmentDropdown = false;
     }
   }
 } 
