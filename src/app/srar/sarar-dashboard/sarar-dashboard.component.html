@@ -312,4 +312,64 @@
       </div>
     </div>
   </div>
+
+  <!-- Enhanced Bottom Section: Three Charts in Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-full">
+    <!-- Ships in Commission Chart -->
+    <div class="group bg-white/80 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20 transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl hover:scale-105 animate-fade-in" style="animation-delay: 1.0s;">
+      <div class="mb-4 sm:mb-6">
+        <h3 class="text-gray-800 text-lg sm:text-xl lg:text-2xl font-bold m-0 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+          SHIPS/SUBMARINES IN COMMISSION: 149
+        </h3>
+        <p class="text-gray-500 text-sm sm:text-base mt-2">PAN NAVY {{ currentDate }}</p>
+      </div>
+      <div class="relative h-64 sm:h-80 lg:h-96 w-full rounded-2xl overflow-hidden bg-gradient-to-br from-violet-50/50 to-purple-50/50">
+        <div class="absolute inset-0 flex items-center justify-center z-10" *ngIf="!chartsLoaded">
+          <div class="relative">
+            <div class="w-16 h-16 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-purple-600 rounded-full animate-spin animate-reverse"></div>
+          </div>
+        </div>
+        <canvas #barChartCanvas class="relative z-20"></canvas>
+      </div>
+    </div>
+
+    <!-- Operational Availability Chart -->
+    <div class="group bg-white/80 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20 transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl hover:scale-105 animate-fade-in" style="animation-delay: 1.1s;">
+      <div class="mb-4 sm:mb-6">
+        <h3 class="text-gray-800 text-lg sm:text-xl lg:text-2xl font-bold m-0 bg-gradient-to-r from-rose-600 via-pink-600 to-red-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+          OPERATIONAL AVAILABILITY
+        </h3>
+        <p class="text-gray-500 text-sm sm:text-base mt-2">PAN NAVY {{ currentDate }}</p>
+      </div>
+      <div class="relative h-64 sm:h-80 lg:h-96 w-full rounded-2xl overflow-hidden bg-gradient-to-br from-rose-50/50 to-pink-50/50">
+        <div class="absolute inset-0 flex items-center justify-center z-10" *ngIf="!chartsLoaded">
+          <div class="relative">
+            <div class="w-16 h-16 border-4 border-rose-200 border-t-rose-600 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-pink-600 rounded-full animate-spin animate-reverse"></div>
+          </div>
+        </div>
+        <canvas #donutChartCanvas class="relative z-20"></canvas>
+      </div>
+    </div>
+
+    <!-- Max Days at Sea Chart -->
+    <div class="group bg-white/80 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-xl border border-white/20 transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl hover:scale-105 animate-fade-in md:col-span-2 lg:col-span-1" style="animation-delay: 1.2s;">
+      <div class="mb-4 sm:mb-6">
+        <h3 class="text-gray-800 text-lg sm:text-xl lg:text-2xl font-bold m-0 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+          MAX DAYS AT SEA
+        </h3>
+        <p class="text-gray-500 text-sm sm:text-base mt-2">PAN NAVY {{ currentDate }}</p>
+      </div>
+      <div class="relative h-64 sm:h-80 lg:h-96 w-full rounded-2xl overflow-hidden bg-gradient-to-br from-amber-50/50 to-orange-50/50">
+        <div class="absolute inset-0 flex items-center justify-center z-10" *ngIf="!chartsLoaded">
+          <div class="relative">
+            <div class="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-orange-600 rounded-full animate-spin animate-reverse"></div>
+          </div>
+        </div>
+        <canvas #horizontalBarCanvas class="relative z-20"></canvas>
+      </div>
+    </div>
+  </div>
 </div>
